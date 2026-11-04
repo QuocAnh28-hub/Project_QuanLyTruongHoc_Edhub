@@ -1,0 +1,10 @@
+global_options:
+  freezed:freezed:
+    runs_before:
+      - injectable_generator:injectable_config_builder
+  injectable_generator:injectable_config_builder:
+    runs_before:
+      - injectable_generator:injectable_builder
+  injectable_generator:injectable_builder:
+    runs_before:
+      - build_resolvers:transitive_digests

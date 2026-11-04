@@ -1,0 +1,848 @@
+{
+  "@@locale": "en",
+  "onboardingWelcomeTitle1": "Welcome to G-Edu",
+  "@onboardingWelcomeTitle1": {
+    "description": "Title for the first onboarding screen"
+  },
+  "onboardingWelcomeDescription1": "Multi-utility education management application for parents and students.",
+  "@onboardingWelcomeDescription1": {
+    "description": "Description for the first onboarding screen"
+  },
+  "onboardingWelcomeTitle2": "Track student attendance daily",
+  "@onboardingWelcomeTitle2": {
+    "description": "Title for the second onboarding screen"
+  },
+  "onboardingWelcomeDescription2": "Complete peace of mind with attendance and activity photos of your child.",
+  "@onboardingWelcomeDescription2": {
+    "description": "Description for the second onboarding screen"
+  },
+  "onboardingWelcomeTitle3": "Convenient tuition payment without fees",
+  "@onboardingWelcomeTitle3": {
+    "description": "Title for the third onboarding screen"
+  },
+  "onboardingWelcomeDescription3": "Efficient tuition management, saving time and costs.",
+  "@onboardingWelcomeDescription3": {
+    "description": "Description for the third onboarding screen"
+  },
+  "onboardingSkipButton": "Skip",
+  "@onboardingSkipButton": {
+    "description": "Skip button text for onboarding"
+  },
+  "onboardingNextButton": "Next",
+  "@onboardingNextButton": {
+    "description": "Next button text for onboarding"
+  },
+  "onboardingLoginButton": "Login",
+  "@onboardingLoginButton": {
+    "description": "Login button text for onboarding"
+  },
+  "loginFirstTimeLabel": "First Time Login",
+  "@loginFirstTimeLabel": {
+    "description": "First time login label"
+  },
+  "loginTitle": "Login",
+  "@loginTitle": {
+    "description": "Login page title"
+  },
+  "loginSubtitle": "Enter your registered email and provided password.",
+  "@loginSubtitle": {
+    "description": "Login page subtitle"
+  },
+  "loginDepartmentLabel": "Province/City",
+  "@loginDepartmentLabel": {
+    "description": "Province/City field label"
+  },
+  "loginDepartmentHint": "Select Province/City",
+  "@loginDepartmentHint": {
+    "description": "Province/City field hint"
+  },
+  "loginPhoneLabel": "Email",
+  "@loginPhoneLabel": {
+    "description": "Phone number field label"
+  },
+  "loginPhoneHint": "Enter email",
+  "@loginPhoneHint": {
+    "description": "Phone number field hint"
+  },
+  "loginPhoneError": "Please enter your email",
+  "@loginPhoneError": {
+    "description": "Phone number validation error"
+  },
+  "loginPasswordLabel": "Enter Password",
+  "@loginPasswordLabel": {
+    "description": "Password field label"
+  },
+  "loginPasswordHint": "Enter password",
+  "@loginPasswordHint": {
+    "description": "Password field hint"
+  },
+  "loginPasswordError": "Please enter your password",
+  "@loginPasswordError": {
+    "description": "Password validation error"
+  },
+  "loginButtonText": "Login",
+  "@loginButtonText": {
+    "description": "Login button text"
+  },
+  "loginRememberMeText": "Remember me",
+  "@loginRememberMeText": {
+    "description": "Remember me checkbox text"
+  },
+  "loginForgotPasswordText": "Forgot Password",
+  "@loginForgotPasswordText": {
+    "description": "Forgot password button text"
+  },
+  "forgotPasswordTitle": "Forgot Password?",
+  "@forgotPasswordTitle": {
+    "description": "Title for forgot password dialog"
+  },
+  "forgotPasswordMessage": "Please contact your homeroom teacher to reset your password.",
+  "@forgotPasswordMessage": {
+    "description": "Message shown in forgot password dialog"
+  },
+  "forgotPasswordButtonText": "I understand",
+  "@forgotPasswordButtonText": {
+    "description": "Button text to close forgot password dialog"
+  },
+  "changePasswordSuccessTitle": "Password changed successfully",
+  "@changePasswordSuccessTitle": {
+    "description": "Title for change password success page"
+  },
+  "changePasswordSuccessMessage": "You have successfully changed your password and need to log in again.",
+  "@changePasswordSuccessMessage": {
+    "description": "Message for change password success page"
+  },
+  "changePasswordSuccessButtonText": "Log in again",
+  "@changePasswordSuccessButtonText": {
+    "description": "Button text for change password success page"
+  },
+  "changePasswordTitle": "Change password",
+  "@changePasswordTitle": {
+    "description": "Title for change password page"
+  },
+  "changePasswordSubtitle": "Create a new password to protect your account.",
+  "@changePasswordSubtitle": {
+    "description": "Subtitle for change password page"
+  },
+  "changePasswordCurrentPasswordLabel": "Current password",
+  "@changePasswordCurrentPasswordLabel": {
+    "description": "Current password field label"
+  },
+  "changePasswordCurrentPasswordHint": "Enter current password",
+  "@changePasswordCurrentPasswordHint": {
+    "description": "Current password field hint"
+  },
+  "changePasswordNavTitle": "Change Password",
+  "@changePasswordNavTitle": {
+    "description": "Navigation bar title for change password page"
+  },
+  "changePasswordNewPasswordLabel": "New password",
+  "@changePasswordNewPasswordLabel": {
+    "description": "Label for new password field"
+  },
+  "changePasswordNewPasswordHint": "Enter new password",
+  "@changePasswordNewPasswordHint": {
+    "description": "New password field hint"
+  },
+  "changePasswordConfirmPasswordLabel": "New password",
+  "@changePasswordConfirmPasswordLabel": {
+    "description": "Label for confirm password field"
+  },
+  "changePasswordConfirmPasswordHint": "Confirm new password",
+  "@changePasswordConfirmPasswordHint": {
+    "description": "Hint for confirm password field"
+  },
+  "changePasswordRequirementsTitle": "New password must include",
+  "@changePasswordRequirementsTitle": {
+    "description": "Title for password requirements section"
+  },
+  "changePasswordRequirementMinChars": "Minimum 8 characters",
+  "@changePasswordRequirementMinChars": {
+    "description": "Minimum characters requirement"
+  },
+  "changePasswordRequirementMinLetter": "Minimum 1 letter",
+  "@changePasswordRequirementMinLetter": {
+    "description": "Minimum letter requirement"
+  },
+  "changePasswordRequirementMinNumber": "Minimum 1 number",
+  "@changePasswordRequirementMinNumber": {
+    "description": "Minimum number requirement"
+  },
+  "changePasswordStrengthWeak": "Weak",
+  "@changePasswordStrengthWeak": {
+    "description": "Weak password strength indicator"
+  },
+  "changePasswordStrengthStrong": "Strong",
+  "@changePasswordStrengthStrong": {
+    "description": "Strong password strength indicator"
+  },
+  "changePasswordButtonText": "Change password",
+  "@changePasswordButtonText": {
+    "description": "Button text for change password"
+  },
+  "changePasswordErrorPasswordsNotMatch": "Passwords do not match",
+  "@changePasswordErrorPasswordsNotMatch": {
+    "description": "Error message when passwords don't match"
+  },
+  "loginLoadingMessage": "Logging in...",
+  "@loginLoadingMessage": {
+    "description": "Loading message shown during login process"
+  },
+  "changePasswordLoadingMessage": "Updating password...",
+  "@changePasswordLoadingMessage": {
+    "description": "Loading message shown during password change process"
+  },
+  "languageSelectionTitle": "Select Language",
+  "@languageSelectionTitle": {
+    "description": "Title for language selection bottom sheet"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageVietnamese": "Tiếng Việt",
+  "@languageVietnamese": {
+    "description": "Vietnamese language option"
+  },
+  "languageButtonText": "Language",
+  "@languageButtonText": {
+    "description": "Text for language selection button"
+  },
+  "studentStatusWaitingForEnrollment": "Waiting for enrollment",
+  "@studentStatusWaitingForEnrollment": {
+    "description": "Student status: waiting for enrollment"
+  },
+  "studentStatusCurrentlyStudying": "Currently studying",
+  "@studentStatusCurrentlyStudying": {
+    "description": "Student status: currently studying"
+  },
+  "studentStatusOnHold": "On hold",
+  "@studentStatusOnHold": {
+    "description": "Student status: on hold"
+  },
+  "studentStatusGraduated": "Graduated",
+  "@studentStatusGraduated": {
+    "description": "Student status: graduated"
+  },
+  "studentStatusDroppedOut": "Dropped out",
+  "@studentStatusDroppedOut": {
+    "description": "Student status: dropped out"
+  },
+  "studentGenderMale": "Male",
+  "@studentGenderMale": {
+    "description": "Student gender: male"
+  },
+  "studentGenderFemale": "Female",
+  "@studentGenderFemale": {
+    "description": "Student gender: female"
+  },
+  "provinceSelectionTitle": "Select Province/City",
+  "@provinceSelectionTitle": {
+    "description": "Province selection title"
+  },
+  "provinceSearchHint": "Search",
+  "@provinceSearchHint": {
+    "description": "Province search hint"
+  },
+  "provinceSearchLabel": "Search",
+  "@provinceSearchLabel": {
+    "description": "Province search label"
+  },
+  "dashboardConfirmLogout": "Logout",
+  "@dashboardConfirmLogout": {
+    "description": "Dashboard logout confirmation text"
+  },
+  "dashboardLogoutError": "Logout failed: ",
+  "@dashboardLogoutError": {
+    "description": "Dashboard logout error message prefix"
+  },
+  "dashboardTabHome": "Home",
+  "@dashboardTabHome": {
+    "description": "Dashboard home tab label"
+  },
+  "dashboardTabMessages": "Messages",
+  "@dashboardTabMessages": {
+    "description": "Dashboard messages tab label"
+  },
+  "dashboardTabNewsFeed": "News Feed",
+  "@dashboardTabNewsFeed": {
+    "description": "Dashboard news feed tab label"
+  },
+  "dashboardTabNotifications": "Notifications",
+  "@dashboardTabNotifications": {
+    "description": "Dashboard notifications tab label"
+  },
+  "dashboardTabAccount": "Account",
+  "@dashboardTabAccount": {
+    "description": "Dashboard account tab label"
+  },
+  "dashboardGreeting": "Good morning",
+  "@dashboardGreeting": {
+    "description": "Dashboard greeting text"
+  },
+  "dashboardGreetingWithName": "Good morning,\n{firstName} {lastName}",
+  "@dashboardGreetingWithName": {
+    "description": "Dashboard greeting with user name",
+    "placeholders": {
+      "firstName": {
+        "type": "String"
+      },
+      "lastName": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardStudentNamePlaceholder": "Student Name",
+  "@dashboardStudentNamePlaceholder": {
+    "description": "Dashboard student name placeholder"
+  },
+  "dashboardClassPlaceholder": "Class",
+  "@dashboardClassPlaceholder": {
+    "description": "Dashboard class placeholder"
+  },
+  "dashboardNoClassYet": "No class yet",
+  "@dashboardNoClassYet": {
+    "description": "Dashboard no class yet placeholder"
+  },
+  "dashboardStudentProfile": "Student Profile",
+  "@dashboardStudentProfile": {
+    "description": "Dashboard student profile text"
+  },
+  "dashboardFeatureMessage": "Send Message",
+  "@dashboardFeatureMessage": {
+    "description": "Dashboard message feature text"
+  },
+  "dashboardFeatureSchedule": "Schedule",
+  "@dashboardFeatureSchedule": {
+    "description": "Dashboard schedule feature text"
+  },
+  "dashboardFeatureMenu": "Menu",
+  "@dashboardFeatureMenu": {
+    "description": "Dashboard menu feature text"
+  },
+  "dashboardFeatureViewSchedule": "View Schedule",
+  "@dashboardFeatureViewSchedule": {
+    "description": "Dashboard view schedule feature text"
+  },
+  "dashboardFeatureViewMenu": "View Menu",
+  "@dashboardFeatureViewMenu": {
+    "description": "Dashboard view menu feature text"
+  },
+  "dashboardNotificationsTitle": "New Notifications",
+  "@dashboardNotificationsTitle": {
+    "description": "Dashboard notifications section title"
+  },
+  "dashboardAttendanceTitle": "Attendance Status",
+  "@dashboardAttendanceTitle": {
+    "description": "Dashboard attendance status section title"
+  },
+  "dashboardScheduleTitle": "Today's Schedule",
+  "@dashboardScheduleTitle": {
+    "description": "Dashboard today's schedule section title"
+  },
+  "dashboardSeeAll": "See All",
+  "@dashboardSeeAll": {
+    "description": "Dashboard see all button text"
+  },
+  "dashboardAttendancePresent": "Present",
+  "@dashboardAttendancePresent": {
+    "description": "Dashboard attendance present status"
+  },
+  "dashboardScheduleEmpty": "Today My An has 5 classes in the morning and afternoon.",
+  "@dashboardScheduleEmpty": {
+    "description": "Dashboard schedule description when student has classes"
+  },
+  "dashboardClassPrefix": "Class {className}",
+  "@dashboardClassPrefix": {
+    "description": "Dashboard class name with prefix",
+    "placeholders": {
+      "className": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardFeatureAttendance": "Attendance",
+  "@dashboardFeatureAttendance": {
+    "description": "Dashboard attendance feature text"
+  },
+  "dashboardFeatureTuition": "Tuition",
+  "@dashboardFeatureTuition": {
+    "description": "Dashboard tuition feature text"
+  },
+  "dashboardFeatureScores": "Scores",
+  "@dashboardFeatureScores": {
+    "description": "Dashboard scores feature text"
+  },
+  "dashboardFeatureLeaveRequest": "Leave Request",
+  "@dashboardFeatureLeaveRequest": {
+    "description": "Dashboard leave request feature text"
+  },
+  "dashboardFeatureTranscript": "Digital Transcript",
+  "@dashboardFeatureTranscript": {
+    "description": "Dashboard digital transcript feature text"
+  },
+  "dashboardFeatureHealthInfo": "Health Information",
+  "@dashboardFeatureHealthInfo": {
+    "description": "Dashboard health information feature text"
+  },
+  "dashboardViewProfile": "View Profile",
+  "@dashboardViewProfile": {
+    "description": "Dashboard view profile button text"
+  },
+  "dashboardRecentNotifications": "Recent Notifications",
+  "@dashboardRecentNotifications": {
+    "description": "Dashboard recent notifications section title"
+  },
+  "dashboardNewNotificationsCount": "You have {count} new notifications",
+  "@dashboardNewNotificationsCount": {
+    "description": "Dashboard new notifications count message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardSchoolWeek": "School Week",
+  "@dashboardSchoolWeek": {
+    "description": "Dashboard school week section title"
+  },
+  "dashboardSchoolWeekMessage": "Week {week} - Active Learning Week",
+  "@dashboardSchoolWeekMessage": {
+    "description": "Dashboard school week message",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardConfirmStudentInfoPrefix": "Please check and confirm the information of",
+  "@dashboardConfirmStudentInfoPrefix": {
+    "description": "Dashboard confirm student info prompt prefix"
+  },
+  "dashboardConfirmStudentInfoSuffix": "so Gedu can provide the most accurate information.",
+  "@dashboardConfirmStudentInfoSuffix": {
+    "description": "Dashboard confirm student info prompt suffix"
+  },
+  "dashboardCheckAndConfirm": "Check and confirm",
+  "@dashboardCheckAndConfirm": {
+    "description": "Dashboard check and confirm button text"
+  },
+  "dashboardAccountManagementTitle": "Account Management",
+  "@dashboardAccountManagementTitle": {
+    "description": "Dashboard account management title"
+  },
+  "dashboardChangePassword": "Change Password",
+  "@dashboardChangePassword": {
+    "description": "Dashboard change password text"
+  },
+  "dashboardNotificationSettings": "Notification Settings",
+  "@dashboardNotificationSettings": {
+    "description": "Dashboard notification settings text"
+  },
+  "dashboardSupportTitle": "Support",
+  "@dashboardSupportTitle": {
+    "description": "Dashboard support title"
+  },
+  "dashboardUserGuide": "User Guide",
+  "@dashboardUserGuide": {
+    "description": "Dashboard user guide text"
+  },
+  "dashboardVideoGuide": "Video Guide",
+  "@dashboardVideoGuide": {
+    "description": "Dashboard video guide text"
+  },
+  "dashboardFAQ": "FAQ",
+  "@dashboardFAQ": {
+    "description": "Dashboard FAQ text"
+  },
+  "dashboardLogout": "Logout",
+  "@dashboardLogout": {
+    "description": "Dashboard logout text"
+  },
+  "dashboardLogoutConfirmation": "Are you sure you want to logout?",
+  "@dashboardLogoutConfirmation": {
+    "description": "Dashboard logout confirmation message"
+  },
+  "dashboardCancel": "Cancel",
+  "@dashboardCancel": {
+    "description": "Dashboard cancel text"
+  },
+  "studentReviewWelcomeTitle": "Welcome Parent,",
+  "@studentReviewWelcomeTitle": {
+    "description": "Student review welcome title"
+  },
+  "studentReviewInstruction": "Your account is linked to multiple students. Please select a student to continue.",
+  "@studentReviewInstruction": {
+    "description": "Student review instruction text"
+  },
+  "studentReviewClassLabel": "Class",
+  "@studentReviewClassLabel": {
+    "description": "Student review class label"
+  },
+  "studentReviewSchoolLabel": "School",
+  "@studentReviewSchoolLabel": {
+    "description": "Student review school label"
+  },
+  "studentReviewContinueButton": "Continue",
+  "@studentReviewContinueButton": {
+    "description": "Student review continue button"
+  },
+  "studentReviewErrorMessage": "An error occurred:",
+  "@studentReviewErrorMessage": {
+    "description": "Student review error message prefix"
+  },
+  "studentReviewRetryButton": "Try again",
+  "@studentReviewRetryButton": {
+    "description": "Student review retry button"
+  },
+  "studentReviewNoName": "No name yet",
+  "@studentReviewNoName": {
+    "description": "Student review no name placeholder"
+  },
+  "studentReviewClassPlaceholder": "Class",
+  "@studentReviewClassPlaceholder": {
+    "description": "Student review class placeholder"
+  },
+  "profileAccountTitle": "Account",
+  "@profileAccountTitle": {
+    "description": "Profile page title"
+  },
+  "profileStudentProfile": "Student Profile",
+  "@profileStudentProfile": {
+    "description": "Profile student profile text"
+  },
+  "studentSelectionTitle": "Select Student",
+  "@studentSelectionTitle": {
+    "description": "Student selection sheet title"
+  },
+  "studentSelectionPleaseSelect": "Please select a student to continue",
+  "@studentSelectionPleaseSelect": {
+    "description": "Please select a student message"
+  },
+  "studentSelectionPleaseSelectShort": "Please select a student",
+  "@studentSelectionPleaseSelectShort": {
+    "description": "Short please select a student message"
+  },
+  "profileNoPhoneYet": "No phone number yet",
+  "@profileNoPhoneYet": {
+    "description": "Profile no phone number placeholder"
+  },
+  "studentProfileTitle": "Student Profile",
+  "@studentProfileTitle": {
+    "description": "Student profile page title"
+  },
+  "personalInformationTitle": "Personal Information",
+  "@personalInformationTitle": {
+    "description": "Personal information section title"
+  },
+  "personalInformationSubtitle": "Student details and contact information.",
+  "@personalInformationSubtitle": {
+    "description": "Personal information section subtitle"
+  },
+  "academicPolicyTitle": "Academic & Policy",
+  "@academicPolicyTitle": {
+    "description": "Academic and policy section title"
+  },
+  "academicPolicySubtitle": "Academic information and general regulations.",
+  "@academicPolicySubtitle": {
+    "description": "Academic and policy section subtitle"
+  },
+  "healthInformationTitle": "Health Information",
+  "@healthInformationTitle": {
+    "description": "Health information section title"
+  },
+  "healthInformationSubtitle": "Information about allergies and underlying medical conditions.",
+  "@healthInformationSubtitle": {
+    "description": "Health information section subtitle"
+  },
+  "documentProfileTitle": "Document Profile",
+  "@documentProfileTitle": {
+    "description": "Document profile section title"
+  },
+  "documentProfileSubtitle": "Identification documents and required documents.",
+  "@documentProfileSubtitle": {
+    "description": "Document profile section subtitle"
+  },
+  "needsConfirmationStatus": "NEEDS CONFIRMATION",
+  "@needsConfirmationStatus": {
+    "description": "Status tag for items needing confirmation"
+  },
+  "alreadyConfirmedStatus": "ĐÃ XÁC NHẬN",
+  "@alreadyConfirmedStatus": {
+    "description": "Status tag for items that are already confirmed"
+  },
+  "addToProfileStatus": "ADD TO PROFILE",
+  "@addToProfileStatus": {
+    "description": "Status tag for items that need to be added to profile"
+  },
+  "studentIdLabel": "Student ID",
+  "@studentIdLabel": {
+    "description": "Student ID label"
+  },
+  "classLabel": "Class",
+  "@classLabel": {
+    "description": "Class label"
+  },
+  "curriculumLabel": "Curriculum",
+  "@curriculumLabel": {
+    "description": "Curriculum label"
+  },
+  "primaryContactLabel": "Primary Contact",
+  "@primaryContactLabel": {
+    "description": "Primary contact label"
+  },
+  "fatherLabel": "Father",
+  "@fatherLabel": {
+    "description": "Father label"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "noClassYet": "No class yet",
+  "@noClassYet": {
+    "description": "No class yet placeholder"
+  },
+  "loadingStudentProfile": "Loading student profile...",
+  "@loadingStudentProfile": {
+    "description": "Loading message for student profile"
+  },
+  "academicInformationTitle": "Academic Information",
+  "@academicInformationTitle": {
+    "description": "Academic information section title"
+  },
+  "contactPersonLabel": "Contact Person",
+  "@contactPersonLabel": {
+    "description": "Contact person label"
+  },
+  "admissionInformationTitle": "Admission Information",
+  "@admissionInformationTitle": {
+    "description": "Admission information section title"
+  },
+  "admissionDateLabel": "Date of admission",
+  "@admissionDateLabel": {
+    "description": "Admission date label"
+  },
+  "admissionYearLabel": "Admission academic year",
+  "@admissionYearLabel": {
+    "description": "Admission academic year label"
+  },
+  "admissionTypeLabel": "Admission type",
+  "@admissionTypeLabel": {
+    "description": "Admission type label"
+  },
+  "admissionTypeInDistrict": "In District",
+  "@admissionTypeInDistrict": {
+    "description": "In district admission type"
+  },
+  "admissionTypeOutOfDistrict": "Out of District",
+  "@admissionTypeOutOfDistrict": {
+    "description": "Out of district admission type"
+  },
+  "admissionTypeTransfer": "Transfer School",
+  "@admissionTypeTransfer": {
+    "description": "Transfer school admission type"
+  },
+  "classInformationTitle": "Class Information",
+  "@classInformationTitle": {
+    "description": "Class information section title"
+  },
+  "statusLabel": "Status",
+  "@statusLabel": {
+    "description": "Status label"
+  },
+  "currentlyStudyingStatus": "ĐANG HỌC",
+  "@currentlyStudyingStatus": {
+    "description": "Currently studying status"
+  },
+  "regimePolicyTitle": "Regime & Policy",
+  "@regimePolicyTitle": {
+    "description": "Regime and policy section title"
+  },
+  "priorityStatusLabel": "Priority status",
+  "@priorityStatusLabel": {
+    "description": "Priority status label"
+  },
+  "disabilityStatusLabel": "Disability status",
+  "@disabilityStatusLabel": {
+    "description": "Disability status label"
+  },
+  "medicalInfoGroupUndetermined": "Other",
+  "@medicalInfoGroupUndetermined": {
+    "description": "Medical info group for undetermined cases"
+  },
+  "medicalInfoGroupAllergy": "Allergy",
+  "@medicalInfoGroupAllergy": {
+    "description": "Medical info group for allergies"
+  },
+  "medicalInfoGroupChronicOrUnderlying": "Chronic/Underlying Disease",
+  "@medicalInfoGroupChronicOrUnderlying": {
+    "description": "Medical info group for chronic or underlying diseases"
+  },
+  "medicalInfoTypeUndetermined": "Other",
+  "@medicalInfoTypeUndetermined": {
+    "description": "Medical info type for undetermined cases"
+  },
+  "medicalInfoTypeFoodAllergy": "Food Allergy",
+  "@medicalInfoTypeFoodAllergy": {
+    "description": "Medical info type for food allergies"
+  },
+  "medicalInfoTypeDrugAllergy": "Drug Allergy",
+  "@medicalInfoTypeDrugAllergy": {
+    "description": "Medical info type for drug allergies"
+  },
+  "medicalInfoTypeChronicOrUnderlying": "Chronic/Underlying Disease",
+  "@medicalInfoTypeChronicOrUnderlying": {
+    "description": "Medical info type for chronic or underlying diseases"
+  },
+  "allergiesTitle": "Allergies",
+  "@allergiesTitle": {
+    "description": "Allergies section title"
+  },
+  "foodAllergyLabel": "Food allergies",
+  "@foodAllergyLabel": {
+    "description": "Food allergies label"
+  },
+  "drugAllergyLabel": "Drug allergies",
+  "@drugAllergyLabel": {
+    "description": "Drug allergies label"
+  },
+  "chronicDiseasesTitle": "Chronic/Underlying Diseases",
+  "@chronicDiseasesTitle": {
+    "description": "Chronic diseases section title"
+  },
+  "chronicDiseasesLabel": "Chronic/Underlying Diseases",
+  "@chronicDiseasesLabel": {
+    "description": "Chronic diseases label"
+  },
+  "additionalNotesTitle": "Additional Notes (Special characteristics or habits to note)",
+  "@additionalNotesTitle": {
+    "description": "Additional notes section title"
+  },
+  "additionalNotesLabel": "Additional notes",
+  "@additionalNotesLabel": {
+    "description": "Additional notes label"
+  },
+  "profileNeutralStatus": "HAS INFO",
+  "@profileNeutralStatus": {
+    "description": "Profile has information status"
+  },
+  "contactRelationshipFather": "Father",
+  "@contactRelationshipFather": {
+    "description": "Contact relationship - Father"
+  },
+  "contactRelationshipMother": "Mother",
+  "@contactRelationshipMother": {
+    "description": "Contact relationship - Mother"
+  },
+  "contactRelationshipOther": "Other",
+  "@contactRelationshipOther": {
+    "description": "Contact relationship - Other"
+  },
+  "studentInformationTitle": "Personal Information",
+  "@studentInformationTitle": {
+    "description": "Student information page title"
+  },
+  "needsConfirmationStatus": "NEEDS CONFIRMATION",
+  "@needsConfirmationStatus": {
+    "description": "Status when student information needs confirmation"
+  },
+  "confirmedStatus": "CONFIRMED",
+  "@confirmedStatus": {
+    "description": "Status when student information is confirmed"
+  },
+  "generalInformationTitle": "General Information",
+  "@generalInformationTitle": {
+    "description": "General information section title"
+  },
+  "idCccdLabel": "ID/CCCD",
+  "@idCccdLabel": {
+    "description": "ID/CCCD label"
+  },
+  "dateOfBirthLabel": "Date of Birth",
+  "@dateOfBirthLabel": {
+    "description": "Date of birth label"
+  },
+  "genderLabel": "Gender",
+  "@genderLabel": {
+    "description": "Gender label"
+  },
+  "nationalityLabel": "Nationality",
+  "@nationalityLabel": {
+    "description": "Nationality label"
+  },
+  "religionLabel": "Religion",
+  "@religionLabel": {
+    "description": "Religion label"
+  },
+  "permanentAddressLabel": "Permanent Address",
+  "@permanentAddressLabel": {
+    "description": "Permanent address label"
+  },
+  "temporaryAddressLabel": "Temporary Address",
+  "@temporaryAddressLabel": {
+    "description": "Temporary address label"
+  },
+  "contactInformationTitle": "Contact Information",
+  "@contactInformationTitle": {
+    "description": "Contact information section title"
+  },
+  "primaryContactTag": "Primary Contact",
+  "@primaryContactTag": {
+    "description": "Primary contact tag text"
+  },
+  "relationshipToStudentLabel": "Relationship to student",
+  "@relationshipToStudentLabel": {
+    "description": "Relationship to student label"
+  },
+  "yearOfBirthLabel": "Year of birth",
+  "@yearOfBirthLabel": {
+    "description": "Year of birth label"
+  },
+  "occupationLabel": "Occupation",
+  "@occupationLabel": {
+    "description": "Occupation label"
+  },
+  "phoneNumberLabel": "Phone number",
+  "@phoneNumberLabel": {
+    "description": "Phone number label"
+  },
+  "confirmStudentInformationButton": "Confirm student information",
+  "@confirmStudentInformationButton": {
+    "description": "Confirm student information button text"
+  },
+  "requestInformationEditButton": "Request information edit",
+  "@requestInformationEditButton": {
+    "description": "Request information edit button text"
+  },
+  "studentInformationSubtitle": "Personal information and contact details of the student.",
+  "@studentInformationSubtitle": {
+    "description": "Student information card subtitle"
+  },
+  "detailedStudentInfoTitle": "Detailed Student Information",
+  "@detailedStudentInfoTitle": {
+    "description": "Detailed student information section title"
+  },
+  "genderMale": "Male",
+  "@genderMale": {
+    "description": "Male gender label"
+  },
+  "genderFemale": "Female",
+  "@genderFemale": {
+    "description": "Female gender label"
+  },
+  "requestEditInfoTitle": "Request information edit",
+  "@requestEditInfoTitle": {"description": "Title for request edit info sheet"},
+  "requestEditInfoDetailsLabel": "Request details",
+  "@requestEditInfoDetailsLabel": {"description": "Label for request details field"},
+  "requestEditInfoDetailsHint": "Please describe the information that needs to be corrected...",
+  "@requestEditInfoDetailsHint": {"description": "Hint for request details field"},
+  "requestEditInfoSubmittedTitle": "Request sent",
+  "@requestEditInfoSubmittedTitle": {"description": "Title for request submitted sheet"},
+  "requestEditInfoSubmittedSubtitle": "The school will review your request and respond as soon as possible.",
+  "@requestEditInfoSubmittedSubtitle": {"description": "Subtitle for request submitted sheet"},
+  "requestEditInfoSend": "Send information",
+  "@requestEditInfoSend": {"description": "Send information button text"},
+  "iUnderstand": "I understand",
+  "@iUnderstand": {"description": "I understand button text"}
+} 

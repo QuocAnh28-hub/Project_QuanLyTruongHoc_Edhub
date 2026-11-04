@@ -1,0 +1,25 @@
+ms-notification:
+  image:
+    repository: registry.eduhub.com/dev/ms-notification
+    tag: 257927a
+  imagePullSecrets:
+    - name: regcred
+  env:
+    - name: PORT
+      value: "3000"
+    - name: SMTP_HOST
+      value: "smtp.gmail.com"
+    - name: SMTP_PORT
+      value: "587"
+    - name: SMTP_SECURE
+      value: "false"
+    - name: SMTP_USER
+      value: "an.nguyen012095@gmail.com"
+    - name: SMTP_PASS
+      value: "gtwxfugsljcnaagv"
+    - name: SMTP_FROM
+      value: "Sở Giáo dục - Hệ thống G-Edu <support@g-edu.vn>"
+    - name: KAFKA_BROKERS
+      value: "gedu-kafka-cluster-kafka-brokers.middleware-nonprod.svc.cluster.local:9092"
+    - name: REDIS_URL
+      value: "default:redispassword@gedu-deploy-redis-master.middleware-prod.svc.cluster.local:6379"

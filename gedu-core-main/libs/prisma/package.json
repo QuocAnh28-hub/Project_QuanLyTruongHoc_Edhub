@@ -1,0 +1,22 @@
+{
+  "name": "@gedu/prisma",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "prisma:format": "prisma format",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:seed": "ts-node src/seed.ts",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset"
+  },
+  "dependencies": {
+    "@prisma/client": "6.13.0"
+  },
+  "devDependencies": {
+    "prisma": "6.13.0"
+  }
+}

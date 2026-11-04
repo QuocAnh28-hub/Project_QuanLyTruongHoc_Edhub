@@ -1,0 +1,72 @@
+---
+# =============================================================================
+# GEDU Infrastructure Deployment - Main Site Configuration
+# =============================================================================
+# This file orchestrates the complete deployment of the GEDU infrastructure
+# including Kubernetes cluster, load balancing, and supporting services.
+
+# =============================================================================
+# 1. BOOTSTRAP - Initial system preparation
+# =============================================================================
+- import_playbook: playbooks/bootstrap.yml
+  name: Running Bootstrap Playbook
+  tags:
+    - bootstrap
+    - init
+
+# =============================================================================
+# 2. LOAD BALANCING - HAProxy and Keepalived for high availability
+# =============================================================================
+- import_playbook: playbooks/deploy_haproxy_keepalived.yml
+  name: Running Deploy HAProxy and Keepalived Playbook
+  tags:
+    - haproxy
+    - loadbalancer
+    - ha
+
+# =============================================================================
+# 3. CONTAINER REGISTRY - Harbor for container image management
+# =============================================================================
+- import_playbook: playbooks/deploy_harbor.yml
+  name: Running Deploy Harbor Playbook
+  tags:
+    - harbor
+    - registry
+
+# =============================================================================
+# 4. KUBERNETES CLUSTER - RKE cluster deployment
+# =============================================================================
+- import_playbook: playbooks/rke_cluster.yml
+  name: Running Deploy RKE Playbook
+  tags:
+    - rke
+    - kubernetes
+    - cluster
+
+# =============================================================================
+# 5. DATA LAKE - MinIO object storage deployment
+# =============================================================================
+- import_playbook: playbooks/data-lake.yaml
+  name: Running Data Lake Deployment Playbook
+  tags:
+    - datalake
+    - minio
+    - storage
+
+# =============================================================================
+# 6. DATABASE CLUSTER - Database deployment
+# =============================================================================
+- import_playbook: playbooks/db-cluster.yml
+  name: Running Database Cluster Playbook
+  tags:
+    - database
+    - db
+
+# =============================================================================
+# 7. CLEANUP - Optional cleanup operations
+# =============================================================================
+- import_playbook: playbooks/cleanup_rke_nodes.yml
+  name: Running Cleanup RKE Nodes Playbook
+  tags:
+    - rke-cleanup
+    - cleanup

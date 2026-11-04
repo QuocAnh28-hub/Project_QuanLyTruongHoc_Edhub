@@ -1,0 +1,119 @@
+---
+- name: Ensure install directory exists
+  file:
+    path: "{{ harbor_install_dir }}"
+    state: directory
+
+- name: Ensure cert directory exists
+  file:
+    path: "{{ harbor_cert_dir }}"
+    state: directory
+
+- name: Download Harbor installer
+  get_url:
+    url: "https://github.com/goharbor/harbor/releases/download/{{ harbor_version }}/{{ harbor_installer }}"
+    dest: "/tmp/{{ harbor_installer }}"
+    mode: '0644'
+
+- name: Extract Harbor installer
+  unarchive:
+    src: "/tmp/{{ harbor_installer }}"
+    dest: "{{ harbor_install_dir }}"
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+
+- name: Generate CA private key
+  command: "openssl genrsa -out {{ harbor_cert_dir }}/ca.key 4096"
+  args:
+    creates: "{{ harbor_cert_dir }}/ca.key"
+  when: harbor_enable_cert | default(true)
+
+- name: Generate CA certificate
+  command: >
+    openssl req -x509 -new -nodes -sha512 -days 3650
+    -subj "/C={{ harbor_country }}/ST={{ harbor_state }}/L={{ harbor_locality }}/O={{ harbor_org }}/OU={{ harbor_ou }}/CN={{ harbor_hostname }} CA"
+    -key {{ harbor_cert_dir }}/ca.key
+    -out {{ harbor_cert_dir }}/ca.crt
+  args:
+    creates: "{{ harbor_cert_dir }}/ca.crt"
+  when: harbor_enable_cert | default(true)
+
+- name: Generate server private key
+  command: "openssl genrsa -out {{ harbor_cert_dir }}/{{ harbor_hostname }}.key 4096"
+  args:
+    creates: "{{ harbor_cert_dir }}/{{ harbor_hostname }}.key"
+  when: harbor_enable_cert | default(true)
+
+- name: Generate server certificate signing request
+  command: >
+    openssl req -sha512 -new
+    -subj "/C={{ harbor_country }}/ST={{ harbor_state }}/L={{ harbor_locality }}/O={{ harbor_org }}/OU={{ harbor_ou }}/CN={{ harbor_hostname }}"
+    -key {{ harbor_cert_dir }}/{{ harbor_hostname }}.key
+    -out {{ harbor_cert_dir }}/{{ harbor_hostname }}.csr
+  args:
+    creates: "{{ harbor_cert_dir }}/{{ harbor_hostname }}.csr"
+  when: harbor_enable_cert | default(true)
+
+- name: Create v3.ext file
+  copy:
+    content: |
+      authorityKeyIdentifier=keyid,issuer
+      basicConstraints=CA:FALSE
+      keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+      extendedKeyUsage = serverAuth
+      subjectAltName = @alt_names
+
+      [alt_names]
+      DNS.1={{ harbor_hostname }}
+      IP.1={{ harbor_ip }}
+    dest: "{{ harbor_cert_dir }}/v3.ext"
+  when: harbor_enable_cert | default(true)
+
+- name: Generate server certificate signed by CA
+  command: >
+    openssl x509 -req -sha512 -days 3650
+    -extfile {{ harbor_cert_dir }}/v3.ext
+    -CA {{ harbor_cert_dir }}/ca.crt
+    -CAkey {{ harbor_cert_dir }}/ca.key
+    -CAcreateserial
+    -in {{ harbor_cert_dir }}/{{ harbor_hostname }}.csr
+    -out {{ harbor_cert_dir }}/{{ harbor_hostname }}.crt
+  args:
+    creates: "{{ harbor_cert_dir }}/{{ harbor_hostname }}.crt"
+  when: harbor_enable_cert | default(true)
+
+- name: Check if harbor.yml exists
+  stat:
+    path: "{{ harbor_install_dir }}/harbor.yml"
+  register: harbor_yml_stat
+
+- name: Ensure harbor.yml is present by copying from template
+  copy:
+    src: "{{ harbor_install_dir }}/harbor.yml.tmpl"
+    dest: "{{ harbor_install_dir }}/harbor.yml"
+    remote_src: yes
+  when: not harbor_yml_stat.stat.exists
+
+- name: Update harbor.yml hostname
+  lineinfile:
+    path: "{{ harbor_install_dir }}/harbor.yml"
+    regexp: '^hostname:'
+    line: "hostname: {{ harbor_hostname }}"
+    backrefs: yes
+
+- name: Enable HTTPS in harbor.yml
+  blockinfile:
+    path: "{{ harbor_install_dir }}/harbor.yml"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: HTTPS"
+    block: |
+      https:
+        port: 443
+        certificate: {{ harbor_cert_dir }}/{{ harbor_hostname }}.crt
+        private_key: {{ harbor_cert_dir }}/{{ harbor_hostname }}.key
+  when: harbor_enable_cert | default(true)
+
+- name: Run Harbor install script
+  command: "./install.sh"
+  args:
+    chdir: "{{ harbor_install_dir }}"

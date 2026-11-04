@@ -1,0 +1,67 @@
+model Class {
+  id                          Int      @id @default(autoincrement())
+  orgId                       Int      @map("org_id")
+  schoolYearId                Int      @map("school_year_id")
+  gradeLevel                  Int?     @map("grade_level") // GRADE_LEVEL enum: 1-12 for grades, 13=PRE_NURSERY, 14=NURSERY, 15=PRE_SCHOOL, 16=KINDERGARTEN
+  code                        String   @unique
+  name                        String
+  maxClassSize                Int      @default(0) @map("max_class_size")
+  curriculumId                Int?     @map("curriculum_id")
+  firstForeignLanguageId      Int?     @map("first_foreign_language_id")
+  secondForeignLanguageId     Int?     @map("second_foreign_language_id")
+  homeroomTeacherId           Int?     @map("home_room_teacher_id")
+  dailyScheduleType           Int?     @map("daily_schedule_type") // DAILY_SCHEDULE_TYPE enum: 1=ONE_SHIFT, 2=TWO_SHIFTS
+  estimatedLessonsPerWeek     Int?     @map("estimated_lessons_per_week") // ESTIMATED_LESSONS_PER_WEEK enum: 1=FROM_FIVE_PER_WEEK, 2=FROM_SIX_PER_WEEK, 3=FROM_SIX_TO_EIGHT_PER_WEEK, 4=FROM_NINE_TO_TEN_PER_WEEK
+  isDayBoarding               Boolean? @default(false) @map("is_day_boarding")
+  isMultiGrade                Boolean? @map("is_multi_grade")
+  hasStudentsWithDisabilities Boolean? @map("has_students_with_disabilities")
+  hasParentRepInClass         Boolean? @map("has_parent_rep_in_class")
+  hasParentRepInSchoolBoard   Boolean? @map("has_parent_rep_in_school_board")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school                School               @relation(fields: [orgId], references: [id])
+  curriculum            Curriculum?          @relation(fields: [curriculumId], references: [id])
+  homeroomTeacher       SchoolStaff?         @relation(fields: [homeroomTeacherId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  firstForeignLanguage  InstructionLanguage? @relation("FirstForeignLanguage", fields: [firstForeignLanguageId], references: [id])
+  secondForeignLanguage InstructionLanguage? @relation("SecondForeignLanguage", fields: [secondForeignLanguageId], references: [id])
+  schoolYear            SchoolYear           @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  studentClasses        StudentClass[]
+
+  attendanceSessions  AttendanceSession[]
+  timetableSchedules  TimetableSchedule[]
+  teachingAssignments TeachingAssignment[]
+  scoreEntries        ScoreEntry[]
+  subjectSummaries    SubjectSemesterSummary[]
+
+  @@index([orgId, schoolYearId, gradeLevel, curriculumId])
+  @@index([orgId, schoolYearId, curriculumId])
+  @@index([orgId, gradeLevel])
+  @@index([gradeLevel])
+  @@map("classes")
+}
+
+model StudentClass {
+  id        Int       @id @default(autoincrement())
+  orgId     Int       @map("org_id")
+  studentId Int       @map("student_id")
+  classId   Int       @map("class_id")
+  status    Int       @default(1) // STATUS enum: 1=CREATED, 2=ACTIVE, 3=COMPLETED, 4=TERMINATED
+  arrangeAt DateTime? @map("arrange_at")
+  endAt     DateTime? @map("end_at")
+  note      String?   @map("note")
+  school    School    @relation(fields: [orgId], references: [id])
+  student   Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class     Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  @@index([orgId, classId])
+  @@map("student_classes")
+}

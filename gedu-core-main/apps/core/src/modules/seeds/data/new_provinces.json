@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "title": "Hà Nội"
+  },
+  {
+    "id": 4,
+    "title": "Cao Bằng"
+  },
+  {
+    "id": 8,
+    "title": "Tuyên Quang"
+  },
+  {
+    "id": 11,
+    "title": "Điện Biên"
+  },
+  {
+    "id": 12,
+    "title": "Lai Châu"
+  },
+  {
+    "id": 14,
+    "title": "Sơn La"
+  },
+  {
+    "id": 15,
+    "title": "Lào Cai"
+  },
+  {
+    "id": 19,
+    "title": "Thái Nguyên"
+  },
+  {
+    "id": 20,
+    "title": "Lạng Sơn"
+  },
+  {
+    "id": 22,
+    "title": "Quảng Ninh"
+  },
+  {
+    "id": 24,
+    "title": "Bắc Ninh"
+  },
+  {
+    "id": 25,
+    "title": "Phú Thọ"
+  },
+  {
+    "id": 31,
+    "title": "Hải Phòng"
+  },
+  {
+    "id": 33,
+    "title": "Hưng Yên"
+  },
+  {
+    "id": 37,
+    "title": "Ninh Bình"
+  },
+  {
+    "id": 38,
+    "title": "Thanh Hóa"
+  },
+  {
+    "id": 40,
+    "title": "Nghệ An"
+  },
+  {
+    "id": 42,
+    "title": "Hà Tĩnh"
+  },
+  {
+    "id": 44,
+    "title": "Quảng Trị"
+  },
+  {
+    "id": 46,
+    "title": "Huế"
+  },
+  {
+    "id": 48,
+    "title": "Đà Nẵng"
+  },
+  {
+    "id": 51,
+    "title": "Quảng Ngãi"
+  },
+  {
+    "id": 52,
+    "title": "Gia Lai"
+  },
+  {
+    "id": 56,
+    "title": "Khánh Hòa"
+  },
+  {
+    "id": 66,
+    "title": "Đắk Lắk"
+  },
+  {
+    "id": 68,
+    "title": "Lâm Đồng"
+  },
+  {
+    "id": 75,
+    "title": "Đồng Nai"
+  },
+  {
+    "id": 79,
+    "title": "Hồ Chí Minh"
+  },
+  {
+    "id": 80,
+    "title": "Tây Ninh"
+  },
+  {
+    "id": 82,
+    "title": "Đồng Tháp"
+  },
+  {
+    "id": 86,
+    "title": "Vĩnh Long"
+  },
+  {
+    "id": 91,
+    "title": "An Giang"
+  },
+  {
+    "id": 92,
+    "title": "Cần Thơ"
+  },
+  {
+    "id": 96,
+    "title": "Cà Mau"
+  }
+]

@@ -1,0 +1,20 @@
+services:
+  fe:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./dist:/app/dist
+    ports:
+      - 80:80
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - API_ENDPOINT=http://host.docker.internal:3000
+      - S3_ENDPOINT=http://10.47.198.59:9000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

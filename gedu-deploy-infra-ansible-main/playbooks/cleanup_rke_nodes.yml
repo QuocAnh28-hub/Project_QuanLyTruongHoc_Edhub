@@ -1,0 +1,19 @@
+---
+- name: Cleanup RKE nodes
+  hosts: rke_nodes
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Copy cleanup script to node
+      copy:
+        src: ../cleanup_rke_node.sh
+        dest: /tmp/cleanup_rke_node.sh
+        mode: "0755"
+
+    - name: Run cleanup script
+      command: bash /tmp/cleanup_rke_node.sh
+
+    - name: Remove cleanup script
+      file:
+        path: /tmp/cleanup_rke_node.sh
+        state: absent

@@ -1,0 +1,9 @@
+#include "Generated.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+
+FLUTTER_TARGET=lib/main_development.dart
+PRODUCT_BUNDLE_IDENTIFIER=com.gedu.app.dev
+PRODUCT_NAME=Gedu Dev
+DISPLAY_NAME=Gedu Dev
+API_BASE_URL=https://demo.lazeout.com
+FLAVOR=development 

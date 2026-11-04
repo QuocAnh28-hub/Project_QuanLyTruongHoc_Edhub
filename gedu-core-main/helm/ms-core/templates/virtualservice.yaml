@@ -1,0 +1,28 @@
+{{- if .Values.virtualService.enabled }}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ include "your-chart.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "your-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- with .Values.virtualService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gateways:
+    - {{ .Values.virtualService.gateway }}
+  hosts:
+    - {{ .Values.virtualService.host | quote }}
+  http:
+    - match:
+        - uri:
+            prefix: {{ .Values.virtualService.uriPrefix | quote }}
+      route:
+        - destination:
+            host: {{ .Values.virtualService.service }}.{{ .Release.Namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.virtualService.port }}
+{{- end }}

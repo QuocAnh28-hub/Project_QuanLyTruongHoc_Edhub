@@ -1,0 +1,38 @@
+name: gedu_mobile_client_workspace
+
+packages:
+  - app/gedu_mobile_client
+  - libraries/*
+  - cores/*
+  - features/*
+
+command:
+  bootstrap:
+    runPubGetInParallel: true
+    usePubspecOverrides: true
+    environment:
+      sdk: ^3.8.1
+      flutter: ">=1.17.0"
+
+    dependencies:
+      connectivity_plus: ^6.1.4
+      dartx: ^1.2.0
+      device_info_plus: ^11.5.0
+      dio: ^5.8.0+1
+      dio_cache_interceptor: ^4.0.3
+      flutter:
+        sdk: flutter
+      get_it: ^8.0.3
+      injectable: ^2.5.0
+      intl: ^0.20.2
+      json_annotation: ^4.9.0
+      rxdart: ^0.28.0
+      tuple: ^2.0.2
+    dev_dependencies:
+      flutter_lints: ^5.0.0
+      build_runner: ^2.5.4
+      build_runner_core: ^9.1.2
+      freezed: ^3.1.0
+      injectable_generator: ^2.7.0
+      json_serializable: ^6.9.5
+      http_mock_adapter: ^0.6.1

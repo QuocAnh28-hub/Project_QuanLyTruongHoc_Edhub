@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "nx-mcp": {
+      "command": "npx",
+      "args": [
+        "nx-mcp@latest",
+        "/Users/annguyen/Workspaces/GEdu/gedu-core"
+      ]
+    }
+  }
+}

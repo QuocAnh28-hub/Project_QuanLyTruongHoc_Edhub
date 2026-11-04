@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Trung học phổ thông",
+    "desc": "Tốt nghiệp cấp 3"
+  },
+  {
+    "id": 2,
+    "name": "Cao đẳng",
+    "desc": "Tốt nghiệp hệ cao đẳng"
+  },
+  {
+    "id": 3,
+    "name": "Đại học",
+    "desc": "Tốt nghiệp hệ đại học"
+  },
+  {
+    "id": 4,
+    "name": "Thạc sĩ",
+    "desc": "Tốt nghiệp hệ thạc sĩ"
+  },
+  {
+    "id": 5,
+    "name": "Tiến sĩ",
+    "desc": "Tốt nghiệp hệ tiến sĩ"
+  }
+]

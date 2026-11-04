@@ -1,0 +1,3 @@
+export const import_schools = { file_name: 'mau-import-truong', link: 'https://docs.google.com/spreadsheets/d/14weQqKc0tGvnDGa7uC9L-WV4Cc7XNR_a' }
+export const import_staffs = { file_name: 'mau-import-canbo-giaovien', link: 'https://docs.google.com/spreadsheets/d/1O_nUc_HbCap17APpWpc8-baDvKGGkXw1' }
+export const import_students = { file_name: 'mau-import-ho-so-hoc-sinh', link: 'https://docs.google.com/spreadsheets/d/1OGtqUScqV_emR-ZAbrxj55zgbns7wqj_' }

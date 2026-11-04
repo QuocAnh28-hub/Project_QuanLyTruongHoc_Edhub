@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package school;
+
+service SchoolImportService {
+  rpc ImportSchools (ImportSchoolsRequest) returns (ImportSchoolsResponse);
+}
+
+message SchoolImportRequest {
+  string code = 1;
+  string name = 2;
+  int32 type = 3;
+  string address = 4;
+  int32 dailyScheduleType = 5;
+  string email = 6;
+  string website = 7;
+  string hotline = 8;
+  string principalFirstName = 9;
+  string principalLastName = 10;
+  string principalPhone = 11;
+  string ward = 12;
+  bool isSchoolForGifted = 13;
+  bool canPreschool = 14;
+  bool canPrimarySchool = 15;
+  bool canLowerSecondarySchool = 16;
+  bool canUpperSecondarySchool = 17;
+  bool isInternationalSchool = 18;
+  AdminInfo admin = 19;
+}
+
+message AdminInfo {
+  string firstName = 1;
+  string lastName = 2;
+  string phone = 3;
+  string email = 4;
+  string personalEmail = 5;
+  string mobile = 6;
+}
+
+message SchoolImportResponse {
+  int32 id = 1;
+  bool success = 4;
+  string message = 5;
+}
+
+message ImportSchoolsRequest {
+  string jobId = 1;
+  repeated SchoolImportRequest schools = 2;
+  int32 createdBy = 3;
+  string email = 4;
+  string fileName = 5;
+}
+
+message ImportSchoolsResponse {
+  repeated SchoolImportResult results = 1;
+  int32 totalCount = 2;
+  int32 successCount = 3;
+  int32 failureCount = 4;
+  int32 orgId = 5;
+}
+
+message SchoolImportResult {
+  int32 id = 1;
+  bool success = 2;
+  string message = 3;
+}
+

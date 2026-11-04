@@ -1,0 +1,60 @@
+k8s_domain_name: "eduhub.local"
+
+hosts_file_groups:
+  - docker_registry
+  - gitlab_runner
+  - k8s_cluster
+  - data_lake
+  - database
+
+k8s_update_kernel: true
+k8s_update_docker: false
+
+ntp_timezone: Asia/Ho_Chi_Minh
+ntp_servers:
+  - 0.pool.ntp.org
+  - 1.pool.ntp.org
+  - 2.pool.ntp.org
+  - 3.pool.ntp.org
+
+docker_users:
+  - docker
+
+system_users:
+  - name: ansible_user
+    comment: Ansible Automation User
+    shell: /bin/bash
+    groups: wheel
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDasyY3V7Nnyz+zsMc71f0K8EvzxbqROTwTwDbjSzKypGcsSiMf20fizHwqPTSx1puuc4xyuKfJIY1KTfbzuWt45Ix0xk6Ca+LiIyX6/aUl5tN5dSiYhL2OXZdlAvI8jEcPWWXMLFAxwbgpZxgHOX6LBiVyBf8eaaBt985XFDdxLUoY/PgJ8/tvYpOTXKjs1JqUt6Xyyl0vACt0Ne0oifIfi5MwCq+B5w7Y82zNJaUrkPLM2yf6vdbCEbhf1Xx7QwWutwzYoSDfN4Z9g1guphQmHCQS+YNYA73KixsVBzsCRscPkml2VULDXwKvPEanvxXvmg1cfY+fAIaV1vf64IwJSV39Py34JZ5XOnoONgSJTOlZgIC/QBsZUECL+f71r0Jyz8jZbEuzrNx1oznF3QB80z1m+OQMA0vAydiQg3iyekGNGpY5Gahyh2j+UBcCt7fSeaw5C0GtycQf9LaXlzjsvUljJddnXEbb0I8b5Sfu4hN4xpKkVO7vrgUO+8XL7FU= phumm@DESKTOP-I80CPHG"
+    sudo_nopasswd: true
+  - name: docker
+    comment: Docker User
+    shell: /bin/bash
+    groups: wheel
+    ssh_key: ""
+    sudo_nopasswd: true
+
+rke2_ha_mode: true
+rke2_api_ip: 10.47.197.31
+rke2_download_kubeconf: true
+rke2_allow_downgrade: true
+
+# rke2_server_node_taints:
+#   - CriticalAddonsOnly=true:NoExecute
+
+rke2_version: "v1.31.9+rke2r1"
+
+# # Add all master node IPs and the VIP/load balancer IP to TLS SANs
+rke2_additional_sans: [
+  "10.47.197.31",  # API server IP
+  "10.47.197.32",  # Additional SAN
+]
+
+rke2_etcd_snapshot: true
+rke2_etcd_snapshot_schedule_cron: "0 */6 * * *"   # Optional: every 6 hours
+rke2_etcd_snapshot_retention: "72h"               # Optional: keep snapshots for 72 hours
+rke2_etcd_snapshot_destination_dir: "/var/lib/rancher/rke2/server/db/snapshots"
+
+# harbor_enable_cert: false
+harbor_hostname: "registry.eduhub.com"
+harbor_ip: "10.47.198.51"

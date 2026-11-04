@@ -1,0 +1,12 @@
+# melos_managed_dependency_overrides: core_network,lib_base,lib_utils,core_storage,lib_design_system
+dependency_overrides:
+  core_network:
+    path: ../core_network
+  core_storage:
+    path: ../core_storage
+  lib_base:
+    path: ../../libraries/lib_base
+  lib_design_system:
+    path: ../../libraries/lib_design_system
+  lib_utils:
+    path: ../../libraries/lib_utils

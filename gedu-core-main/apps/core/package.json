@@ -1,0 +1,29 @@
+{
+  "name": "@gedu/core",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV=production nest build --webpack --webpackPath webpack.config.js",
+    "start:dev": "ts-node-dev --respawn --transpile-only --env-file=../../.env.core -r tsconfig-paths/register src/main.ts",
+    "start:prod": "node dist/apps/core/main"
+  },
+  "dependencies": {
+    
+    "@fastify/multipart": "7.7.3",
+    "@fastify/static": "^7.0.4",
+    "@nestjs/jwt": "^10.0.0",
+    "@nestjs/mapped-types": "^2.1.0",
+    "@nestjs/passport": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.0.0",
+    "@nestjs/swagger": "^7.4.2",
+    "swagger-ui-dist": "^5.18.2",
+    "@nestjs/throttler": "^5.2.0",
+    "class-transformer": "^0.5.1",
+    "axios": "^1.9.0",
+    "fastify": "^4.26.2",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "uuid": "^11.1.0",
+    "xml2js": "^0.6.2"
+  }
+}

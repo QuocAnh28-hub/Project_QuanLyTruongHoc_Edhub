@@ -1,0 +1,52 @@
+services:
+  # Email microservice
+  notification:
+    image: gedu/notification:${TAG:-latest}
+    container_name: gedu-notification
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile
+    environment:
+      # SMTP Configuration
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_SECURE=${SMTP_SECURE:-false}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      
+      - SMTP_CIPHERS=${SMTP_CIPHERS:-SSLv3}
+      - MAILERSEND_API=${MAILERSEND_API}
+
+      - MS_GRAPH_CLIENT_ID=${MS_GRAPH_CLIENT_ID}
+      - MS_GRAPH_CLIENT_SECRET=${MS_GRAPH_CLIENT_SECRET}
+      - MS_GRAPH_TENANT_ID=${MS_GRAPH_TENANT_ID}
+      
+      - MAIL_FROM=${MAIL_FROM:-"Hệ Thống Gedu <no-reply@gedu.vn>"}
+      - WEB_ACCESS_LINK=${WEB_ACCESS_LINK:-https://gedu.vn}
+      - WEB_SUPPORT_EMAIL=${WEB_SUPPORT_EMAIL:-hotro@gedu.vn}
+      - WEB_SUPPORT_PHONE=${WEB_SUPPORT_PHONE:-0931 441 213}
+
+      - REDIS_URL=${REDIS_URL:-redis://localhost:6379}
+  
+      # Kafka Configuration (using host Kafka broker)
+      # On Mac/Windows, use host.docker.internal to access host services
+      # On Linux, you might need to use the host's IP address or add --add-host=host.docker.internal:host-gateway
+      - KAFKA_BROKERS=${KAFKA_BROKERS:-host.docker.internal:9092}
+      
+      # Application Configuration
+      - NODE_ENV=${NODE_ENV:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - PORT=3000
+
+    restart: unless-stopped
+    # Add this for Linux compatibility
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 3005:3000
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('Health check passed')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s 

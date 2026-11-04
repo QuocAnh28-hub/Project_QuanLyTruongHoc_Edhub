@@ -1,0 +1,6 @@
+---
+- name: reboot_server
+  ansible.builtin.reboot:
+
+- name: apply_sysctl_parameters
+  ansible.builtin.command: sysctl --system

@@ -1,0 +1,6 @@
+---
+- name: Include Docker installation tasks
+  include_tasks: install.yml
+
+- name: Include Harbor certificate configuration tasks
+  include_tasks: harbor_certificates.yml

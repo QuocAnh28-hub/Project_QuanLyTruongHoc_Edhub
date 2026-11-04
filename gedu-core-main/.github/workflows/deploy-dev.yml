@@ -1,0 +1,446 @@
+name: Deploy to Dev Server
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'apps/**'
+      - 'libs/**'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch:
+
+env:
+  TAG: ${{ github.sha }}
+  NODE_ENV: development
+  COMPOSE_DOCKER_CLI_BUILD: 1
+  DOCKER_BUILDKIT: 1
+  RUN_MODE: build
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      affected-apps: ${{ steps.affected.outputs.apps }}
+      affected-libs: ${{ steps.affected.outputs.libs }}
+      has-changes: ${{ steps.affected.outputs.has-changes }}
+      base-sha: ${{ steps.last-success.outputs.last-success-sha }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+              
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Get last successful deployment
+        id: last-success
+        run: |
+          # Get the last successful workflow run for this branch
+          LAST_SUCCESS_SHA=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${{ github.repository }}/actions/workflows/deploy-dev.yml/runs?branch=dev&status=success&per_page=1" \
+            --jq '.workflow_runs[0].head_sha' 2>/dev/null || echo "")
+          
+          # If no successful run found, fall back to previous commit
+          if [ -z "$LAST_SUCCESS_SHA" ] || [ "$LAST_SUCCESS_SHA" = "null" ]; then
+            echo "No previous successful run found, using previous commit"
+            LAST_SUCCESS_SHA=$(git rev-parse HEAD~1)
+          fi
+          
+          echo "last-success-sha=$LAST_SUCCESS_SHA" >> $GITHUB_OUTPUT
+          echo "Last successful deployment SHA: $LAST_SUCCESS_SHA"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Determine affected projects
+        id: affected
+        run: |
+          BASE_SHA="${{ steps.last-success.outputs.last-success-sha }}"
+          CURRENT_SHA="${{ github.sha }}"
+          
+          echo "=== Change Detection ==="
+          echo "Base SHA (last success): $BASE_SHA"
+          echo "Current SHA: $CURRENT_SHA"
+          
+          # Verify commits exist
+          if ! git cat-file -e "$BASE_SHA" 2>/dev/null; then
+            echo "Base SHA not found, falling back to previous commit"
+            BASE_SHA=$(git rev-parse HEAD~1)
+          fi
+          
+          echo "Using base SHA: $BASE_SHA"
+          
+          # Show commit range for debugging
+          echo "Commit range: $BASE_SHA..$CURRENT_SHA"
+          git log --oneline "$BASE_SHA..$CURRENT_SHA" | head -10 || echo "No commits in range"
+          
+          # Get affected apps using Nx
+          echo "=== Analyzing Affected Projects ==="
+          
+          # Check Nx version for debugging
+          echo "Nx version: $(npx nx --version)"
+          
+          # Get affected apps (exclude root project)
+          echo "Running: nx show projects --affected --base=$BASE_SHA --head=$CURRENT_SHA --type=app --sep=,"
+          AFFECTED_APPS_RAW=$(npx nx show projects --affected --base=$BASE_SHA --head=$CURRENT_SHA --type=app --sep=, 2>/dev/null || echo "")
+          echo "Affected apps raw: $AFFECTED_APPS_RAW"
+          # Filter out the root project name (eduhub is the root project, not a deployable lib)
+          AFFECTED_APPS=$(echo "$AFFECTED_APPS_RAW" | sed 's/eduhub,//g' | sed 's/,eduhub//g' | sed 's/^eduhub$//g' || echo "")
+          echo "Affected apps (filtered): $AFFECTED_APPS"
+          
+          # Get affected libs (exclude root project)
+          echo "Running: nx show projects --affected --base=$BASE_SHA --head=$CURRENT_SHA --type=lib --sep=,"
+          AFFECTED_LIBS_RAW=$(npx nx show projects --affected --base=$BASE_SHA --head=$CURRENT_SHA --type=lib --sep=, 2>/dev/null || echo "")
+          echo "Raw affected libs: $AFFECTED_LIBS_RAW"
+          # Filter out the root project name (eduhub is the root project, not a deployable lib)
+          AFFECTED_LIBS=$(echo "$AFFECTED_LIBS_RAW" | sed 's/eduhub,//g' | sed 's/,eduhub//g' | sed 's/^eduhub$//g' || echo "")
+          echo "Affected libs (filtered): $AFFECTED_LIBS"
+          
+
+          
+          # Fallback: if Nx failed, check for direct file changes in apps
+          if [ -z "$AFFECTED_APPS" ] && [ -z "$AFFECTED_LIBS" ]; then
+            echo "=== Fallback: Checking for direct file changes ==="
+            APPS_CHANGED=$(git diff --name-only $BASE_SHA..$CURRENT_SHA | grep "^apps/" | cut -d'/' -f2 | sort -u | tr '\n' ',' | sed 's/,$//' || echo "")
+            LIBS_CHANGED=$(git diff --name-only $BASE_SHA..$CURRENT_SHA | grep "^libs/" | cut -d'/' -f2 | sort -u | tr '\n' ',' | sed 's/,$//' || echo "")
+            
+            if [ -n "$APPS_CHANGED" ]; then
+              echo "Apps changed (fallback): $APPS_CHANGED"
+              AFFECTED_APPS="$APPS_CHANGED"
+            fi
+            
+            if [ -n "$LIBS_CHANGED" ]; then
+              echo "Libs changed (fallback): $LIBS_CHANGED"
+              # Filter out root project from fallback as well
+              AFFECTED_LIBS=$(echo "$LIBS_CHANGED" | sed 's/eduhub,//g' | sed 's/,eduhub//g' | sed 's/^eduhub$//g' || echo "")
+              echo "Libs changed (filtered): $AFFECTED_LIBS"
+              # If actual libs changed (not just root project), assume all apps are affected
+              if [ -n "$AFFECTED_LIBS" ] && [ -z "$AFFECTED_APPS" ]; then
+                AFFECTED_APPS="core,import"
+                echo "Real libs changed, assuming all apps affected: $AFFECTED_APPS"
+              fi
+            fi
+          fi
+          
+          # Check if we have any changes at all
+          HAS_CHANGES="false"
+          if [ -n "$AFFECTED_APPS" ] || [ -n "$AFFECTED_LIBS" ]; then
+            HAS_CHANGES="true"
+          fi
+          
+          # Convert to JSON arrays for matrix strategy
+          if [ -n "$AFFECTED_APPS" ]; then
+            APPS_JSON=$(echo "$AFFECTED_APPS" | tr ',' '\n' | jq -R -s -c 'split("\n")[:-1]')
+          else
+            APPS_JSON="[]"
+          fi
+          
+          if [ -n "$AFFECTED_LIBS" ]; then
+            LIBS_JSON=$(echo "$AFFECTED_LIBS" | tr ',' '\n' | jq -R -s -c 'split("\n")[:-1]')
+          else
+            LIBS_JSON="[]"
+          fi
+          
+          echo "=== Changed Files ==="
+          git diff --name-only $BASE_SHA..$CURRENT_SHA | head -20 || echo "No file changes detected"
+          
+          echo "=== Deployment Summary ==="
+          echo "Has changes: $HAS_CHANGES"
+          echo "Apps to deploy: $APPS_JSON"
+          echo "Affected libs: $LIBS_JSON"
+          
+          echo "apps=$APPS_JSON" >> $GITHUB_OUTPUT
+          echo "libs=$LIBS_JSON" >> $GITHUB_OUTPUT
+          echo "has-changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+  build-affected:
+    needs: setup
+    if: needs.setup.outputs.has-changes == 'true'
+    runs-on: ubuntu-latest
+    environment: development
+    strategy:
+      matrix:
+        app: ${{ fromJson(needs.setup.outputs.affected-apps) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+
+      - name: Build image
+        run: |
+          # Build only the affected app
+          docker build -f apps/${{ matrix.app }}/Dockerfile.dev \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --cache-from=gedu/${{ matrix.app }}:dev \
+            -t gedu/${{ matrix.app }}:${TAG} \
+            -t gedu/${{ matrix.app }}:dev \
+            .
+          
+          echo "Built ${{ matrix.app }} image successfully"
+      
+      - name: Login to Harbor Registry
+        uses: docker/login-action@v3
+        with:
+          registry: registry.lazeout.com
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push image to Harbor Registry
+        run: |
+          # Create image tag using first 6 characters of commit hash
+          SHORT_SHA=$(echo "${TAG}" | cut -c1-6)
+          DEV_IMAGE="registry.lazeout.com/gedu/${{ matrix.app }}:dev-${SHORT_SHA}"
+          
+          echo "Pushing ${{ matrix.app }} image to Harbor Registry..."
+          echo "Image tag: dev-${SHORT_SHA}"
+          
+          # Tag and push as 'dev-${SHORT_SHA}' for deployment
+          docker tag gedu/${{ matrix.app }}:${TAG} "${DEV_IMAGE}"
+          
+          if docker push "${DEV_IMAGE}"; then
+            echo "Dev image pushed successfully: ${DEV_IMAGE}"
+          else
+            echo "Failed to push dev image to Harbor Registry"
+            exit 1
+          fi
+          
+          # Cleanup local images
+          docker rmi gedu/${{ matrix.app }}:${TAG} || true
+          docker rmi gedu/${{ matrix.app }}:dev || true
+
+
+
+  deploy:
+    needs: [setup, build-affected]
+    if: always() && needs.setup.outputs.has-changes == 'true' && needs.build-affected.result == 'success'
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Deploy to dev server
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DEPLOY_TAG: ${{ github.sha }}
+          BASE_SHA: ${{ needs.setup.outputs.base-sha }}
+          AFFECTED_APPS: ${{ needs.setup.outputs.affected-apps }}
+          ENV_DEV: ${{ secrets.ENV_DEV }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          SHORT_SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          envs: DEPLOY_TAG,BASE_SHA,AFFECTED_APPS,ENV_DEV,REGISTRY_USERNAME,REGISTRY_PASSWORD,SHORT_SHA
+          script: |
+            cd ${{ vars.SERVER_DEPLOY_DIR }}
+            
+            # Parse affected apps
+            APPS_TO_DEPLOY=$(echo "$AFFECTED_APPS" | jq -r '.[]' 2>/dev/null || echo "")
+            
+            # Create short SHA (first 6 characters)
+            SHORT_SHA_TAG=$(echo "$SHORT_SHA" | cut -c1-6)
+            
+            echo "=== Deployment Summary ==="
+            echo "Deploy Tag: $DEPLOY_TAG"
+            echo "Short SHA: $SHORT_SHA_TAG"
+            echo "Base SHA: $BASE_SHA"
+            echo "Affected Apps: $APPS_TO_DEPLOY"
+            echo "========================="
+            
+            # Create .env file
+            echo "Creating .env file..."
+            cat > .env << 'EOF'
+            ${{ secrets.ENV_DEV }}
+            EOF
+            echo ".env file created successfully"
+            
+            # Create docker-compose file based on existing docker-compose.yml with local tagged images
+            echo "Creating docker-compose.yml file with local tagged images..."
+            cat > docker-compose.yml << EOF
+            # docker-compose.yml, use for dev-server deployment
+            services:
+              core:
+                image: gedu/core:dev
+                ports:
+                  - "3000:3000" # core service is running on port 3000
+                environment:
+                  # Database Configuration
+                  - DATABASE_URL=\${DATABASE_URL}
+                  
+                  # Redis Configuration
+                  - REDIS_URL=\${REDIS_URL}
+
+                  # Kafka
+                  - KAFKA_BROKERS=\${KAFKA_BROKERS}
+
+                  # MinIO Configuration
+                  - MINIO_ENDPOINT=\${MINIO_ENDPOINT}
+                  - MINIO_PORT=\${MINIO_PORT}
+                  - MINIO_ACCESS_KEY=\${MINIO_ACCESS_KEY}
+                  - MINIO_SECRET_KEY=\${MINIO_SECRET_KEY}
+                  
+                  # JWT Configuration
+                  - JWT_SECRET=\${JWT_SECRET}
+
+                  # Application Configuration
+                  - PORT=3000
+                  - API_PATH=\${API_PATH:-/}
+                  - SWAGGER_ENABLE=\${SWAGGER_ENABLE:-true}
+                  
+                  # Province
+                  - PROVINCE_ID=\${PROVINCE_ID:-91}
+
+                  # GRPC
+                  - GRPC_IMPORT_HOST=\${GRPC_IMPORT_HOST:-core}
+                  - GRPC_IMPORT_PORT=\${GRPC_IMPORT_PORT:-50001}
+                networks:
+                  - gedu-network
+
+              import:
+                image: gedu/import:dev
+                ports:
+                  - "4000:3000" # import service is running on port 4000
+                environment:
+                  # Database Configuration
+                  - DATABASE_URL=\${DATABASE_URL}
+
+                  # Redis Configuration
+                  - REDIS_URL=\${REDIS_URL}
+
+                  # Kafka
+                  - KAFKA_BROKERS=\${KAFKA_BROKERS}
+                  
+                  # MinIO Configuration
+                  - MINIO_ENDPOINT=\${MINIO_ENDPOINT}
+                  - MINIO_PORT=\${MINIO_PORT}
+                  - MINIO_ACCESS_KEY=\${MINIO_ACCESS_KEY}
+                  - MINIO_SECRET_KEY=\${MINIO_SECRET_KEY}
+
+                  # Kafka
+                  - KAFKA_BROKERS=\${KAFKA_BROKERS}
+
+                  # Application Configuration
+                  - PORT=4000
+
+                  # GRPC
+                  - GRPC_IMPORT_HOST=\${GRPC_IMPORT_HOST:-core}
+                  - GRPC_IMPORT_PORT=\${GRPC_IMPORT_PORT:-50001}
+                networks:
+                  - gedu-network
+
+            networks:
+              gedu-network:
+                name: \${NETWORK_NAME:-eduhub}
+                external: true
+            EOF
+            echo "docker-compose.yml file created successfully with local tagged images (dev-${SHORT_SHA_TAG} pulled and tagged locally)"
+            
+            # Login to Harbor Registry
+            echo "Logging in to Harbor Registry..."
+            echo "$REGISTRY_PASSWORD" | docker login registry.lazeout.com -u "$REGISTRY_USERNAME" --password-stdin
+            
+            # Pull images from Harbor Registry
+            echo "=== Pulling Images from Harbor Registry ==="
+            
+            # Pull app images
+            for app in $APPS_TO_DEPLOY; do
+              if [ -n "$app" ]; then
+                HARBOR_IMAGE="registry.lazeout.com/gedu/${app}:dev-${SHORT_SHA_TAG}"
+                echo "Pulling ${app} image from Harbor Registry (${HARBOR_IMAGE})..."
+                
+                if docker pull "${HARBOR_IMAGE}"; then
+                  echo "Successfully pulled ${app} image"
+                  
+                  # Tag for local deployment
+                  docker tag "${HARBOR_IMAGE}" "gedu/${app}:dev"
+                  echo "Tagged ${app} image for deployment"
+                else
+                  echo "Failed to pull ${app} image from Harbor Registry"
+                  exit 1
+                fi
+              fi
+            done
+            
+            echo "All images pulled successfully from Harbor Registry"
+            
+            # Deploy affected services
+            if [ -n "$APPS_TO_DEPLOY" ]; then
+              echo "Deploying affected services..."
+              
+              # Stop affected services
+              for app in $APPS_TO_DEPLOY; do
+                echo "Stopping $app service..."
+                docker compose -f docker-compose.yml stop "$app" || true
+              done
+              
+              # Start affected services
+              for app in $APPS_TO_DEPLOY; do
+                echo "Starting $app service..."
+                if ! docker compose -f docker-compose.yml up -d "$app"; then
+                  echo "Failed to start $app service"
+                  exit 1
+                fi
+              done
+              
+              # Wait for services to be ready
+              echo "Waiting for services to start..."
+              sleep 15
+              
+              # Check service health
+              echo "Checking service status..."
+              for app in $APPS_TO_DEPLOY; do
+                if ! docker compose -f docker-compose.yml ps "$app" --format json | grep -q "running"; then
+                  echo "$app service is not running properly"
+                  docker compose -f docker-compose.yml logs "$app"
+                  exit 1
+                fi
+                echo "$app service is running"
+              done
+              
+            else
+              echo "No app services to deploy"
+            fi
+            
+            # Final status check
+            echo "=== Final Service Status ==="
+            docker compose -f docker-compose.yml ps
+            
+            # Cleanup old Docker images locally
+            echo "=== Cleaning up old Docker images ==="
+            # Keep only images from the last 24 hours
+            docker image prune -a -f --filter "until=24h"
+            echo "Local Docker cleanup completed!"
+            echo "Deployment completed successfully!"

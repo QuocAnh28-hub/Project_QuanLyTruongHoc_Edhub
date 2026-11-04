@@ -1,0 +1,11 @@
+{
+  "flavor": "production",
+  "appName": "Gedu Provider",
+  "appId": "com.gedu.provider",
+  "baseUrl": "https://api.lazeout.com",
+  "timeoutSeconds": 30,
+  "enableLogging": false,
+  "appIcon": "@mipmap/ic_launcher",
+  "appVersion": "1.0.0",
+  "buildNumber": "1"
+} 

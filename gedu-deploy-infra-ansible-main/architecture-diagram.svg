@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="clientGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#357ABD;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="vipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E74C3C;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="haproxyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#50C878;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3CB371;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="masterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9B59B6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8E44AD;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="workerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F39C12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E67E22;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="keepalivedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1ABC9C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16A085;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Arrow markers -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50">
+    GEDU RKE Infrastructure Architecture
+  </text>
+  
+  <!-- Client Section -->
+  <g transform="translate(50, 80)">
+    <rect x="0" y="0" width="200" height="120" rx="10" fill="url(#clientGrad)" stroke="#333" stroke-width="2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+      Client/User
+    </text>
+    <text x="100" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      kubectl
+    </text>
+    <text x="100" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Dashboard
+    </text>
+    <text x="100" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      API Calls
+    </text>
+    <text x="100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">
+      --insecure-skip-tls-verify
+    </text>
+  </g>
+  
+  <!-- Virtual IP Section -->
+  <g transform="translate(350, 80)">
+    <rect x="0" y="0" width="200" height="120" rx="10" fill="url(#vipGrad)" stroke="#333" stroke-width="2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+      Virtual IP
+    </text>
+    <text x="100" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      10.47.197.30
+    </text>
+    <text x="100" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      Port: 8443
+    </text>
+    <text x="100" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Keepalived
+    </text>
+    <text x="100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">
+      VRRP Failover
+    </text>
+  </g>
+  
+  <!-- HAProxy Section -->
+  <g transform="translate(650, 80)">
+    <rect x="0" y="0" width="200" height="120" rx="10" fill="url(#haproxyGrad)" stroke="#333" stroke-width="2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+      HAProxy
+    </text>
+    <text x="100" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Load Balancer
+    </text>
+    <text x="100" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Round Robin
+    </text>
+    <text x="100" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Health Checks
+    </text>
+    <text x="100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">
+      Port 8443 → 6443
+    </text>
+  </g>
+  
+  <!-- Master Nodes Section -->
+  <g transform="translate(950, 80)">
+    <rect x="0" y="0" width="200" height="120" rx="10" fill="url(#masterGrad)" stroke="#333" stroke-width="2"/>
+    <text x="100" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">
+      Master Nodes
+    </text>
+    <text x="100" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      k8s_master_02
+    </text>
+    <text x="100" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      k8s_master_03
+    </text>
+    <text x="100" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Port: 6443
+    </text>
+    <text x="100" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="white">
+      etcd + Control Plane
+    </text>
+  </g>
+  
+  <!-- Arrows from Client to VIP -->
+  <line x1="250" y1="140" x2="350" y2="140" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="300" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">
+    HTTPS
+  </text>
+  
+  <!-- Arrows from VIP to HAProxy -->
+  <line x1="550" y1="140" x2="650" y2="140" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="600" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">
+    TCP
+  </text>
+  
+  <!-- Arrows from HAProxy to Masters -->
+  <line x1="850" y1="140" x2="950" y2="140" stroke="#333" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <text x="900" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#333">
+    Load Balanced
+  </text>
+  
+  <!-- Master Node Details -->
+  <g transform="translate(50, 250)">
+    <rect x="0" y="0" width="300" height="200" rx="10" fill="url(#masterGrad)" stroke="#333" stroke-width="2"/>
+    <text x="150" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">
+      Master Node 1
+    </text>
+    <text x="150" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      k8s_master_02
+    </text>
+    <text x="150" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      10.47.197.32
+    </text>
+    <text x="150" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Primary (Priority: 255)
+    </text>
+    <text x="150" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-apiserver
+    </text>
+    <text x="150" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-scheduler
+    </text>
+    <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-controller-manager
+    </text>
+    <text x="150" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • etcd
+    </text>
+    <text x="150" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • HAProxy + Keepalived
+    </text>
+  </g>
+  
+  <g transform="translate(400, 250)">
+    <rect x="0" y="0" width="300" height="200" rx="10" fill="url(#masterGrad)" stroke="#333" stroke-width="2"/>
+    <text x="150" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">
+      Master Node 2
+    </text>
+    <text x="150" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      k8s_master_03
+    </text>
+    <text x="150" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      10.47.197.33
+    </text>
+    <text x="150" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      Backup (Priority: 254)
+    </text>
+    <text x="150" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-apiserver
+    </text>
+    <text x="150" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-scheduler
+    </text>
+    <text x="150" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-controller-manager
+    </text>
+    <text x="150" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • etcd
+    </text>
+    <text x="150" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • HAProxy + Keepalived
+    </text>
+  </g>
+  
+  <!-- Worker Nodes Section -->
+  <g transform="translate(750, 250)">
+    <rect x="0" y="0" width="400" height="200" rx="10" fill="url(#workerGrad)" stroke="#333" stroke-width="2"/>
+    <text x="200" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">
+      Worker Nodes
+    </text>
+    <text x="200" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="white">
+      Application Workloads
+    </text>
+    <text x="200" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • k8s_worker_02: 10.47.197.33 (also controlplane)
+    </text>
+    <text x="200" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • k8s_worker_03: 10.47.197.34
+    </text>
+    <text x="200" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • k8s_worker_04: 10.47.197.35
+    </text>
+    <text x="200" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • k8s_worker_05: 10.47.197.36
+    </text>
+    <text x="200" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kubelet
+    </text>
+    <text x="200" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • kube-proxy
+    </text>
+    <text x="200" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="white">
+      • Container Runtime (Docker)
+    </text>
+  </g>
+  
+  <!-- Network Configuration Section -->
+  <g transform="translate(50, 500)">
+    <rect x="0" y="0" width="1100" height="120" rx="10" fill="#ecf0f1" stroke="#333" stroke-width="2"/>
+    <text x="550" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">
+      Network Configuration
+    </text>
+    <text x="550" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#2c3e50">
+      Pod CIDR: 10.42.0.0/16 | Service CIDR: 10.43.0.0/16 | Network Plugin: Canal (Calico + Flannel)
+    </text>
+    <text x="550" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#2c3e50">
+      Required Ports: 6443 (API), 8443 (HAProxy), 2379-2380 (etcd), 10250 (kubelet), 10251 (scheduler), 10252 (controller)
+    </text>
+    <text x="550" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#2c3e50">
+      High Availability: VRRP (Virtual Router Redundancy Protocol) with Keepalived
+    </text>
+    <text x="550" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#2c3e50">
+      Load Balancing: HAProxy with Round Robin and Health Checks
+    </text>
+  </g>
+  
+  <!-- High Availability Flow -->
+  <g transform="translate(50, 650)">
+    <rect x="0" y="0" width="1100" height="120" rx="10" fill="#e8f5e8" stroke="#333" stroke-width="2"/>
+    <text x="550" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#27ae60">
+      High Availability Flow
+    </text>
+    <text x="550" y="50" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#27ae60">
+      1. Client connects to Virtual IP (10.47.197.30:8443)
+    </text>
+    <text x="550" y="70" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#27ae60">
+      2. Keepalived ensures Virtual IP is active on primary master node
+    </text>
+    <text x="550" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#27ae60">
+      3. HAProxy distributes traffic between master nodes (round-robin)
+    </text>
+    <text x="550" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#27ae60">
+      4. If primary master fails, Keepalived moves Virtual IP to backup master automatically
+    </text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 720)">
+    <rect x="0" y="0" width="1100" height="60" rx="5" fill="#f1f2f6" stroke="#333" stroke-width="1"/>
+    <text x="550" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">
+      Legend
+    </text>
+    <circle cx="100" cy="40" r="8" fill="url(#clientGrad)"/>
+    <text x="120" y="45" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Client Access</text>
+    
+    <circle cx="250" cy="40" r="8" fill="url(#vipGrad)"/>
+    <text x="270" y="45" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Virtual IP (Keepalived)</text>
+    
+    <circle cx="400" cy="40" r="8" fill="url(#haproxyGrad)"/>
+    <text x="420" y="45" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Load Balancer (HAProxy)</text>
+    
+    <circle cx="550" cy="40" r="8" fill="url(#masterGrad)"/>
+    <text x="570" y="45" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Master Nodes (Control Plane)</text>
+    
+    <circle cx="750" cy="40" r="8" fill="url(#workerGrad)"/>
+    <text x="770" y="45" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Worker Nodes (Application)</text>
+  </g>
+</svg> 

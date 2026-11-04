@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chào mừng đến với Gedu! Hãy cùng bắt đầu thiết lập cho Trường {{schoolName}}</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333333;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    .header h1 {
+        color: #0056b3;
+        font-size: 24px;
+    }
+    .content {
+        padding: 20px 0;
+    }
+    .content p {
+        margin-bottom: 10px;
+    }
+    .login-info {
+        background-color: #e9f7ff;
+        border-left: 5px solid #007bff;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+    .login-info p {
+        margin: 5px 0;
+    }
+    .button-container {
+        text-align: center;
+        margin-top: 25px;
+    }
+    .button {
+        display: inline-block;
+        background-color: #007bff;
+        color: #ffffff !important;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .important-note {
+        background-color: #fff3cd;
+        border-left: 5px solid #ffc107;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 4px;
+        color: #664d03;
+    }
+    .footer {
+        text-align: center;
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 1px solid #eeeeee;
+        font-size: 12px;
+        color: #777777;
+    }
+</style>
+</head>
+<body style="background-color: #f4f4f4; padding: 20px;">
+    <div class="container">
+        <div class="content">
+            <p>Chào mừng Thầy/Cô <b>{{staffName}}</b> đến với hệ thống quản lý giáo dục Gedu!</p>
+            <p>Tài khoản của Thầy/Cô đã sẵn sàng để sử dụng. Từ bây giờ, Thầy/Cô có thể dễ dàng quản lý lớp học, cập nhật điểm số và liên lạc với phụ huynh.</p>
+
+            <div class="login-info">
+                <p><strong>Email Đăng nhập:</strong> {{email}}</p>
+                <p><strong>Mật khẩu Tạm thời:</strong> {{password}}</p>
+            </div>
+
+            <div class="button-container">
+                <a href="{{accessLink}}" target="_blank" class="button">Đăng nhập</a>
+            </div>
+
+            <div class="important-note">
+                <p><strong>Lưu ý quan trọng:</strong> Vì lý do bảo mật, xin vui lòng đăng nhập và thay đổi mật khẩu ngay trong lần đầu tiên.</p>
+            </div>
+
+            <p>Trân trọng,<br>Đội ngũ Gedu.</p>
+        </div>
+        <div class="footer">
+            <p>Để được hỗ trợ, vui lòng liên hệ qua email: <a href="mailto:hotro@gedu.vn">hotro@gedu.vn</a></p>
+            <p>Email được gửi tự động từ hệ thống Gedu. Vui lòng không phản hồi lại email này.</p>
+        </div>
+    </div>
+</body>
+</html>

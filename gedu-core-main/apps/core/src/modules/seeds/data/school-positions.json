@@ -1,0 +1,152 @@
+[
+  {
+    "title": "Hiệu trưởng",
+    "desc": "Lãnh đạo cao nhất của nhà trường, chịu trách nhiệm toàn diện",
+    "departmentId": 1
+  },
+  {
+    "title": "Phó Hiệu trưởng",
+    "desc": "Hỗ trợ Hiệu trưởng trong quản lý và điều hành",
+    "departmentId": 1
+  },
+  {
+    "title": "Giáo viên Bộ môn",
+    "desc": "Giảng dạy các môn học chuyên ngành",
+    "departmentId": 2
+  },
+  {
+    "title": "Giáo viên chủ nhiệm",
+    "desc": "Quản lý lớp học và hỗ trợ học sinh trong học tập, nề nếp",
+    "departmentId": 2
+  },
+  {
+    "title": "Tổ trưởng Tổ chuyên môn",
+    "desc": "Quản lý tổ bộ môn và điều phối hoạt động giảng dạy",
+    "departmentId": 2
+  },
+  {
+    "title": "Tổ trưởng Tổ chủ nhiệm (Thường thấy ở Tiểu Học)",
+    "desc": "Điều phối hoạt động chủ nhiệm các lớp",
+    "departmentId": 2
+  },
+  {
+    "title": "Giáo viên Thỉnh giảng/Hợp đồng",
+    "desc": "Giảng dạy theo hợp đồng hoặc thời vụ",
+    "departmentId": 2
+  },
+  {
+    "title": "Trưởng phòng/Nhân viên phòng Nhân sự",
+    "desc": "Quản lý công tác tuyển dụng và nhân sự",
+    "departmentId": 3
+  },
+  {
+    "title": "Nhân viên phòng Tuyển sinh",
+    "desc": "Phụ trách công tác tuyển sinh và tiếp nhận học sinh",
+    "departmentId": 3
+  },
+  {
+    "title": "Nhân viên Văn thư - Lưu trữ",
+    "desc": "Quản lý hồ sơ, công văn và lưu trữ tài liệu",
+    "departmentId": 3
+  },
+  {
+    "title": "Nhân viên Y tế học đường",
+    "desc": "Chăm sóc sức khỏe và xử lý sơ cấp cứu cho học sinh",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên Thư viện (Thủ thư)",
+    "desc": "Quản lý sách vở, tài liệu học tập và hỗ trợ mượn/trả",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên IT Hỗ trợ / Quản trị Mạng",
+    "desc": "Hỗ trợ kỹ thuật và duy trì hệ thống CNTT",
+    "departmentId": 4
+  },
+  {
+    "title": "Quản lý Bếp ăn",
+    "desc": "Giám sát hoạt động chế biến và phân phối bữa ăn",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên Dinh dưỡng",
+    "desc": "Lên thực đơn và đảm bảo chế độ dinh dưỡng cho học sinh",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên Quản lý Cơ sở vật chất/Thiết bị - Thí nghiệm",
+    "desc": "Bảo trì, giám sát thiết bị và cơ sở vật chất phục vụ giảng dạy",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên Bảo vệ (Tổ trưởng/Đội trưởng)",
+    "desc": "Đảm bảo an ninh, trật tự trong khuôn viên nhà trường",
+    "departmentId": 4
+  },
+  {
+    "title": "Nhân viên Lao công/Tạp vụ (Tổ trưởng/Đội trưởng)",
+    "desc": "Giữ gìn vệ sinh, môi trường học đường sạch sẽ",
+    "departmentId": 4
+  },
+  {
+    "title": "Kế toán trưởng",
+    "desc": "Quản lý tài chính và kiểm soát chi tiêu của trường",
+    "departmentId": 5
+  },
+  {
+    "title": "Kế toán viên",
+    "desc": "Thực hiện các nghiệp vụ kế toán hằng ngày",
+    "departmentId": 5
+  },
+  {
+    "title": "Thủ quỹ",
+    "desc": "Quản lý quỹ tiền mặt và thực hiện giao dịch tài chính",
+    "departmentId": 5
+  },
+  {
+    "title": "Bí thư Đoàn trường",
+    "desc": "Lãnh đạo hoạt động Đoàn Thanh niên trong nhà trường",
+    "departmentId": 6
+  },
+  {
+    "title": "Phó Bí thư Đoàn trường",
+    "desc": "Hỗ trợ Bí thư Đoàn trong công tác phong trào",
+    "departmentId": 6
+  },
+  {
+    "title": "Tổng phụ trách Đội",
+    "desc": "Tổ chức và quản lý các hoạt động Đội Thiếu niên",
+    "departmentId": 6
+  },
+  {
+    "title": "Thành viên Hội đồng Sư phạm",
+    "desc": "Tham gia đóng góp ý kiến trong công tác chuyên môn",
+    "departmentId": 6
+  },
+  {
+    "title": "Thành viên Ban Tuyển sinh",
+    "desc": "Tham gia hỗ trợ công tác tuyển sinh của trường",
+    "departmentId": 6
+  },
+  {
+    "title": "Thành viên Ban Kỷ luật",
+    "desc": "Xử lý các vấn đề vi phạm nội quy học sinh",
+    "departmentId": 6
+  },
+  {
+    "title": "Thư ký Hội đồng",
+    "desc": "Ghi chép và tổng hợp nội dung các cuộc họp hội đồng",
+    "departmentId": 6
+  },
+  {
+    "title": "Phụ trách Câu lạc bộ",
+    "desc": "Tổ chức và điều phối hoạt động các CLB trong trường",
+    "departmentId": 6
+  },
+  {
+    "title": "Cố vấn học tập",
+    "desc": "Hướng dẫn và hỗ trợ học sinh về học tập và định hướng nghề nghiệp",
+    "departmentId": 6
+  }
+]

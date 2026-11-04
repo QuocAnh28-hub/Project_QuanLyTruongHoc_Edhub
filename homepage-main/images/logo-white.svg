@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="150" height="40" viewBox="0 0 150 40">
+    <defs>
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&amp;display=swap');
+            .text { font-family: 'Inter', sans-serif; font-weight: 700; fill: white; }
+        </style>
+    </defs>
+    
+    <!-- Logo Background -->
+    <rect width="150" height="40" fill="transparent"/>
+    
+    <!-- Text Elements -->
+    <text x="10" y="30" class="text">G</text>
+    <text x="35" y="30" class="text">EDU</text>
+    <text x="85" y="30" class="text">HUB</text>
+    
+    <!-- Accent Circle -->
+    <circle cx="25" cy="15" r="5" fill="white" opacity="0.9"/>
+</svg> 

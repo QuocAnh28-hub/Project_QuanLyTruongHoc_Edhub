@@ -1,0 +1,60 @@
+{
+  "name": "import",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/import/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/import",
+        "main": "apps/import/src/main.ts",
+        "tsConfig": "apps/import/tsconfig.app.json",
+        "webpackConfig": "apps/import/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true,
+          "sourceMap": true
+        },
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "sourceMap": false
+        }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "start:dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "start:dev"
+      }
+    },
+    "start:prod": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "start:prod"
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate"
+      }
+    }
+  }
+} 

@@ -1,0 +1,288 @@
+{
+  "data": [
+    {
+      "name": "Ban Giám đốc",
+      "code": "BGD",
+      "desc": "Ban Giám đốc Sở",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "GDS",
+            "title": "Giám đốc Sở",
+            "desc": "Giám đốc Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PGDS",
+            "title": "Phó Giám đốc Sở",
+            "desc": "Phó Giám đốc Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Văn phòng Sở",
+      "code": "VP",
+      "desc": "Tham mưu, tổng hợp, điều phối hành chính chung.",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "CHVP",
+            "title": "Chánh Văn phòng Sở",
+            "desc": "Chánh Văn phòng Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHVP",
+            "title": "Phó Chánh Văn phòng Sở",
+            "desc": "Phó Chánh Văn phòng Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVTP",
+            "title": "Chuyên viên Tổng hợp",
+            "desc": "",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "NVVT&LT",
+            "title": "Nhân viên Văn thư - Lưu trữ",
+            "desc": "Nhân viên Văn phòng phụ trách công tác thư ký, hành chính",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Thanh tra Sở",
+      "code": "TTRA",
+      "desc": "Thực hiện công tác thanh tra, kiểm tra, giải quyết khiếu nại",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "CHTT",
+            "title": "Chánh Thanh tra Sở",
+            "desc": "Chánh Thanh tra Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHTT",
+            "title": "Phó Chánh Thanh tra Sở",
+            "desc": "Phó Chánh Thanh tra Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "TTRV",
+            "title": "Thanh tra viên",
+            "desc": "Thanh tra viên Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Phòng Tổ chức Cán bộ",
+      "code": "TCCB",
+      "desc": "Quản lý toàn bộ công tác nhân sự của ngành",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "TPTCCB",
+            "title": "Trưởng phòng",
+            "desc": "Chánh Phòng Tổ chức Cán bộ Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHPTCCB",
+            "title": "Phó Trưởng phòng",
+            "desc": "Phó Trưởng phòng Tổ chức Cán bộ Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CV-TCCB",
+            "title": "Chuyên viên Tổ chức Cán bộ",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Phòng Kế hoạch - Tài chính",
+      "code": "KHTC",
+      "desc": "Xây dựng kế hoạch, lập dự toán và quản lý ngân sách",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "TPKHTC",
+            "title": "Trưởng phòng",
+            "desc": "Chánh Phòng Kế hoạch - Tài chính Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHTPKHTC",
+            "title": "Phó Trưởng phòng",
+            "desc": "Phó Trưởng phòng Kế hoạch - Tài chính Sở Giáo dục và Đào tạo",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVKHKHTC",
+            "title": "Chuyên viên Kế hoạch",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVTCKHTC",
+            "title": "Chuyên viên Tài chính",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "KTVKHTC",
+            "title": "Nhân viên Kế toán",
+            "desc": "Nhân viên phụ trách công tác kế toán, tài chính",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Phòng Giáo dục Mầm non & Tiểu học",
+      "code": "GD-MN-TH",
+      "desc": "Chỉ đạo chuyên môn cho cấp Mầm non và Tiểu học",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "TPGDMNTH",
+            "title": "Trưởng phòng",
+            "desc": "Chánh Phòng Giáo dục Mầm non & Tiểu học",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHTPGDMNTH",
+            "title": "Phó Trưởng phòng",
+            "desc": "Phó Chánh Phòng Giáo dục Mầm non & Tiểu học",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVMNGDMNTH",
+            "title": "Chuyên viên Mầm non",
+            "desc": "Chuyên viên phụ trách công tác Mầm non",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVTHGDMNTH",
+            "title": "Chuyên viên Tiểu học",
+            "desc": "Chuyên viên phụ trách công tác Tiểu học",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Phòng Giáo dục Trung học & GDTX",
+      "code": "GD-TRH-GDTX",
+      "desc": "Chỉ đạo chuyên môn cho cấp THCS, THPT và Giáo dục Thường xuyên",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "TPGDTRHGDTX",
+            "title": "Trưởng phòng",
+            "desc": "Chánh Phòng Giáo dục Trung học & GDTX",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHTPGDTRHGDTX",
+            "title": "Phó Trưởng phòng",
+            "desc": "Phó Chánh Phòng Giáo dục Trung học & GDTX",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVTRHGDTRHGDTX",
+            "title": "Chuyên viên Trung học",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVGDTXGDTRHGDTX",
+            "title": "Chuyên viên Giáo dục Thường xuyên",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Phòng Khảo thí & Quản lý Chất lượng",
+      "code": "KT&QLCL",
+      "desc": "Tổ chức các kỳ thi và quản lý công tác kiểm định chất lượng giáo dục",
+      "isActive": true,
+      "positionTemplates": {
+        "create": [
+          {
+            "code": "TPKT&QLCL",
+            "title": "Trưởng phòng",
+            "desc": "Chánh Phòng Khảo thí & Quản lý Chất lượng",
+            "isActive": true,
+            "isDepartmentHead": true,
+            "canDedicated": true
+          },
+          {
+            "code": "PHTPKT&QLCL",
+            "title": "Phó Trưởng phòng",
+            "desc": "Phó Chánh Phòng Khảo thí & Quản lý Chất lượng",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVKTKT&QLCL",
+            "title": "Chuyên viên Khảo thí",
+            "isActive": true,
+            "canDedicated": true
+          },
+          {
+            "code": "CVQLCLKT&QLCL",
+            "title": "Chuyên viên Quản lý Chất lượng",
+            "isActive": true,
+            "canDedicated": true
+          }
+        ]
+      }
+    }
+  ]
+}

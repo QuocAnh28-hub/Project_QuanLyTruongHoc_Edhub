@@ -1,0 +1,13 @@
+---
+# Harbor configuration
+harbor_hostname: "registry.eduhub.com"
+harbor_ip: "10.47.198.51"
+harbor_enable_cert: true
+
+# Docker configuration
+docker_daemon_config:
+  exec_opts: ["native.cgroupdriver=systemd"]
+  log_driver: "json-file"
+  log_opts:
+    max_size: "100m"
+  storage_driver: "overlay2"

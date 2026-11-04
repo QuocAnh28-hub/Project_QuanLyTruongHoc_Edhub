@@ -1,0 +1,29 @@
+[Unit]
+Description=GitHub Runner Autoscaler
+After=network.target docker.service
+Wants=docker.service
+Requires=network.target
+
+[Service]
+Type=simple
+User={{ github_runner_container_user }}
+Group={{ github_runner_container_user }}
+WorkingDirectory=/home/{{ github_runner_container_user }}/actions-runner
+
+ExecStart=/usr/bin/python3 /home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Environment variables
+Environment=PYTHONUNBUFFERED=1
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/{{ github_runner_container_user }}/actions-runner
+
+[Install]
+WantedBy=multi-user.target 

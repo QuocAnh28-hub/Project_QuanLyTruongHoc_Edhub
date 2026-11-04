@@ -1,0 +1,12 @@
+---
+- name: Include HAProxy installation tasks
+  include_tasks: haproxy_install.yml
+
+- name: Include Keepalived installation tasks
+  include_tasks: keepalived_install.yml
+
+- name: Include configuration tasks
+  include_tasks: configure_services.yml
+
+- name: Include verification tasks
+  include_tasks: verification.yml

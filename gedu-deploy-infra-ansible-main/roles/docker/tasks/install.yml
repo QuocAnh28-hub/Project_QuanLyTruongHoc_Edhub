@@ -1,0 +1,30 @@
+---
+- name: Update package cache
+  raw: dnf update -y
+  changed_when: false
+
+- name: Install required packages
+  raw: dnf install -y yum-utils device-mapper-persistent-data lvm2 wget curl
+  changed_when: false
+
+- name: Add Docker repository
+  raw: dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  changed_when: false
+
+- name: Remove conflicting runc package
+  raw: dnf remove -y runc
+  changed_when: false
+
+- name: Install Docker
+  raw: dnf install -y docker-ce docker-ce-cli containerd.io
+  changed_when: false
+
+- name: Start and enable Docker
+  raw: |
+    systemctl start docker
+    systemctl enable docker
+  changed_when: false
+
+- name: Add ansible_user to docker group
+  raw: usermod -aG docker {{ ansible_user }}
+  changed_when: false

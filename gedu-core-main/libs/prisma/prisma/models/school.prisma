@@ -1,0 +1,391 @@
+model School {
+  id                        Int       @id @default(autoincrement())
+  code                      String    @unique
+  name                      String
+  shortName                 String?   @map("short_name")
+  dateFounded               DateTime? @map("date_founded")
+  ranking                   Int?
+  project                   String?
+  type                      Int       @default(3) @map("type")
+  status                    Int       @default(1) // STATUS enum: 1=CREATED, 2=ACTIVE, 3=PAUSED, 4=TERMINATED
+  dailyScheduleType         Int?      @map("daily_schedule_type")
+  canComplementaryEducation Boolean   @default(false) @map("can_complementary_education")
+  isInternationalSchool     Boolean   @default(false) @map("is_international_school")
+  canPreschool              Boolean   @default(false) @map("can_preschool")
+  canPrimarySchool          Boolean   @default(false) @map("can_primary_school")
+  canLowerSecondarySchool   Boolean   @default(false) @map("can_lower_secondary_school")
+  canUpperSecondarySchool   Boolean   @default(false) @map("can_upper_secondary_school")
+
+  email   String?
+  website String?
+  hotline String?
+  fax     String?
+
+  principalFirstName     String? @map("principal_first_name")
+  principalLastName      String? @map("principal_last_name")
+  principalPhone         String? @map("principal_phone")
+  principalEmail         String? @map("principal_email")
+  principalIsPartyMember Boolean @default(false) @map("principal_is_party_member")
+
+  address    String?
+  provinceId Int?    @map("province_id")
+  wardId     Int?    @map("ward_id")
+
+  ward     WardsCommunes?   @relation(fields: [wardId], references: [id])
+  province ProvincesCities? @relation(fields: [provinceId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdBy Int?     @map("created_by")
+  updatedBy Int?     @map("updated_by")
+
+  schoolCampuses            SchoolCampus[]
+  schoolOperation           SchoolOperation?
+  schoolFacility            SchoolFacility?
+  schoolStaffs              SchoolStaff[]
+  schoolYears               SchoolYear[]
+  classes                   Class[]
+  students                  Student[]
+  userEduLevels             UserEduLevel[]
+  schoolDepartmentTemplates SchoolDepartmentTemplates[]
+  schoolPositionTemplates   SchoolPositionTemplates[]
+  semesters                 Semester[]
+  examinations              Examination[]
+  curriculum                Curriculum[]
+  curriculumGradeLevel      CurriculumGradeLevel[]
+  curriculumSubject         CurriculumSubject[]
+  subject                   Subject[]
+  departmentSubject         DepartmentSubject[]
+  studentClasses            StudentClass[]
+
+  attendanceSessions  AttendanceSession[]
+  timetablePeriods    TimetablePeriod[]
+  timetableSchedules  TimetableSchedule[]
+  teachingAssignments TeachingAssignment[]
+  scoreEntries        ScoreEntry[]
+  subjectSummaries    SubjectSemesterSummary[]
+  studentEditRequests StudentEditRequest[]
+
+  additionalInfo           SchoolAdditionalInfo?
+  schoolStaffWorkContracts SchoolStaffWorkContract[]
+  schoolStaffSalaries      SchoolStaffSalary[]
+  schoolStaffsAllowance    SchoolStaffsAllowance[]
+  staffUnionInfos          SchoolStaffUnionInfo[]
+
+  @@index([name])
+  @@index([type, isInternationalSchool])
+  @@index([canPreschool, canPrimarySchool, canLowerSecondarySchool, canUpperSecondarySchool])
+  @@map("schools")
+}
+
+model SchoolCampus {
+  id                    Int      @id @default(autoincrement())
+  schoolId              Int      @map("school_id")
+  code                  String
+  name                  String
+  address               String?
+  provinceId            Int?     @map("province_id")
+  wardId                Int?     @map("ward_id")
+  hotline               String?
+  totalArea             Decimal? @map("total_area")
+  distance              Int? // distance from main campus in metre
+  meansOfTransportation String?  @map("means_of_transportation")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school   School           @relation(fields: [schoolId], references: [id])
+  ward     WardsCommunes?   @relation(fields: [wardId], references: [id])
+  province ProvincesCities? @relation(fields: [provinceId], references: [id])
+
+  @@map("school_campuses")
+}
+
+model SchoolOperation {
+  id                          Int     @id @default(autoincrement())
+  schoolId                    Int     @unique @map("school_id")
+  nationalStandardStatus      Int     @default(0) @map("national_standard_status")
+  region                      Int?
+  zone                        Int?
+  hasStudentsWithDisabilities Boolean @default(false) @map("has_students_with_disabilities")
+  hasLifeSkillsEducation      Boolean @default(false) @map("has_life_skills_education")
+  hasBasicEducationProgram    Boolean @default(false) @map("has_basic_education_program")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school School @relation(fields: [schoolId], references: [id])
+
+  @@map("school_operations")
+}
+
+model SchoolFacility {
+  id        Int      @id @default(autoincrement())
+  schoolId  Int      @unique @map("school_id")
+  totalArea Decimal? @map("total_area")
+
+  hasMinimumTeachingEquipment                Boolean @default(false) @map("has_minimum_teaching_equipment")
+  hasComputers                               Boolean @default(false) @map("has_computers")
+  hasInternetAccess                          Boolean @default(false) @map("has_internet_access")
+  hasPowerGrid                               Boolean @default(false) @map("has_power_grid")
+  hasCleanWaterSource                        Boolean @default(false) @map("has_clean_water_source")
+  hasRestrooms                               Boolean @default(false) @map("has_restrooms")
+  hasCleanHygieneEducationProgram            Boolean @default(false) @map("has_clean_hygiene_education_program")
+  hasAccessibleInfraStudentsWithDisabilities Boolean @default(false) @map("has_accessible_infra_students_with_disabilities")
+  hasStudentServiceUnit                      Boolean @default(false) @map("has_student_service_unit")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school School @relation(fields: [schoolId], references: [id])
+
+  @@map("school_facilities")
+}
+
+model SchoolDepartmentTemplates {
+  id             Int      @id @default(autoincrement())
+  templateId     Int      @map("template_id")
+  orgId          Int?     @map("org_id")
+  code           String
+  name           String
+  desc           String?
+  parentId       Int?     @map("parent_id")
+  headPositionId Int?     @map("head_position_id")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  parent                  SchoolDepartmentTemplates?  @relation("DepartmentHierarchy", fields: [parentId], references: [id])
+  children                SchoolDepartmentTemplates[] @relation("DepartmentHierarchy")
+  schoolPositionTemplates SchoolPositionTemplates[]
+  schoolStaffs            SchoolStaff[]
+  school                  School?                     @relation(fields: [orgId], references: [id])
+  DepartmentSubject       DepartmentSubject[]
+
+  @@map("school_department_templates")
+}
+
+model SchoolPositionTemplates {
+  id               Int      @id @default(autoincrement())
+  templateId       Int      @map("template_id")
+  orgId            Int?     @map("org_id")
+  code             String
+  departmentId     Int      @map("department_id")
+  title            String
+  desc             String?
+  level            Int      @default(1)
+  canDedicated     Boolean  @default(false) @map("can_dedicated")
+  canConcurrent    Boolean  @default(false) @map("can_concurrent")
+  isDepartmentHead Boolean  @default(false) @map("is_department_head")
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+
+  department           SchoolDepartmentTemplates @relation(fields: [departmentId], references: [id])
+  school               School?                   @relation(fields: [orgId], references: [id])
+  schoolStaffs         SchoolStaff[]
+  schoolStaffPositions SchoolStaffPositions[]
+  positionRoles        Position_Role[]
+
+  @@unique([departmentId, title], name: "school_position_templates_department_title_key")
+  @@map("school_position_templates")
+}
+
+model SchoolYear {
+  id            Int      @id @default(autoincrement())
+  orgId         Int      @map("org_id")
+  title         String
+  fromDate      DateTime @map("from_date")
+  toDate        DateTime @map("to_date")
+  semesterCount Int      @default(0) @map("semester_count")
+  examCount     Int      @default(0) @map("exam_count")
+  status        Int      @default(1) // SCHOOL_YEAR_STATUS enum: 1=NEW, 2=ACTIVE, 3=CLOSED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school       School        @relation(fields: [orgId], references: [id])
+  classes      Class[]
+  students     Student[]
+  semesters    Semester[]
+  examinations Examination[]
+
+  attendanceSessions  AttendanceSession[]
+  timetableSchedules  TimetableSchedule[]
+  teachingAssignments TeachingAssignment[]
+  scoreEntries        ScoreEntry[]
+  subjectSummaries    SubjectSemesterSummary[]
+
+  @@map("school_years")
+}
+
+model Semester {
+  id           Int       @id @default(autoincrement())
+  orgId        Int       @map("org_id")
+  schoolYearId Int       @map("school_year_id")
+  title        String
+  fromDate     DateTime? @map("from_date")
+  toDate       DateTime? @map("to_date")
+  isActive     Boolean   @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  schoolYear   SchoolYear    @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  school       School?       @relation(fields: [orgId], references: [id])
+  examinations Examination[]
+
+  timetableSchedules  TimetableSchedule[]
+  teachingAssignments TeachingAssignment[]
+  scoreEntries        ScoreEntry[]
+  subjectSummaries    SubjectSemesterSummary[]
+
+  @@index([orgId, schoolYearId])
+  @@map("semesters")
+}
+
+model Examination {
+  id           Int  @id @default(autoincrement())
+  orgId        Int  @map("org_id")
+  schoolYearId Int  @map("school_year_id")
+  semesterId   Int? @map("semester_id")
+
+  title    String
+  fromDate DateTime? @map("from_date")
+  toDate   DateTime? @map("to_date")
+  isActive Boolean   @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  schoolYear SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  school     School?    @relation(fields: [orgId], references: [id])
+  semester   Semester?  @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, schoolYearId])
+  @@index([semesterId])
+  @@index([schoolYearId, semesterId])
+  @@map("examinations")
+}
+
+model InstructionLanguage {
+  id            Int     @id @default(autoincrement())
+  code          String
+  name          String
+  isActive      Boolean @default(true) @map("is_active")
+  isInstruction Boolean @default(false) @map("is_instruction")
+  isForeign     Boolean @default(false) @map("is_foreign")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  curriculums        Curriculum[]
+  curriculumSubjects CurriculumSubject[]
+
+  firstForeignLanguageClasses  Class[] @relation("FirstForeignLanguage")
+  secondForeignLanguageClasses Class[] @relation("SecondForeignLanguage")
+
+  @@map("instruction_languages")
+}
+
+model Curriculum {
+  id                    Int     @id @default(autoincrement())
+  orgId                 Int     @map("org_id")
+  code                  String
+  name                  String
+  instructionLanguageId Int     @map("instruction_language_id")
+  graduationDegree      String? @map("graduation_degree")
+  isReceived            Boolean @default(false) @map("is_received_diploma")
+  canApply              Boolean @default(false) @map("can_apply")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school              School                 @relation(fields: [orgId], references: [id])
+  instructionLanguage InstructionLanguage    @relation(fields: [instructionLanguageId], references: [id])
+  gradeLevels         CurriculumGradeLevel[]
+  subjects            CurriculumSubject[]
+  Class               Class[]
+
+  @@index([orgId, instructionLanguageId])
+  // Removed @@index([orgId])
+  @@index([orgId, code])
+  @@map("curriculums")
+}
+
+model CurriculumGradeLevel {
+  id           Int @id @default(autoincrement())
+  orgId        Int @map("org_id")
+  curriculumId Int @map("curriculum_id")
+  gradeLevel   Int @map("grade_level") // GRADE_LEVEL enum: 1-12 for grades, 13=PRE_NURSERY, 14=NURSERY, 15=PRE_SCHOOL, 16=KINDERGARTEN
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  curriculum Curriculum @relation(fields: [curriculumId], references: [id])
+  school     School     @relation(fields: [orgId], references: [id])
+
+  @@unique([orgId, curriculumId, gradeLevel])
+  // Removed @@index([orgId])
+  // Removed @@index([orgId, curriculumId])
+  @@map("curriculum_grade_levels")
+}
+
+model CurriculumSubject {
+  id                    Int     @id @default(autoincrement())
+  orgId                 Int     @map("org_id")
+  curriculumId          Int     @map("curriculum_id")
+  gradeLevel            Int     @map("grade_level") // GRADE_LEVEL enum: 1-12 for grades, 13=PRE_NURSERY, 14=NURSERY, 15=PRE_SCHOOL, 16=KINDERGARTEN
+  subjectId             Int     @map("subject_id")
+  type                  Int     @map("type") // CURRICULUM_SUBJECT_TYPE enum: 1=REQUIRED, 2=OPTIONAL, 3=ELECTIVE, 4=COMPULSORY_EDUCATION_ACTIVITY, 5=LOCAL_EDUCATION_CONTENT
+  instructionLanguageId Int     @map("instruction_language_id")
+  commentsBased         Boolean @default(false) @map("comments_based")
+  scoringBased          Boolean @default(false) @map("scoring_based")
+  lessonsPerWeek        Int     @default(1) @map("lessons_per_week")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school              School              @relation(fields: [orgId], references: [id])
+  curriculum          Curriculum          @relation(fields: [curriculumId], references: [id])
+  subject             Subject             @relation(fields: [subjectId], references: [id])
+  instructionLanguage InstructionLanguage @relation(fields: [instructionLanguageId], references: [id])
+
+  @@index([orgId, curriculumId])
+  @@index([orgId, subjectId])
+  @@map("curriculum_subjects")
+}
+
+model SchoolAdditionalInfo {
+  id    Int @id @default(autoincrement())
+  orgId Int @unique @map("org_id")
+
+  additionalInfo Json? @map("additional_info")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  school School @relation(fields: [orgId], references: [id])
+
+  @@map("school_additional_info")
+}

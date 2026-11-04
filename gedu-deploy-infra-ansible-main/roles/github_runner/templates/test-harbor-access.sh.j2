@@ -1,0 +1,54 @@
+#!/bin/bash
+# Test Harbor registry access for GitHub runner
+
+echo "=== Harbor Registry Access Test ==="
+echo "Testing access to Harbor registry..."
+
+# Test basic connectivity
+echo "1. Testing basic connectivity to Harbor..."
+if curl -s --connect-timeout 10 https://registry.eduhub.com/v2/ > /dev/null 2>&1; then
+    echo "✓ Harbor registry is reachable"
+else
+    echo "✗ Harbor registry is not reachable"
+fi
+
+# Test Docker login (without credentials - should show auth required)
+echo ""
+echo "2. Testing Docker registry access..."
+if docker pull registry.eduhub.com/library/hello-world:latest 2>&1 | grep -q "unauthorized"; then
+    echo "✓ Harbor registry requires authentication (expected)"
+elif docker pull registry.eduhub.com/library/hello-world:latest 2>&1 | grep -q "not found"; then
+    echo "✓ Harbor registry accessible but image not found (expected)"
+else
+    echo "⚠ Unexpected response from Harbor registry"
+fi
+
+# Test with Docker daemon configuration
+echo ""
+echo "3. Testing Docker daemon configuration..."
+if [ -d /etc/docker/certs.d/registry.eduhub.com ]; then
+    echo "✓ Docker certs directory exists"
+    if [ -f /etc/docker/certs.d/registry.eduhub.com/ca.crt ]; then
+        echo "✓ Harbor CA certificate found"
+    else
+        echo "✗ Harbor CA certificate not found"
+    fi
+else
+    echo "✗ Docker certs directory not found"
+fi
+
+# Test CA certificates
+echo ""
+echo "4. Testing CA certificates..."
+if command -v openssl &> /dev/null; then
+    if openssl s_client -connect registry.eduhub.com:443 -servername registry.eduhub.com < /dev/null 2>&1 | grep -q "Verify return code: 0"; then
+        echo "✓ SSL certificate is trusted"
+    else
+        echo "⚠ SSL certificate verification failed (may need CA import)"
+    fi
+else
+    echo "⚠ OpenSSL not available for certificate testing"
+fi
+
+echo ""
+echo "=== Harbor Access Test Complete ===" 

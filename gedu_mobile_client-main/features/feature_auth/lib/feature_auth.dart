@@ -1,0 +1,16 @@
+library feature_auth;
+export 'src/login/bloc/auth_bloc.dart';
+export 'src/login/bloc/auth_event.dart';
+export 'src/login/bloc/auth_state.dart';
+export 'src/change_password/bloc/change_password_bloc.dart';
+export 'src/change_password/bloc/change_password_event.dart';
+export 'src/change_password/bloc/change_password_state.dart';
+export 'src/change_password/view/change_password_page.dart';
+export 'src/coordinator/auth_feature_coordinator.dart';
+export 'src/di/di.dart';
+export 'src/di/feature_auth_di_config.dart';
+export 'src/change_pass_success/change_password_success_page.dart';
+export 'src/login/view/login_page.dart';
+export 'src/onboarding/onboarding_page.dart';
+export 'src/router/login_router.dart';
+export 'src/routes/auth_routes.dart';

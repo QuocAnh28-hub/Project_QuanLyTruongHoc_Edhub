@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package staff;
+
+service StaffImportService {
+  rpc ImportStaffs (ImportStaffRequest) returns (ImportStaffResponse);
+}
+
+message Staff {
+  string code = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string citizenId = 4;
+  string email = 5;
+  string dateOfBirth = 6;
+  string dateOfIssue = 7;
+  string dateOfExpiry = 8;
+  string placeOfIssue = 9;
+  string permanentResidenceProvince = 10;
+  string permanentResidenceWard = 11;
+  string permanentResidenceAddress = 12;
+
+  string temporaryResidenceProvince = 13;
+  string temporaryResidenceWard = 14;
+  string temporaryResidenceAddress = 15;
+
+  int32 sex = 16; // Valid values: 0 (unknown), 1 (male), 2 (female)
+
+  string contactPhone = 17;
+  string contactPhone2 = 18;
+  string position = 19;
+  string department = 20;
+  string nationality = 21;
+  string religion = 22;
+  string phone = 23;
+  string schoolPosition = 24;
+}
+
+message ImportStaffRequest {
+  repeated Staff staffs = 1;
+  int32 createdBy = 2;
+  string email = 3;
+  string fileName = 4;
+  int32 orgId = 5;
+}
+
+message StaffImportResult {
+  int32 id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message ImportStaffResponse {
+  repeated StaffImportResult results = 1;
+  int32 totalCount = 2;
+  int32 successCount = 3;
+  int32 failureCount = 4;
+}
+

@@ -1,0 +1,61 @@
+---
+- name: Check HAProxy status
+  raw: systemctl is-active haproxy
+  register: haproxy_status
+  changed_when: false
+
+- name: Display HAProxy status
+  debug:
+    msg: "HAProxy status on {{ inventory_hostname }}: {{ haproxy_status.stdout }}"
+
+- name: Check Keepalived status
+  raw: systemctl is-active keepalived
+  register: keepalived_status
+  changed_when: false
+
+- name: Display Keepalived status
+  debug:
+    msg: "Keepalived status on {{ inventory_hostname }}: {{ keepalived_status.stdout }}"
+
+- name: Check HAProxy configuration
+  raw: haproxy -c -f {{ haproxy_config_dir }}/{{ haproxy_config_file }}
+  changed_when: false
+
+- name: Check virtual IP assignment
+  raw: ip addr show | grep {{ keepalived_virtual_ip }}
+  register: vip_check
+  changed_when: false
+  failed_when: false
+
+- name: Display virtual IP status
+  debug:
+    msg: "Virtual IP {{ keepalived_virtual_ip }} status: {{ 'Assigned' if vip_check.rc == 0 else 'Not assigned' }}"
+
+- name: Check HAProxy listening ports
+  raw: netstat -tlnp | grep haproxy
+  register: haproxy_ports
+  changed_when: false
+
+- name: Display HAProxy listening ports
+  debug:
+    msg: "HAProxy listening ports on {{ inventory_hostname }}: {{ haproxy_ports.stdout_lines }}"
+
+- name: Test HTTP connectivity
+  raw: curl -s -o /dev/null -w "%{http_code}" http://{{ keepalived_virtual_ip }}:{{ istio_ingress_port }} || echo "Connection failed"
+  register: http_test
+  changed_when: false
+  failed_when: false
+
+- name: Display HTTP connectivity test result
+  debug:
+    msg: "HTTP connectivity test to {{ keepalived_virtual_ip }}:{{ istio_ingress_port }}: {{ http_test.stdout }}"
+
+- name: Test HTTPS connectivity
+  raw: curl -s -o /dev/null -w "%{http_code}" -k https://{{ keepalived_virtual_ip }}:{{ istio_ingress_https_port }} || echo "Connection failed"
+  register: https_test
+  changed_when: false
+  failed_when: false
+
+- name: Display HTTPS connectivity test result
+  debug:
+    msg: "HTTPS connectivity test to {{ keepalived_virtual_ip }}:{{ istio_ingress_https_port }}: {{ https_test.stdout }}"

@@ -1,0 +1,4 @@
+# templates/sudoers_user
+# This file grants {{ item.name }} sudo privileges without password.
+# Managed by Ansible.
+{{ item.name }} ALL=(ALL) NOPASSWD: ALL

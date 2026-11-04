@@ -1,0 +1,12 @@
+---
+- name: Install HAProxy
+  raw: dnf install -y haproxy
+  changed_when: false
+
+- name: Create HAProxy configuration directory
+  raw: mkdir -p {{ haproxy_config_dir }}
+  changed_when: false
+
+- name: Backup existing HAProxy configuration
+  raw: cp {{ haproxy_config_dir }}/{{ haproxy_config_file }} {{ haproxy_config_dir }}/{{ haproxy_config_file }}.backup 2>/dev/null || true
+  changed_when: false

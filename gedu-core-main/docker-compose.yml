@@ -1,0 +1,78 @@
+# docker-compose.yml, use for dev-server deployment
+services:
+  core:
+    image: gedu/core:dev
+    ports:
+      - "3000:3000" # core service is running on port 3000
+    environment:
+      # Database Configuration
+      - DATABASE_URL=${DATABASE_URL}
+      
+      # Redis Configuration
+      - REDIS_URL=${REDIS_URL}
+      
+      # Kafka
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+
+      # MinIO Configuration
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_PORT=${MINIO_PORT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      
+      # JWT Configuration
+      - JWT_SECRET=${JWT_SECRET}
+
+      # Application Configuration
+      - PORT=3000
+      - API_PREFIX=${API_PREFIX:-/}
+      - SWAGGER_ENABLE=${SWAGGER_ENABLE:-true}
+      
+      # Province
+      - PROVINCE_ID=${PROVINCE_ID:-91}
+
+      # GRPC
+      - GRPC_IMPORT_HOST=${GRPC_IMPORT_HOST:-core}
+      - GRPC_IMPORT_PORT=${GRPC_IMPORT_PORT:-50001}
+      
+      # Migration Configuration
+      - SKIP_MIGRATIONS=${SKIP_MIGRATIONS:-false}
+    networks:
+      - gedu-network
+
+  import:
+    image: gedu/import:dev
+    ports:
+      - "4000:3000" # import service is running on port 4000
+    environment:
+      # Database Configuration
+      - DATABASE_URL=${DATABASE_URL}
+
+      # Redis Configuration
+      - REDIS_URL=${REDIS_URL}
+
+      # Kafka
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      
+      # MinIO Configuration
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_PORT=${MINIO_PORT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+
+      # Application Configuration
+      - PORT=4000
+
+      # GRPC
+      - GRPC_IMPORT_HOST=${GRPC_IMPORT_HOST:-core}
+      - GRPC_IMPORT_PORT=${GRPC_IMPORT_PORT:-50001}
+      
+      # Migration Configuration
+      - SKIP_MIGRATIONS=${SKIP_MIGRATIONS:-false}
+    networks:
+      - gedu-network
+
+networks:
+  gedu-network:
+    name: ${NETWORK_NAME:-eduhub}
+    external: true

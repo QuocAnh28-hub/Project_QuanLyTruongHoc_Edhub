@@ -1,0 +1,138 @@
+model Nations {
+  id    Int    @id @default(autoincrement())
+  title String @unique
+
+  personals Personal[]
+
+  @@map("nations")
+}
+
+model Ethnics {
+  id        Int        @id @default(autoincrement())
+  title     String
+  personals Personal[]
+
+  @@map("ethnics")
+}
+
+model Religions {
+  id        Int        @id @default(autoincrement())
+  title     String
+  personals Personal[]
+
+  @@map("religions")
+}
+
+model Countries {
+  id           Int    @id @default(autoincrement())
+  name         String
+  code         String @unique
+  originalName String @map("original_name")
+  phoneCode    String @map("phone_code")
+  flag         String
+
+  @@map("countries")
+}
+
+model Provinces {
+  id        Int     @id @default(autoincrement())
+  title     String
+  countryId Int     @map("country_id")
+  phoneCode String? @map("phone_code")
+  isActive  Boolean @default(true) @map("is_active")
+  // Schools   School[]
+
+  // originPlacePersonals        Personal[] @relation("originProvince")
+  // permanentResidencePersonals Personal[] @relation("permanentProvince")
+  // temporaryResidencePersonals Personal[] @relation("temporaryProvince")
+
+  @@map("provinces")
+}
+
+model Districts {
+  id         Int     @id @default(autoincrement())
+  title      String
+  type       String
+  provinceId Int     @map("province_id")
+  isActive   Boolean @default(true) @map("is_active")
+  // Schools    School[]
+
+  // originPlacePersonals        Personal[] @relation("originDistrict")
+  // permanentResidencePersonals Personal[] @relation("permanentDistrict")
+  // temporaryResidencePersonals Personal[] @relation("temporaryDistrict")
+
+  @@map("districts")
+}
+
+model Wards {
+  id         Int     @id @default(autoincrement())
+  title      String
+  districtId Int     @map("district_id")
+  isActive   Boolean @default(true) @map("is_active")
+  // Schools    School[]
+
+  // originPlacePersonals        Personal[] @relation("originWard")
+  // permanentResidencePersonals Personal[] @relation("permanentWard")
+  // temporaryResidencePersonals Personal[] @relation("temporaryWard")
+
+  @@map("wards")
+}
+
+model ProvincesCities {
+  id        Int      @id @default(autoincrement())
+  countryId Int      @map("country_id")
+  code      Int
+  title     String
+  type      Int
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  WardsCommunes WardsCommunes[]
+
+  originPlacePersonals        Personal[] @relation("originProvince")
+  permanentResidencePersonals Personal[] @relation("permanentProvince")
+  temporaryResidencePersonals Personal[] @relation("temporaryProvince")
+
+  schools        School[]
+  schoolCampuses SchoolCampus[]
+
+  @@index([isActive])
+  @@index([countryId, isActive])
+  @@index([code])
+  @@map("provinces_cities")
+}
+
+model WardsCommunes {
+  id        Int      @id @default(autoincrement())
+  parentId  Int      @map("provinces_cities_id")
+  title     String
+  type      Int
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  ProvincesCities ProvincesCities @relation(fields: [parentId], references: [id])
+
+  originPlacePersonals        Personal[] @relation("originWard")
+  permanentResidencePersonals Personal[] @relation("permanentWard")
+  temporaryResidencePersonals Personal[] @relation("temporaryWard")
+
+  schools        School[]
+  schoolCampuses SchoolCampus[]
+
+  @@index([parentId])
+  @@index([parentId, isActive])
+  @@index([isActive])
+  @@map("wards_communes")
+}
+
+model EducationLevels {
+  id           Int            @id @default(autoincrement())
+  name         String
+  desc         String
+  isActive     Boolean        @default(true) @map("is_active")
+  UserEduLevel UserEduLevel[]
+
+  @@map("education_levels")
+}

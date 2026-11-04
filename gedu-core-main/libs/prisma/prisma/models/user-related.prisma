@@ -1,0 +1,40 @@
+model Folder {
+  id               Int       @id @default(autoincrement())
+  orgId            Int       @map("org_id")
+  userId           Int       @map("user_id")
+  folderName       String    @map("folder_name")
+  issuingAuthority String    @map("issuing_authority")
+  dateOfIssue      DateTime? @map("date_of_issue")
+  recordNumber     String?   @map("record_number")
+  type             Int?      @default(1)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  files File[]
+
+  @@index([orgId, userId])
+  @@map("folders")
+}
+
+model File {
+  id       Int    @id @default(autoincrement())
+  orgId    Int    @map("org_id")
+  userId   Int    @map("user_id")
+  folderId Int    @map("folder_id")
+  name     String
+  link     String
+  type     Int?   @default(1)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, userId, folderId])
+  @@map("files")
+}

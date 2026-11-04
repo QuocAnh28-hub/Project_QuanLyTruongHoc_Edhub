@@ -1,0 +1,28 @@
+{
+  "name": "import",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nx build import",
+    "start:dev": "ts-node-dev --respawn --transpile-only --env-file=../../.env.import -r tsconfig-paths/register src/main.ts",
+    "start:prod": "node dist/apps/import/main.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/microservices": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@prisma/adapter-pg": "^6.13.0",
+    "class-transformer": "^0.5.1",
+    "exceljs": "^4.4.0",
+    "joi": "^17.13.3",
+    "papaparse": "^5.5.3",
+    "rxjs": "^7.8.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "prisma": "^6.13.0"
+  }
+}

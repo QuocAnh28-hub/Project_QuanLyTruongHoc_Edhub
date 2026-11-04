@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package student;
+
+service StudentImportService {
+  rpc ImportStudents (ImportStudentRequest) returns (ImportStudentResponse);
+}
+
+message Guardian {
+  string firstName = 1;
+  string lastName = 2;
+  string phone = 3;
+  string email = 4;
+  int32 relationship = 5; // Valid values: 1 (father), 2 (mother), 9 (other).
+  string relationshipTitle = 6;
+}
+
+message AdmissionInfo {
+  string admissionDate = 1;
+  int32 admissionType = 2;
+  string admissionSchoolYear = 3;
+  int32 gradeLevel = 4;
+  string className = 5;
+
+  string priorityPolicy = 6;
+  string disabilityPolicy = 7;
+
+  string youngPioneerJoinDate = 8;
+  string youngPioneerTitle = 9;
+
+  string youthUnionJoinDate = 10;
+  string youthUnionTitle = 11;
+
+  string communistPartyJoinDate = 12;
+  string communistPartyTitle = 13;
+}
+
+message MedicalInfo {
+  string foodAllergy = 1;
+  string drugAllergy = 2;
+  string disease = 3;
+  string note = 4;
+}
+
+message Student {
+  string code = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string citizenId = 4;
+  string dateOfBirth = 5;
+  int32 sex = 6;
+  string nationality = 7;
+  string religion = 8;
+  
+  string permanentResidenceProvince = 9;
+  string permanentResidenceWard = 10;
+  string permanentResidenceAddress = 11;
+
+  string temporaryResidenceProvince = 12;
+  string temporaryResidenceWard = 13;
+  string temporaryResidenceAddress = 14;
+
+  repeated Guardian guardians = 15;
+  AdmissionInfo admissionInfo = 16;
+  MedicalInfo medicalInfo = 17;
+}
+
+message ImportStudentRequest {
+  repeated Student students = 1;
+  int32 createdBy = 2;
+  string email = 3;
+  string fileName = 4;
+  int32 orgId = 5;
+}
+
+message StudentImportResult {
+  int32 id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message ImportStudentResponse {
+  repeated StudentImportResult results = 1;
+  int32 totalCount = 2;
+  int32 successCount = 3;
+  int32 failureCount = 4;
+}
+

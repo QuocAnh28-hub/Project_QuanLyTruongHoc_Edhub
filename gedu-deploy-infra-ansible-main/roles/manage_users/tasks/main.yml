@@ -1,0 +1,67 @@
+# tasks/main.yml
+
+- name: Create or manage user accounts (allows multiple users via 'system_users' list)
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment | default('') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    home: "/home/{{ item.name }}"
+    groups: "{{ item.groups | default('') }}"
+    append: true
+    state: present
+  loop: "{{ system_users }}"
+  become: true
+
+- name: Ensure .ssh directory exists with correct permissions for each user
+  ansible.builtin.file:
+    path: "/home/{{ item.name }}/.ssh"
+    state: directory
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0700'
+  loop: "{{ system_users }}"
+  when: item.ssh_key is defined and item.ssh_key | length > 0
+  become: true
+
+- name: Add SSH public key to authorized_keys for each user
+  ansible.builtin.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key }}"
+  loop: "{{ system_users }}"
+  when: item.ssh_key is defined and item.ssh_key | length > 0
+  become: true
+
+- name: Configure sudoers for user (passwordless sudo) if enabled
+  ansible.builtin.template:
+    src: sudoers_user
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: '/usr/sbin/visudo -cf %s'
+  loop: "{{ system_users }}"
+  when: item.sudo_nopasswd | default(false)
+  become: true
+
+- name: Disable root SSH login if 'disable_root_login_ssh' is true
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+    backup: yes
+  when: disable_root_login_ssh
+  notify: Restart sshd service
+  become: true
+
+- name: Ensure PasswordAuthentication is set to no for security
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+    backup: yes
+  when: enforce_password_authentication_no # Only apply if this is true
+  notify: Restart sshd service
+  become: true

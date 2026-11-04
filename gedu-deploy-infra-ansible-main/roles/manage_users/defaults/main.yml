@@ -1,0 +1,27 @@
+# defaults/main.yml
+# General security settings
+# Set to true to disable root SSH login (PermitRootLogin no).
+# Default is false, meaning the role will not explicitly disable root login.
+# (Note: On modern RHEL/Oracle Linux, PermitRootLogin defaults to 'prohibit-password' if not set to 'yes' or 'no'.)
+disable_root_login_ssh: false
+
+# Ensure PasswordAuthentication is set to no for security (recommended)
+# Set to false if you need password-based SSH login (NOT recommended for automation users)
+enforce_password_authentication_no: false
+
+# List of users to manage
+system_users:
+  - name: "ansible_user"
+    comment: "Ansible managed user"
+    shell: "/bin/bash"
+    groups: "wheel" # Use 'wheel' for RHEL/Oracle Linux, 'sudo' for Debian/Ubuntu
+    ssh_key: "" # Public SSH key string (e.g., "ssh-rsa AAAA...")
+    sudo_nopasswd: true # Allow passwordless sudo for this user
+
+  # EXAMPLE: Add more users here by extending this list in your playbook or inventory
+  # - name: "another_dev_user"
+  #   comment: "Another developer"
+  #   shell: "/bin/bash"
+  #   groups: "wheel"
+  #   ssh_key: "ssh-rsa BBBBB...another_dev_key..."
+  #   sudo_nopasswd: true

@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node
+node_modules
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+dist
+coverage
+/apps/*/dist
+/prisma/generated
+
+# Env
+.env
+.env.*
+sample-env/
+
+# OS / Editor
+.DS_Store
+.vscode
+*.log
+
+# Tests
+test
+apps/**/test
+
+README.md
+*.iml
+.idea
+.cursor
+.github
+**/*.spec.ts
+**/*.test.ts

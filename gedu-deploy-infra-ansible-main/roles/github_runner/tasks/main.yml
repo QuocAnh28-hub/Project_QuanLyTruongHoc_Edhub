@@ -1,0 +1,204 @@
+---
+- name: Include RedHat/Oracle Linux tasks
+  include_tasks: redhat.yml
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Include Debian/Ubuntu tasks
+  include_tasks: debian.yml
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Create GitHub runner network
+  community.docker.docker_network:
+    name: "{{ github_runner_network }}"
+    state: present
+  when: github_runner_network is defined
+
+- name: Ensure Docker socket has proper permissions
+  file:
+    path: /var/run/docker.sock
+    mode: "0666"
+    state: file
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Ensure Docker socket has proper permissions (RedHat)
+  raw: |
+    chmod 666 /var/run/docker.sock
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Verify user is in docker group
+  shell: "id {{ github_runner_container_user }}"
+  register: user_groups
+  changed_when: false
+
+- name: Display user groups for verification
+  debug:
+    msg: "User {{ github_runner_container_user }} groups: {{ user_groups.stdout }}"
+
+- name: Wait for Docker service to be ready
+  wait_for:
+    path: /var/run/docker.sock
+    timeout: 30
+  when: user_groups.stdout is search('docker')
+
+- name: Ensure Docker socket has correct permissions after restart
+  file:
+    path: /var/run/docker.sock
+    mode: "0666"
+    state: file
+  when: user_groups.stdout is search('docker')
+
+- name: Ensure /home/{{ github_runner_container_user }}/actions-runner exists
+  file:
+    path: /home/{{ github_runner_container_user }}/actions-runner
+    state: directory
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+
+- name: Create docker-compose.yml for GitHub runner
+  template:
+    src: docker-compose.yml.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/docker-compose.yml"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0644"
+
+- name: Create systemd service for GitHub runner
+  template:
+    src: github-runner.service.j2
+    dest: "/etc/systemd/system/github-runner.service"
+    mode: "0644"
+  notify: reload systemd
+
+- name: Create Docker access test script
+  template:
+    src: test-docker-access.sh.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/test-docker-access.sh"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+
+- name: Create Harbor CA certificate directory in container
+  file:
+    path: "/home/{{ github_runner_container_user }}/actions-runner/certs"
+    state: directory
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+
+- name: Copy Harbor CA certificate for container
+  copy:
+    src: ca.crt
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/certs/harbor-ca.crt"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0644"
+
+# Custom entrypoint removed - using default runner entrypoint for stability
+
+- name: Create Harbor access test script
+  template:
+    src: test-harbor-access.sh.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/test-harbor-access.sh"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+
+- name: Test Docker access
+  shell: "/home/{{ github_runner_container_user }}/actions-runner/test-docker-access.sh"
+  register: docker_test_result
+  changed_when: false
+
+- name: Display Docker test results
+  debug:
+    msg: "{{ docker_test_result.stdout_lines }}"
+
+- name: Test Harbor registry access
+  shell: "/home/{{ github_runner_container_user }}/actions-runner/test-harbor-access.sh"
+  register: harbor_test_result
+  changed_when: false
+
+- name: Display Harbor test results
+  debug:
+    msg: "{{ harbor_test_result.stdout_lines }}"
+
+- name: Start GitHub runner service
+  systemd:
+    name: github-runner
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: github_org is defined and github_org != "" and github_access_token is defined and github_access_token != ""
+
+- name: Wait for GitHub runner container to be ready
+  wait_for:
+    timeout: 30
+  when: github_org is defined and github_org != "" and github_access_token is defined and github_access_token != ""
+
+- name: Install Harbor CA certificate in runner container
+  raw: |
+    docker exec {{ github_runner_container_name }} update-ca-certificates || echo "Container not ready yet"
+  register: ca_install_result
+  when: github_org is defined and github_org != "" and github_access_token is defined and github_access_token != ""
+
+- name: Start GitHub runners with scaling
+  raw: |
+    cd /home/{{ github_runner_container_user }}/actions-runner && docker compose up -d --scale github-runner={{ github_runner_min_runners }}
+  register: runner_scaling_result
+  when: github_org is defined and github_org != "" and github_access_token is defined and github_access_token != "" and github_runner_auto_scaling | bool
+
+- name: Display runner scaling result
+  debug:
+    msg: "{{ runner_scaling_result.stdout_lines }}"
+  when: github_org is defined and github_org != "" and github_access_token is defined and github_access_token != "" and github_runner_auto_scaling | bool and runner_scaling_result.stdout_lines is defined
+
+- name: Create autoscale configuration file
+  template:
+    src: autoscale-config.yml.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/autoscale-config.yml"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0644"
+  when: github_runner_auto_scaling | bool
+
+- name: Create GitHub runner autoscaler script
+  template:
+    src: github-runner-autoscaler.py.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.py"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+  when: github_runner_auto_scaling | bool
+
+- name: Create systemd service for GitHub runner autoscaler
+  template:
+    src: github-runner-autoscaler.service.j2
+    dest: "/etc/systemd/system/github-runner-autoscaler.service"
+    mode: "0644"
+  when: github_runner_auto_scaling | bool
+  notify: reload systemd
+
+- name: Install Python dependencies for autoscaler
+  pip:
+    name:
+      - requests
+      - pyyaml
+    state: present
+  when: github_runner_auto_scaling | bool
+
+- name: Start GitHub runner autoscaler service
+  systemd:
+    name: github-runner-autoscaler
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: github_runner_auto_scaling | bool and github_org is defined and github_org != "" and github_access_token is defined and github_access_token != ""
+
+- name: Create autoscaler status check script
+  template:
+    src: check-autoscaler-status.sh.j2
+    dest: "/home/{{ github_runner_container_user }}/actions-runner/check-autoscaler-status.sh"
+    owner: "{{ github_runner_container_user }}"
+    group: "{{ github_runner_container_user }}"
+    mode: "0755"
+  when: github_runner_auto_scaling | bool

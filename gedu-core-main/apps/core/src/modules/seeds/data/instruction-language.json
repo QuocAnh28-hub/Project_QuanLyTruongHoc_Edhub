@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "Tiếng Anh (Phổ biến nhất)",
+    "code": "en",
+    "isForeign": true,
+    "isInstruction": true
+  },
+  {
+    "id": 2,
+    "name": "Tiếng Pháp",
+    "code": "ph",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 3,
+    "name": "Tiếng Trung Quốc",
+    "code": "zh",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 4,
+    "name": "Tiếng Nga",
+    "code": "ru",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 5,
+    "name": "Tiếng Nhật",
+    "code": "ja",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 6,
+    "name": "Tiếng Hàn",
+    "code": "ko",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 7,
+    "name": "Tiếng Đức",
+    "code": "de",
+    "isForeign": true,
+    "isInstruction": false
+  },
+  {
+    "id": 8,
+    "name": "Tiếng Việt",
+    "code": "vi",
+    "isForeign": false,
+    "isInstruction": true
+  }
+]

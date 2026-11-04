@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewBox="0 0 600 400">
+    <defs>
+        <style type="text/css">
+            .building { fill: #2563eb; }
+            .windows { fill: #dbeafe; }
+            .roof { fill: #1e40af; }
+            .door { fill: #f59e0b; }
+            .steps { fill: #d1d5db; }
+            .tree { fill: #10b981; }
+            .tree-shadow { fill: #059669; }
+            .ground { fill: #e5e7eb; }
+            .cloud { fill: white; opacity: 0.9; }
+            .student { fill: #6b7280; }
+        </style>
+        
+        <!-- Cloud Pattern -->
+        <g id="cloud-group">
+            <circle cx="0" cy="0" r="20"/>
+            <circle cx="30" cy="0" r="25"/>
+            <circle cx="60" cy="0" r="20"/>
+        </g>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="600" height="400" fill="#f3f4f6"/>
+    
+    <!-- Clouds with Animation -->
+    <g class="cloud">
+        <use xlink:href="#cloud-group" transform="translate(100,80)">
+            <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="translate"
+                values="100,80; 150,80; 100,80"
+                dur="20s"
+                repeatCount="indefinite"/>
+        </use>
+    </g>
+    <g class="cloud">
+        <use xlink:href="#cloud-group" transform="translate(400,60)">
+            <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="translate"
+                values="400,60; 450,60; 400,60"
+                dur="15s"
+                repeatCount="indefinite"/>
+        </use>
+    </g>
+    
+    <!-- Ground -->
+    <rect class="ground" x="0" y="300" width="600" height="100"/>
+    
+    <!-- Trees -->
+    <g class="tree">
+        <polygon points="50,280 80,280 65,200" class="tree">
+            <animate
+                attributeName="transform"
+                attributeType="XML"
+                type="skewX"
+                values="0; 2; 0; -2; 0"
+                dur="3s"
+                repeatCount="indefinite"/>
+        </polygon>
+        <rect x="60" y="280" width="10" height="20" class="tree-shadow"/>
+    </g>
+    <g class="tree">
+        <polygon points="500,280 530,280 515,200" class="tree">
+            <animate
+                attributeName="transform"
+                attributeType="XML"
+                type="skewX"
+                values="0; -2; 0; 2; 0"
+                dur="3s"
+                repeatCount="indefinite"/>
+        </polygon>
+        <rect x="510" y="280" width="10" height="20" class="tree-shadow"/>
+    </g>
+    
+    <!-- School Building -->
+    <g transform="translate(150,100)">
+        <!-- Main Building -->
+        <rect class="building" x="0" y="80" width="300" height="200"/>
+        
+        <!-- Roof -->
+        <polygon class="roof" points="0,80 150,20 300,80"/>
+        
+        <!-- Windows with Light Animation -->
+        <g class="windows">
+            <rect x="30" y="120" width="40" height="60">
+                <animate
+                    attributeName="opacity"
+                    attributeType="CSS"
+                    values="1; 0.8; 1"
+                    dur="4s"
+                    repeatCount="indefinite"/>
+            </rect>
+            <rect x="130" y="120" width="40" height="60">
+                <animate
+                    attributeName="opacity"
+                    attributeType="CSS"
+                    values="0.8; 1; 0.8"
+                    dur="4s"
+                    repeatCount="indefinite"/>
+            </rect>
+            <rect x="230" y="120" width="40" height="60">
+                <animate
+                    attributeName="opacity"
+                    attributeType="CSS"
+                    values="1; 0.9; 1"
+                    dur="4s"
+                    repeatCount="indefinite"/>
+            </rect>
+            <rect x="30" y="200" width="40" height="60"/>
+            <rect x="130" y="200" width="40" height="60"/>
+            <rect x="230" y="200" width="40" height="60"/>
+        </g>
+        
+        <!-- Door -->
+        <g class="door">
+            <rect x="120" y="230" width="60" height="50"/>
+            <circle cx="170" cy="255" r="3" fill="#1e3c72"/>
+        </g>
+        
+        <!-- Steps -->
+        <g class="steps">
+            <rect x="110" y="280" width="80" height="10"/>
+            <rect x="100" y="290" width="100" height="10"/>
+        </g>
+    </g>
+    
+    <!-- Students with Walking Animation -->
+    <g class="student">
+        <g transform="translate(200,320)">
+            <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="translate"
+                values="200,320; 220,320; 200,320"
+                dur="3s"
+                repeatCount="indefinite"/>
+            <circle r="10"/>
+            <rect x="-5" y="10" width="10" height="20"/>
+            <line x1="-5" y1="20" x2="-15" y2="30" stroke="#6b7280" stroke-width="2"/>
+            <line x1="5" y1="20" x2="15" y2="30" stroke="#6b7280" stroke-width="2"/>
+        </g>
+    </g>
+    <g class="student">
+        <g transform="translate(400,320)">
+            <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="translate"
+                values="400,320; 380,320; 400,320"
+                dur="4s"
+                repeatCount="indefinite"/>
+            <circle r="10"/>
+            <rect x="-5" y="10" width="10" height="20"/>
+            <line x1="-5" y1="20" x2="-15" y2="30" stroke="#6b7280" stroke-width="2"/>
+            <line x1="5" y1="20" x2="15" y2="30" stroke="#6b7280" stroke-width="2"/>
+        </g>
+    </g>
+</svg> 

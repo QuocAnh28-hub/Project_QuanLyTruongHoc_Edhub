@@ -1,0 +1,170 @@
+name: lib_design_system
+description: Design system library for the G-Edu mobile app
+version: 0.0.1
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.2.0
+  lottie: ^2.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  injectable_generator: ^2.7.0
+  build_runner: ^2.5.4
+  flutter_gen_runner: ^5.10.0
+
+flutter_gen:
+  output: lib/gen/
+  line_length: 160
+  integrations:
+    flutter_svg: true
+  assets:
+    enabled: true
+flutter:
+  assets:
+    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/tabbar/
+    - assets/images/home/
+    - assets/images/profile/
+    - assets/animation/
+    - assets/fonts/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
+        - asset: assets/fonts/Inter_18pt-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter_18pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter_18pt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter_18pt-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter_18pt-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter_18pt-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter_18pt-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter_18pt-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Inter_18pt-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Inter_18pt-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Inter_18pt-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Inter_18pt-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Inter_18pt-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Inter_18pt-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/Inter_18pt-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/Inter_18pt-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Inter_18pt-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Inter_24pt-Regular.ttf
+        - asset: assets/fonts/Inter_24pt-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter_24pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter_24pt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter_24pt-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter_24pt-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter_24pt-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter_24pt-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter_24pt-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Inter_24pt-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Inter_24pt-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Inter_24pt-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Inter_24pt-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Inter_24pt-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Inter_24pt-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/Inter_24pt-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/Inter_24pt-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Inter_24pt-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Inter_28pt-Regular.ttf
+        - asset: assets/fonts/Inter_28pt-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter_28pt-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter_28pt-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter_28pt-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Inter_28pt-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Inter_28pt-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Inter_28pt-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Inter_28pt-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Inter_28pt-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Inter_28pt-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Inter_28pt-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Inter_28pt-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Inter_28pt-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Inter_28pt-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/Inter_28pt-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/Inter_28pt-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Inter_28pt-BlackItalic.ttf
+          weight: 900
+          style: italic

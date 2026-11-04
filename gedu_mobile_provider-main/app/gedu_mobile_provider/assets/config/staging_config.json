@@ -1,0 +1,11 @@
+{
+  "flavor": "staging",
+  "appName": "Gedu Provider Staging",
+  "appId": "com.gedu.provider.staging",
+  "baseUrl": "https://staging.lazeout.com",
+  "timeoutSeconds": 30,
+  "enableLogging": true,
+  "appIcon": "@mipmap/ic_launcher_staging",
+  "appVersion": "1.0.0",
+  "buildNumber": "1"
+} 

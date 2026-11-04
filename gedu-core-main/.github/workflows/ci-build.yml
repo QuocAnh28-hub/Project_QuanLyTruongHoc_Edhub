@@ -1,0 +1,96 @@
+name: CI Deploy Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Target environment'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - stag
+          - main
+      service:
+        description: 'Service to build and deploy (select one or all)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - core
+          - import
+
+env:
+  IMAGE_REGISTRY: registry.eduhub.com
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy (${{ inputs.branch }})
+    runs-on: [gedu-runner]
+
+    strategy:
+      matrix:
+        service: ["core", "import"]
+
+    steps:
+      - name: Install Git (if missing)
+        run: |
+          if ! command -v git &> /dev/null; then
+            sudo apt-get update -y
+            sudo apt-get install -y git
+          fi
+
+      - name: Checkout selected branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Skip non-selected service
+        if: inputs.service != 'all' && matrix.service != inputs.service
+        run: |
+          echo "Skipping service ${{ matrix.service }}"
+          exit 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ matrix.service }}-${{ hashFiles(format('services/{0}/Dockerfile', matrix.service), format('services/{0}/**/requirements.txt', matrix.service)) }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-${{ matrix.service }}-
+
+      - name: Log in to Docker registry
+        run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login ${{ env.IMAGE_REGISTRY }} -u "${{ secrets.HARBOR_USERNAME }}" --password-stdin
+
+      - name: Set ENV variables
+        run: |
+          echo "SERVICE=${{ matrix.service }}" >> $GITHUB_ENV
+
+      - name: Build and Push for DEV
+        if: inputs.branch == 'dev'
+        run: make docker-push-dev SERVICE=${{ matrix.service }}
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build and Push for STAG
+        if: inputs.branch == 'stag'
+        run: make docker-push-stag SERVICE=${{ matrix.service }}
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build and Push for PROD
+        if: inputs.branch == 'main'
+        run: make docker-push-prod SERVICE=${{ matrix.service }}
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}

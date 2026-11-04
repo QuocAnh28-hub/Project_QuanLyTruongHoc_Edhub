@@ -1,0 +1,39 @@
+#!/bin/bash
+# Test Docker access for GitHub runner
+
+echo "=== Docker Access Test ==="
+echo "Current user: $(whoami)"
+echo "User groups: $(groups)"
+echo "Docker socket permissions: $(ls -la /var/run/docker.sock)"
+echo "Docker socket owner: $(stat -c '%U:%G' /var/run/docker.sock)"
+
+echo ""
+echo "=== Testing Docker Commands ==="
+if docker ps >/dev/null 2>&1; then
+    echo "✓ Docker ps command works"
+    echo "Docker version: $(docker --version)"
+    echo "Docker info:"
+    docker info | head -10
+else
+    echo "✗ Docker ps command failed"
+    echo "Error: $(docker ps 2>&1)"
+fi
+
+echo ""
+echo "=== Testing Docker Buildx ==="
+if docker buildx version >/dev/null 2>&1; then
+    echo "✓ Docker buildx works"
+    echo "Buildx version: $(docker buildx version)"
+else
+    echo "✗ Docker buildx failed"
+    echo "Error: $(docker buildx version 2>&1)"
+fi
+
+echo ""
+echo "=== Testing Docker Build ==="
+if docker build --help >/dev/null 2>&1; then
+    echo "✓ Docker build command works"
+else
+    echo "✗ Docker build command failed"
+    echo "Error: $(docker build --help 2>&1)"
+fi 

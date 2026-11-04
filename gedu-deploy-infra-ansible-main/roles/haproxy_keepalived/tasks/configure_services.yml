@@ -1,0 +1,82 @@
+---
+- name: Create HAProxy runtime directories
+  raw: |
+    mkdir -p /run/haproxy
+    mkdir -p /var/lib/haproxy
+    chown {{ haproxy_user }}:{{ haproxy_group }} /run/haproxy
+    chown {{ haproxy_user }}:{{ haproxy_group }} /var/lib/haproxy
+  changed_when: false
+
+- name: Create HAProxy certificates directory (for SSL termination mode)
+  raw: |
+    mkdir -p /etc/haproxy/certs
+    chown {{ haproxy_user }}:{{ haproxy_group }} /etc/haproxy/certs
+    chmod 700 /etc/haproxy/certs
+  changed_when: false
+  when: haproxy_ssl_mode == "http"
+
+- name: Copy SSL certificate files (for SSL termination mode)
+  raw: |
+    if [ -f "{{ ssl_cert_source }}" ]; then
+      cp "{{ ssl_cert_source }}" /etc/haproxy/certs/geduhub.vn.crt
+      cp "{{ ssl_key_source }}" /etc/haproxy/certs/geduhub.vn.key
+      cat /etc/haproxy/certs/geduhub.vn.crt /etc/haproxy/certs/geduhub.vn.key > {{ ssl_cert_path }}
+      chown {{ haproxy_user }}:{{ haproxy_group }} /etc/haproxy/certs/*
+      chmod 600 /etc/haproxy/certs/*
+      echo "SSL certificates copied successfully"
+    else
+      echo "Warning: SSL certificate files not found. SSL termination mode may not work properly."
+    fi
+  changed_when: false
+  when: haproxy_ssl_mode == "http"
+
+- name: Copy HAProxy configuration template
+  template:
+    src: haproxy.cfg.j2
+    dest: "{{ haproxy_config_dir }}/{{ haproxy_config_file }}"
+    owner: "{{ haproxy_user }}"
+    group: "{{ haproxy_group }}"
+    mode: '0644'
+  notify: restart haproxy
+
+- name: Configure Keepalived
+  raw: |
+    cat > {{ keepalived_config_dir }}/{{ keepalived_config_file }} << 'EOF'
+    vrrp_script check_haproxy {
+        script "killall -0 haproxy"
+        interval 2
+        weight 2
+    }
+
+    vrrp_instance {{ keepalived_vrrp_instance }} {
+        state MASTER
+        interface {{ keepalived_interface }}
+        virtual_router_id {{ keepalived_virtual_router_id }}
+        priority {{ keepalived_priority }}
+        advert_int 1
+        nopreempt
+        authentication {
+            auth_type PASS
+            auth_pass 1111
+        }
+        virtual_ipaddress {
+            {{ keepalived_virtual_ip }}
+        }
+        track_script {
+            check_haproxy
+        }
+    }
+    EOF
+  notify: restart keepalived
+
+- name: Enable and start HAProxy
+  raw: |
+    systemctl enable haproxy
+    systemctl start haproxy
+  changed_when: false
+
+- name: Enable and start Keepalived
+  raw: |
+    systemctl enable keepalived
+    systemctl start keepalived
+  changed_when: false

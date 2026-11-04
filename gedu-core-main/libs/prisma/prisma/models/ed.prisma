@@ -1,0 +1,105 @@
+model EducationDepartment {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  shortName   String @map("short_name")
+  hotline     String @map("hotline")
+  email       String
+  address     String
+  website     String
+  wardId      Int    @map("ward_id")
+  provinceId  Int    @map("province_id")
+
+  // ward     WardsCommunes? @relation(fields: [wardId], references: [id])
+  // province ProvincesCities? @relation(fields: [provinceId], references: [id])
+
+  @@map("education_departments")
+}
+
+model EduDepartmentTemplate {
+  id             Int      @id @default(autoincrement())
+  templateId     Int      @default(1) @map("template_id")
+  code           String
+  name           String
+  desc           String?
+  parentId       Int?     @map("parent_id")
+  headPositionId Int?     @map("head_position_id")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  parent            EduDepartmentTemplate?  @relation("EduDepartmentHierarchy", fields: [parentId], references: [id])
+  children          EduDepartmentTemplate[] @relation("EduDepartmentHierarchy")
+  positionTemplates EdPositionTemplate[]
+  edStaffs          EdStaff[]
+
+  @@map("edu_department_templates")
+}
+
+model EdPositionTemplate {
+  id               Int      @id @default(autoincrement())
+  templateId       Int      @default(1) @map("template_id")
+  code             String
+  departmentId     Int      @map("department_id")
+  title            String
+  desc             String?
+  canDedicated     Boolean  @default(false) @map("can_dedicated")
+  canConcurrent    Boolean  @default(false) @map("can_concurrent")
+  isDepartmentHead Boolean  @default(false) @map("is_department_head")
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+
+  department     EduDepartmentTemplate @relation(fields: [departmentId], references: [id])
+  staffPositions EdStaffPosition[]
+  edStaffs       EdStaff[]
+
+  @@unique([departmentId, title], name: "ed_position_templates_department_title_key")
+  @@map("ed_position_templates")
+}
+
+model EdStaff {
+  id            Int     @id @default(autoincrement())
+  userId        Int     @unique @map("user_id")
+  orgId         Int     @map("org_id")
+  departmentId  Int?    @map("department_id")
+  code          String?
+  isAdmin       Boolean @default(false) @map("is_admin")
+  contactPhone  String? @map("contact_phone")
+  contactPhone2 String? @map("contact_phone_2")
+  status        Int     @default(1) // STAFF_STATUS enum: 1=CREATED, 2=ACTIVE, 3=PAUSED, 4=TERMINATED, 5=RESIGNED, 6=MATERNITY_LEAVE, 7=LONG_TERM_LEAVE
+  positionId    Int?    @map("position_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user             User                   @relation(fields: [userId], references: [id])
+  department       EduDepartmentTemplate? @relation(fields: [departmentId], references: [id])
+  position         EdPositionTemplate?    @relation(fields: [positionId], references: [id])
+  edStaffPositions EdStaffPosition[]
+
+  @@unique([orgId, code])
+  @@map("ed_staffs")
+}
+
+model EdStaffPosition {
+  id          Int     @id @default(autoincrement())
+  orgId       Int     @map("org_id")
+  staffId     Int     @map("staff_id")
+  positionId  Int?    @map("position_id")
+  isDedicated Boolean @default(false) @map("is_dedicated")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  staff    EdStaff             @relation(fields: [staffId], references: [id])
+  position EdPositionTemplate? @relation(fields: [positionId], references: [id])
+
+  @@index([orgId, staffId])
+  @@index([positionId])
+  @@map("ed_staff_positions")
+}

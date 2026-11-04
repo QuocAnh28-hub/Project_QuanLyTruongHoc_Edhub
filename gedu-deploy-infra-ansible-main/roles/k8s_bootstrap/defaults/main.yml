@@ -1,0 +1,6 @@
+---
+k8s_domain_name: "yourdomain.com" # Default domain name for Kubernetes hosts
+k8s_update_kernel: false           # Default to not update the kernel
+hosts_file_groups:                 # New variable: List of groups for /etc/hosts entries
+  - k8s_cluster
+  - data_lake                      # Add your new group here

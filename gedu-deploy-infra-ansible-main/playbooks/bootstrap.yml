@@ -1,0 +1,11 @@
+# This playbook bootstraps common utilities on the docker_registry hosts
+
+- name: Bootstrap common utilities
+  hosts: all        # Target hosts group
+  gather_facts: true           # Collect system facts
+  become: true                 # Run tasks with elevated privileges
+  roles:
+    - { role: base_packages, tags: [bootstrap, base_packages] }      # Install base packages
+    - { role: manage_users, tags: [bootstrap, manage_users] }        # Manage user accounts
+    # - { role: k8s_bootstrap, tags: [bootstrap, k8s_bootstrap] }      # Bootstrap Kubernetes prerequisites
+    # - { role: docker, tags: [bootstrap, docker_engine] }   # Bootstrap Docker Engine

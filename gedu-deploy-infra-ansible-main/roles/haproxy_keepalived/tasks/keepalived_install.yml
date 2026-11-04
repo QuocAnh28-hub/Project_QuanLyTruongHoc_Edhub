@@ -1,0 +1,12 @@
+---
+- name: Install Keepalived
+  raw: dnf install -y keepalived
+  changed_when: false
+
+- name: Create Keepalived configuration directory
+  raw: mkdir -p {{ keepalived_config_dir }}
+  changed_when: false
+
+- name: Backup existing Keepalived configuration
+  raw: cp {{ keepalived_config_dir }}/{{ keepalived_config_file }} {{ keepalived_config_dir }}/{{ keepalived_config_file }}.backup 2>/dev/null || true
+  changed_when: false

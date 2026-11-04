@@ -1,0 +1,19 @@
+---
+- name: Create RKE directory
+  raw: mkdir -p {{ rke_install_dir }}
+  changed_when: false
+
+- name: Download RKE binary
+  raw: |
+    cd {{ rke_install_dir }}
+    rm -f rke_linux-amd64
+    wget -q {{ rke_download_url }}
+    ls -la rke_linux-amd64
+    chmod +x rke_linux-amd64
+    ln -sf {{ rke_install_dir }}/rke_linux-amd64 /usr/local/bin/rke
+    ls -la /usr/local/bin/rke
+  changed_when: false
+
+- name: Verify RKE installation
+  raw: /usr/local/bin/rke --version
+  changed_when: false

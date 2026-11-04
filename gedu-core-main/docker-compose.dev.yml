@@ -1,0 +1,48 @@
+services:
+  core:
+    build:
+      context: .
+      dockerfile: apps/core/Dockerfile.dev
+    image: gedu/core:dev
+    # depends_on:
+    #   migrate:
+    #     condition: service_completed_successfully
+    env_file:
+      - .env
+      - .env.core
+    ports:
+      - "3000:3000" # core service is running on port 3000
+    environment:
+      - PORT=3000
+    networks:
+      - gedu-network
+
+  import:
+    build:
+      context: .
+      dockerfile: apps/import/Dockerfile.dev
+    image: gedu/import:dev
+    env_file:
+      - .env
+      - .env.import
+    ports:
+      - "4000:3000" # import service is running on port 4000
+    environment:
+      - PORT=3000
+    networks:
+      - gedu-network
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.migrate
+    image: gedu/migrate:latest
+    env_file:
+      - .env
+    networks:
+      - gedu-network
+
+networks:
+  gedu-network:
+    name: ${NETWORK_NAME:-gedu-network}
+    external: true

@@ -1,0 +1,17 @@
+# Build Stage
+FROM node:20.9-alpine3.18 as builder
+
+WORKDIR /app
+
+COPY libs/prisma/package.json ./
+COPY libs/prisma/prisma/schema.prisma ./prisma/schema.prisma
+COPY libs/prisma/prisma/models ./prisma/models
+COPY libs/prisma/prisma/migrations ./prisma/migrations
+COPY libs/prisma/prisma.config.ts ./prisma.config.ts
+
+RUN npm i prisma@6.13.0
+
+ENV PRISMA_QUERY_ENGINE_TYPE=binary
+
+# Generate Prisma client
+CMD ["npx", "prisma", "migrate", "deploy"] 

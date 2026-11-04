@@ -1,0 +1,18 @@
+{
+  "data": [
+    { "id": 7, "title": "Minh Lý đạo" },
+    { "id": 4, "title": "Hồi giáo" },
+    { "id": 8, "title": "Tin Lành" },
+    { "id": 5, "title": "Cao Đài" },
+    { "id": 13, "title": "Tôn giáo khác" },
+    { "id": 14, "title": "Không" },
+    { "id": 10, "title": "Đạo Tứ ấn hiếu nghĩa" },
+    { "id": 6, "title": "Minh sư đạo" },
+    { "id": 9, "title": "Tịnh độ cư sĩ Phật hội Việt Nam" },
+    { "id": 11, "title": "Bửu sơn Kỳ hương" },
+    { "id": 3, "title": "Phật giáo Hoà Hảo" },
+    { "id": 12, "title": "Ba Ha'i" },
+    { "id": 1, "title": "Phật giáo" },
+    { "id": 2, "title": "Công giáo" }
+  ]
+} 

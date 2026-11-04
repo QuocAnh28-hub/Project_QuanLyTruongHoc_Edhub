@@ -1,0 +1,65 @@
+---
+- name: Install Docker
+  raw: dnf install -y docker-ce docker-ce-cli containerd.io
+  changed_when: false
+
+- name: Start and enable Docker
+  raw: |
+    systemctl start docker
+    systemctl enable docker
+  changed_when: false
+
+- name: Add ansible_user to docker group
+  raw: usermod -aG docker {{ ansible_user }}
+  changed_when: false
+
+- name: Create Docker certificates directory
+  raw: mkdir -p /etc/docker/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}
+  become: true
+  changed_when: false
+
+- name: Copy Harbor CA certificate to Docker certificates directory
+  copy:
+    src: ca.crt
+    dest: "/etc/docker/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}/ca.crt"
+    mode: "0644"
+  become: true
+  when: harbor_enable_cert | default(true)
+
+- name: Create system CA certificates directory
+  raw: mkdir -p /usr/local/share/ca-certificates
+  become: true
+  changed_when: false
+
+- name: Copy Harbor CA certificate to system CA trust store
+  copy:
+    src: ca.crt
+    dest: "/usr/local/share/ca-certificates/{{ harbor_hostname | default('registry.eduhub.com') }}.crt"
+    mode: "0644"
+  become: true
+  when: harbor_enable_cert | default(true)
+
+- name: Update system CA certificates
+  raw: update-ca-trust
+  become: true
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+
+- name: Configure Docker daemon
+  raw: |
+    cat > /etc/docker/daemon.json << EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2",
+      "insecure-registries": ["{{ harbor_hostname | default('registry.eduhub.com') }}"]
+    }
+    EOF
+  changed_when: false
+
+- name: Restart Docker
+  raw: systemctl restart docker
+  changed_when: false

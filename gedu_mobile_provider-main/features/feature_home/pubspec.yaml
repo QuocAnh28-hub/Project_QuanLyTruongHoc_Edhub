@@ -1,0 +1,34 @@
+name: feature_home
+description: Home feature module for the GEDU mobile application
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core_storage: ^0.0.1
+  core_students: ^0.0.1
+  core_auth: ^0.0.1
+  core_localization: ^0.0.1
+
+  lib_base: ^0.0.1
+  lib_design_system: ^0.0.1
+  lib_utils: ^0.0.1
+  injectable: ^2.5.0
+  go_router: ^16.0.0
+  flutter_bloc: ^9.1.1
+  dartx: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.5.4
+  injectable_generator: ^2.7.0
+
+flutter:
+  uses-material-design: true

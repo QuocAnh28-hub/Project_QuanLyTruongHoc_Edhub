@@ -1,0 +1,8 @@
+---
+- name: restart haproxy
+  raw: systemctl restart haproxy
+  listen: "restart haproxy"
+
+- name: restart keepalived
+  raw: systemctl restart keepalived
+  listen: "restart keepalived"

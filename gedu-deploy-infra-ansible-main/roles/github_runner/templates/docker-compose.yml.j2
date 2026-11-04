@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  github-runner:
+    image: ghcr.io/myoung34/docker-github-actions-runner:ubuntu-jammy
+    restart: unless-stopped
+    environment:
+      {% if github_repo %}
+      - RUNNER_SCOPE=repo
+      - REPO_URL=https://github.com/{{ github_org }}/{{ github_repo }}
+      {% else %}
+      - RUNNER_SCOPE=org
+      - ORG_NAME={{ github_org }}
+      {% endif %}
+      - ACCESS_TOKEN={{ github_access_token }}
+      - RUNNER_TOKEN={{ github_runner_token }}
+      - LABELS={{ github_runner_labels }}
+      - RUNNER_GROUP={{ github_runner_group }}
+      - RUN_AS_ROOT=false
+      - DISABLE_RUNNER_UPDATE=true
+      - DEBUG_OUTPUT=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/docker/certs.d:/etc/docker/certs.d:ro
+      - ./certs/harbor-ca.crt:/usr/local/share/ca-certificates/harbor-ca.crt:ro
+      - ./certs/harbor-ca.crt:/etc/docker/certs.d/registry.eduhub.com/ca.crt:ro
+    group_add:
+      - docker
+    networks:
+      - {{ github_runner_network }}
+    deploy:
+      resources:
+        limits:
+          memory: {{ github_runner_memory_limit }}
+          cpus: '{{ github_runner_cpu_limit }}'
+        reservations:
+          memory: 1g
+          cpus: '0.5'
+
+networks:
+  {{ github_runner_network }}:
+    external: true

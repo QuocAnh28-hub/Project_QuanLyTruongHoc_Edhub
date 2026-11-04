@@ -1,0 +1,18 @@
+model ImportJob {
+  id             String   @id @default(uuid())
+  orgId          Int      @map("org_id")
+  type           String
+  payload        Json
+  status         Int      @default(1) // IMPORT_STATUS enum: 1=PENDING, 2=PROCESSING, 3=COMPLETED, 4=FAILED
+  result         Json?
+  totalLines     Int      @default(0) @map("total_lines")
+  processedLines Int      @default(0) @map("processed_lines")
+  failedLines    Int      @default(0) @map("failed_lines")
+  errorDetails   Json?    @map("error_details")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  createdBy      Int      @map("created_by")
+
+  @@index([orgId])
+  @@map("import_jobs")
+}

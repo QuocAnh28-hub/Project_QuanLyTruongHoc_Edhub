@@ -1,0 +1,74 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-apk-development",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "development",
+        "--dart-define-from-file=app/gedu_mobile_provider/assets/config/dev_config.json",
+        "--target=app/gedu_mobile_provider/lib/main_development.dart"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "build-apk-staging",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "staging",
+        "--dart-define-from-file=app/gedu_mobile_provider/assets/config/staging_config.json",
+        "--target=app/gedu_mobile_provider/lib/main_staging.dart"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "build-apk-production",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "production",
+        "--dart-define-from-file=app/gedu_mobile_provider/assets/config/prod_config.json",
+        "--target=app/gedu_mobile_provider/lib/main_production.dart"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}

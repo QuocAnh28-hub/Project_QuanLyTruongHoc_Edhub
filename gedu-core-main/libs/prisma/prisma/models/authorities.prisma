@@ -1,0 +1,64 @@
+model Permission {
+  code  String @id
+  title String
+  desc  String
+
+  rolesPermissions Role_Permission[]
+  userPermissions  User_Permission[]
+
+  @@map("permissions")
+}
+
+model Role {
+  code  String @id
+  title String
+  desc  String
+
+  rolesPermissions Role_Permission[]
+  positionRoles    Position_Role[]
+
+  @@map("roles")
+}
+
+model Role_Permission {
+  id              Int    @id @default(autoincrement())
+  role_code       String
+  permission_code String
+
+  role       Role       @relation(fields: [role_code], references: [code])
+  permission Permission @relation(fields: [permission_code], references: [code])
+
+  @@map("role_permissions")
+}
+
+model Position_Role {
+  id          Int    @id @default(autoincrement())
+  position_id Int
+  role_code   String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  position SchoolPositionTemplates @relation(fields: [position_id], references: [id])
+  role     Role                    @relation(fields: [role_code], references: [code])
+
+  @@map("position_roles")
+}
+
+model User_Permission {
+  id              Int    @id @default(autoincrement())
+  user_id         Int
+  permission_code String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user       User       @relation(fields: [user_id], references: [id])
+  permission Permission @relation(fields: [permission_code], references: [code])
+
+  @@map("user_permissions")
+}

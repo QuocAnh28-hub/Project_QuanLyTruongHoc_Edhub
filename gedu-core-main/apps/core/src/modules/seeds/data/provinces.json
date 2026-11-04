@@ -1,0 +1,320 @@
+{
+  "updatedAt": "2024-11-20T10:18:20.954Z",
+  "data": [
+    {
+      "code": 1,
+      "name": "Ha Noi",
+      "type": "municipality"
+    },
+    {
+      "code": 2,
+      "name": "Ha Giang",
+      "type": "province"
+    },
+    {
+      "code": 4,
+      "name": "Cao Bang",
+      "type": "province"
+    },
+    {
+      "code": 6,
+      "name": "Bac Kan",
+      "type": "province"
+    },
+    {
+      "code": 8,
+      "name": "Tuyen Quang",
+      "type": "province"
+    },
+    {
+      "code": 10,
+      "name": "Lao Cai",
+      "type": "province"
+    },
+    {
+      "code": 11,
+      "name": "Dien Bien",
+      "type": "province"
+    },
+    {
+      "code": 12,
+      "name": "Lai Chau",
+      "type": "province"
+    },
+    {
+      "code": 14,
+      "name": "Son La",
+      "type": "province"
+    },
+    {
+      "code": 15,
+      "name": "Yen Bai",
+      "type": "province"
+    },
+    {
+      "code": 17,
+      "name": "Hoa Binh",
+      "type": "province"
+    },
+    {
+      "code": 19,
+      "name": "Thai Nguyen",
+      "type": "province"
+    },
+    {
+      "code": 20,
+      "name": "Lang Son",
+      "type": "province"
+    },
+    {
+      "code": 22,
+      "name": "Quang Ninh",
+      "type": "province"
+    },
+    {
+      "code": 24,
+      "name": "Bac Giang",
+      "type": "province"
+    },
+    {
+      "code": 25,
+      "name": "Phu Tho",
+      "type": "province"
+    },
+    {
+      "code": 26,
+      "name": "Vinh Phuc",
+      "type": "province"
+    },
+    {
+      "code": 27,
+      "name": "Bac Ninh",
+      "type": "province"
+    },
+    {
+      "code": 30,
+      "name": "Hai Duong",
+      "type": "province"
+    },
+    {
+      "code": 31,
+      "name": "Hai Phong",
+      "type": "municipality"
+    },
+    {
+      "code": 33,
+      "name": "Hung Yen",
+      "type": "province"
+    },
+    {
+      "code": 34,
+      "name": "Thai Binh",
+      "type": "province"
+    },
+    {
+      "code": 35,
+      "name": "Ha Nam",
+      "type": "province"
+    },
+    {
+      "code": 36,
+      "name": "Nam Dinh",
+      "type": "province"
+    },
+    {
+      "code": 37,
+      "name": "Ninh Binh",
+      "type": "province"
+    },
+    {
+      "code": 38,
+      "name": "Thanh Hoa",
+      "type": "province"
+    },
+    {
+      "code": 40,
+      "name": "Nghe An",
+      "type": "province"
+    },
+    {
+      "code": 42,
+      "name": "Ha Tinh",
+      "type": "province"
+    },
+    {
+      "code": 44,
+      "name": "Quang Binh",
+      "type": "province"
+    },
+    {
+      "code": 45,
+      "name": "Quang Tri",
+      "type": "province"
+    },
+    {
+      "code": 46,
+      "name": "Thua Thien Hue",
+      "type": "province"
+    },
+    {
+      "code": 48,
+      "name": "Da Nang",
+      "type": "municipality"
+    },
+    {
+      "code": 49,
+      "name": "Quang Nam",
+      "type": "province"
+    },
+    {
+      "code": 51,
+      "name": "Quang Ngai",
+      "type": "province"
+    },
+    {
+      "code": 52,
+      "name": "Binh Dinh",
+      "type": "province"
+    },
+    {
+      "code": 54,
+      "name": "Phu Yen",
+      "type": "province"
+    },
+    {
+      "code": 56,
+      "name": "Khanh Hoa",
+      "type": "province"
+    },
+    {
+      "code": 58,
+      "name": "Ninh Thuan",
+      "type": "province"
+    },
+    {
+      "code": 60,
+      "name": "Binh Thuan",
+      "type": "province"
+    },
+    {
+      "code": 62,
+      "name": "Kon Tum",
+      "type": "province"
+    },
+    {
+      "code": 64,
+      "name": "Gia Lai",
+      "type": "province"
+    },
+    {
+      "code": 66,
+      "name": "Dak Lak",
+      "type": "province"
+    },
+    {
+      "code": 67,
+      "name": "Dak Nong",
+      "type": "province"
+    },
+    {
+      "code": 68,
+      "name": "Lam Dong",
+      "type": "province"
+    },
+    {
+      "code": 70,
+      "name": "Binh Phuoc",
+      "type": "province"
+    },
+    {
+      "code": 72,
+      "name": "Tay Ninh",
+      "type": "province"
+    },
+    {
+      "code": 74,
+      "name": "Binh Duong",
+      "type": "province"
+    },
+    {
+      "code": 75,
+      "name": "Dong Nai",
+      "type": "province"
+    },
+    {
+      "code": 77,
+      "name": "Ba Ria - Vung Tau",
+      "type": "province"
+    },
+    {
+      "code": 79,
+      "name": "Ho Chi Minh",
+      "type": "municipality"
+    },
+    {
+      "code": 80,
+      "name": "Long An",
+      "type": "province"
+    },
+    {
+      "code": 82,
+      "name": "Tien Giang",
+      "type": "province"
+    },
+    {
+      "code": 83,
+      "name": "Ben Tre",
+      "type": "province"
+    },
+    {
+      "code": 84,
+      "name": "Tra Vinh",
+      "type": "province"
+    },
+    {
+      "code": 86,
+      "name": "Vinh Long",
+      "type": "province"
+    },
+    {
+      "code": 87,
+      "name": "Dong Thap",
+      "type": "province"
+    },
+    {
+      "code": 89,
+      "name": "An Giang",
+      "type": "province"
+    },
+    {
+      "code": 91,
+      "name": "Kien Giang",
+      "type": "province"
+    },
+    {
+      "code": 92,
+      "name": "Can Tho",
+      "type": "municipality"
+    },
+    {
+      "code": 93,
+      "name": "Hau Giang",
+      "type": "province"
+    },
+    {
+      "code": 94,
+      "name": "Soc Trang",
+      "type": "province"
+    },
+    {
+      "code": 95,
+      "name": "Bac Lieu",
+      "type": "province"
+    },
+    {
+      "code": 96,
+      "name": "Ca Mau",
+      "type": "province"
+    }
+  ]
+}

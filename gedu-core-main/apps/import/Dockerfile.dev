@@ -1,0 +1,68 @@
+# Build Stage
+FROM node:20.9-alpine3.18 AS builder
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Install pnpm
+RUN npm install -g pnpm@10.14.0
+
+WORKDIR /app
+
+# Copy package files for better caching
+COPY package.json pnpm-lock.yaml ./
+
+# Copy source code
+COPY . .
+
+# Install dependencies
+RUN pnpm install
+
+# Generate Prisma client
+# RUN pnpm prisma:generate
+
+ENV NX_DAEMON=false
+
+# Build the application
+RUN pnpm nx build import --configuration=development
+
+# Production dependencies stage
+FROM node:20.9-alpine3.18 AS deps
+
+RUN npm install -g pnpm@10.14.0
+
+WORKDIR /app
+
+# Copy package files for production dependencies
+COPY --from=builder /app/dist/apps/import ./
+
+RUN pnpm install --prod --frozen-lockfile --no-optional
+
+# Runtime Stage
+FROM node:20.9-alpine3.18
+
+WORKDIR /app
+
+# Install runtime dependencies and Prisma CLI
+RUN apk add --no-cache openssl bash curl
+RUN npm install -g prisma@6.13.0
+
+# Copy built application and necessary files
+COPY --from=builder /app/dist/apps/import ./
+COPY --from=builder /app/dist/assets ./assets
+COPY --from=builder /app/libs/prisma/prisma ./libs/prisma/prisma
+COPY --from=builder /app/libs/prisma/generated ./libs/prisma/generated
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy migration entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENV RUN_MODE=build
+ENV NODE_ENV=development
+
+EXPOSE 3000
+
+# Use entrypoint script for migrations + app startup
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["node", "main.js"] 

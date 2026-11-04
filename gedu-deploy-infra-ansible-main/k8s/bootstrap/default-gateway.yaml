@@ -1,0 +1,36 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.istio.io/v1","kind":"Gateway","metadata":{"annotations":{},"creationTimestamp":"2025-07-18T15:16:53Z","generation":4,"name":"default-gateway","namespace":"istio-system","resourceVersion":"3366818","uid":"5d9080da-9f11-487a-87cf-9d56ad4d91e6"},"spec":{"selector":{"istio":"ingressgateway"},"servers":[{"hosts":["*.geduhub.vn"],"port":{"name":"geduhub-https","number":443,"protocol":"HTTPS"},"tls":{"credentialName":"geduhub.vn-tls","mode":"SIMPLE"}},{"hosts":["*.gedu.vn"],"port":{"name":"gedu-https","number":443,"protocol":"HTTPS"},"tls":{"credentialName":"gedu.vn-tls","mode":"SIMPLE"}}]}}
+  creationTimestamp: "2025-07-18T15:16:53Z"
+  generation: 5
+  name: default-gateway
+  namespace: istio-system
+  resourceVersion: "11404601"
+  uid: 5d9080da-9f11-487a-87cf-9d56ad4d91e6
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - '*.geduhub.vn'
+    - 'geduhub.vn'
+    port:
+      name: geduhub-https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: geduhub.vn-tls
+      mode: SIMPLE
+  - hosts:
+    - '*.gedu.vn'
+    - 'gedu.vn'
+    port:
+      name: gedu-https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: gedu.vn-tls
+      mode: SIMPLE

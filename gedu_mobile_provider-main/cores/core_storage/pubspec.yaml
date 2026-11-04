@@ -1,0 +1,26 @@
+name: core_storage
+description: "Core storage module for app preferences and data persistence"
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.8.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get_it: ^8.0.3
+  injectable: ^2.5.0
+  shared_preferences: ^2.5.3
+  lib_base: ^0.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  injectable_generator: ^2.7.0
+  build_runner: ^2.5.4
+  build_runner_core: ^9.1.2
+
+flutter: 

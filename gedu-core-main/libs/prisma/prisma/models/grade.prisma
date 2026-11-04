@@ -1,0 +1,50 @@
+model ScoreEntry {
+  id           Int      @id @default(autoincrement())
+  orgId        Int      @map("org_id")
+  studentId    Int      @map("student_id")
+  classId      Int      @map("class_id")
+  subjectId    Int      @map("subject_id")
+  schoolYearId Int      @map("school_year_id")
+  semesterId   Int      @map("semester_id")
+  scoreType    Int      @map("score_type") // 1=Oral, 2=15-min, 3=1-period, 4=Midterm, 5=Final
+  scoreValue   Float?   @map("score_value")
+  comment      String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  school     School     @relation(fields: [orgId], references: [id])
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class      Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject    Subject    @relation(fields: [subjectId], references: [id])
+  schoolYear SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  semester   Semester   @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@index([classId, subjectId, semesterId])
+  @@index([studentId, subjectId])
+  @@map("score_entries")
+}
+
+model SubjectSemesterSummary {
+  id           Int      @id @default(autoincrement())
+  orgId        Int      @map("org_id")
+  studentId    Int      @map("student_id")
+  classId      Int      @map("class_id")
+  subjectId    Int      @map("subject_id")
+  schoolYearId Int      @map("school_year_id")
+  semesterId   Int      @map("semester_id")
+  averageScore Float?   @map("average_score")
+  evaluation   String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  school     School     @relation(fields: [orgId], references: [id])
+  student    Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class      Class      @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject    Subject    @relation(fields: [subjectId], references: [id])
+  schoolYear SchoolYear @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  semester   Semester   @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, subjectId, schoolYearId, semesterId])
+  @@map("subject_semester_summaries")
+}
+

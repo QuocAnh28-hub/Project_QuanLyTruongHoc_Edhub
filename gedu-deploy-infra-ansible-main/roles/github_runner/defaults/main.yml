@@ -1,0 +1,34 @@
+---
+# GitHub Runner Configuration
+github_runner_version: "2.311.0"
+github_runner_arch: "linux-x64"
+github_runner_download_url: "https://github.com/actions/runner/releases/download/v{{ github_runner_version }}/actions-runner-{{ github_runner_arch }}-{{ github_runner_version }}.tar.gz"
+
+# Docker Configuration
+github_runner_container_name: "gedu-github-runner"
+github_runner_network: "github-runner-network"
+
+# GitHub Configuration
+github_org: "gedu-hub"
+github_repo: ""  # Empty for organization-level runners
+github_access_token: "ghp_1234567890"
+github_runner_token: "BUN1234567890"
+github_runner_labels: "self-hosted,ubuntu-runner,gedu-runner,docker-runner"
+github_runner_group: "docker-runners"
+
+# Runner Configuration
+github_runner_work_dir: "/home/runner/_work"
+github_runner_file_dir: "/home/runner/_files"
+github_runner_temp_dir: "/home/runner/_temp"
+
+# Container Configuration
+github_runner_container_user: "ansible_user"
+
+# Resource Limits
+github_runner_memory_limit: "2g"
+github_runner_cpu_limit: "1"
+
+# Auto-scaling Configuration
+github_runner_auto_scaling: false
+github_runner_min_runners: 1
+github_runner_max_runners: 5

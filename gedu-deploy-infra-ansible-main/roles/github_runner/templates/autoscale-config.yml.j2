@@ -1,0 +1,50 @@
+# GitHub Runner Auto-scaling Configuration
+github_org: {{ github_org }}
+github_repo: {{ github_repo }}
+github_token: {{ github_access_token }}
+
+# Runner Configuration
+runner_labels: {{ github_runner_labels }}
+runner_group: {{ github_runner_group }}
+
+# Scaling Configuration
+min_runners: {{ github_runner_min_runners }}
+max_runners: {{ github_runner_max_runners }}
+
+# Scaling Rules
+scaling_rules:
+  # Scale up when queue length > 1
+  scale_up:
+    queue_length_threshold: 1
+    scale_up_delay: 30  # seconds
+  
+  # Scale down when idle for > 300 seconds
+  scale_down:
+    idle_time_threshold: 300  # seconds
+    scale_down_delay: 60  # seconds
+
+# Docker Configuration
+docker:
+  image: ghcr.io/myoung34/docker-github-actions-runner:ubuntu-jammy
+  network: {{ github_runner_network }}
+  memory_limit: {{ github_runner_memory_limit }}
+  cpu_limit: {{ github_runner_cpu_limit }}
+
+# Health Check Configuration
+health_check:
+  interval: 300
+  retries: 3
+  timeout: 10
+
+# Logging Configuration
+logging:
+  level: INFO
+  file: /home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.log
+  max_size: 100MB
+  max_files: 5
+
+# Monitoring Configuration
+monitoring:
+  check_interval: 60  # seconds
+  max_concurrent_scaling: 2
+  graceful_shutdown_timeout: 300  # seconds 

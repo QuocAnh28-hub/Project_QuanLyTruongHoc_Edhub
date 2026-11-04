@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: regcred
+  namespace: ms-service-prod
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJyZWdpc3RyeS5lZHVodWIuY29tIjogewogICAgICAiYXV0aCI6ICJZMmt0WkdWd2JHOTVPbGMwZDFCUWRrcFJaRUZOIgogICAgfQogIH0KfQo=

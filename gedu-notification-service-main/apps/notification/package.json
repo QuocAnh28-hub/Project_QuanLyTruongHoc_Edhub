@@ -1,0 +1,69 @@
+{
+  "name": "@gedu/notification",
+  "version": "1.0.0",
+  "private": true,
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "webpack-cli build",
+          "args": [
+            "--node-env=production"
+          ],
+          "cwd": "apps/notification"
+        },
+        "configurations": {
+          "development": {
+            "args": [
+              "--node-env=development"
+            ]
+          }
+        }
+      },
+      "serve": {
+        "continuous": true,
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@gedu/notification:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@gedu/notification:build:development"
+          },
+          "production": {
+            "buildTarget": "@gedu/notification:build:production"
+          }
+        }
+      },
+      "docker-build": {
+        "dependsOn": [
+          "build"
+        ],
+        "command": "docker build -f apps/notification/Dockerfile . -t gedu-notification"
+      }
+    }
+  },
+  "dependencies": {
+    "@keyv/redis": "^5.0.0",
+    "@nestjs-modules/mailer": "^2.0.2",
+    "@nestjs/cache-manager": "^3.0.1",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/microservices": "^11.1.3",
+    "@nestjs/platform-express": "11.1.4",
+    "axios": "^1.6.0",
+    "cache-manager": "^7.0.1",
+    "handlebars": "^4.7.8",
+    "kafkajs": "^2.2.4",
+    "mailersend": "^2.6.0",
+    "nodemailer": "^7.0.5"
+  },
+  "devDependencies": {
+    "ignore-loader": "^0.1.2"
+  }
+}

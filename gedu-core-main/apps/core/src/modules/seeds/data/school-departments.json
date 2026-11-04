@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Ban Giám hiệu",
+    "desc": "Lãnh đạo và quản lý chung toàn bộ hoạt động của nhà trường"
+  },
+  {
+    "id": 2,
+    "title": "Tổ Chuyên môn",
+    "desc": "Quản lý, triển khai và giám sát công tác giảng dạy chuyên môn"
+  },
+  {
+    "id": 3,
+    "title": "Tổ hành chính, văn phòng",
+    "desc": "Quản lý công tác hành chính, văn thư, lưu trữ và hỗ trợ văn phòng"
+  },
+  {
+    "id": 4,
+    "title": "Khối Hỗ trợ & Dịch vụ",
+    "desc": "Hỗ trợ hoạt động giảng dạy và cung cấp dịch vụ cho học sinh"
+  },
+  {
+    "id": 5,
+    "title": "Khối Tài chính và Kế toán",
+    "desc": "Quản lý tài chính, kế toán và ngân sách nhà trường"
+  },
+  {
+    "id": 6,
+    "title": "Khối Đoàn thể và Hội đồng",
+    "desc": "Tổ chức các hoạt động phong trào, đoàn thể và tư vấn chiến lược"
+  }
+]

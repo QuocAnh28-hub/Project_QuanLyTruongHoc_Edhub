@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" viewBox="0 0 200 200">
+    <defs>
+        <style type="text/css">
+            .book { fill: #2563eb; }
+            .book-page { fill: #dbeafe; }
+            .star { fill: #f59e0b; }
+            .brain { fill: #10b981; }
+            .connection { stroke: #6b7280; stroke-width: 2; fill: none; }
+        </style>
+    </defs>
+    
+    <!-- Background Circle -->
+    <circle cx="100" cy="100" r="90" fill="#dbeafe" opacity="0.3"/>
+    
+    <!-- Open Book -->
+    <g transform="translate(50,80)">
+        <path class="book" d="M0,0 C0,0 20,-10 50,-10 C80,-10 100,0 100,0 L100,40 C100,40 80,30 50,30 C20,30 0,40 0,40 Z"/>
+        <path class="book-page" d="M5,5 C5,5 20,-5 50,-5 C80,-5 95,5 95,5 L95,35 C95,35 80,25 50,25 C20,25 5,35 5,35 Z"/>
+    </g>
+    
+    <!-- Brain -->
+    <g transform="translate(70,40)">
+        <path class="brain" d="M30,0 C45,0 60,15 60,30 C60,45 45,60 30,60 C15,60 0,45 0,30 C0,15 15,0 30,0 Z"/>
+        <path class="connection" d="M15,30 Q30,15 45,30"/>
+        <path class="connection" d="M15,40 Q30,25 45,40"/>
+    </g>
+    
+    <!-- Stars -->
+    <g class="star">
+        <path d="M160,40 L165,50 L175,52 L167,60 L169,70 L160,65 L151,70 L153,60 L145,52 L155,50 Z">
+            <animate 
+                attributeName="opacity"
+                attributeType="CSS"
+                values="1;0.5;1"
+                dur="2s"
+                repeatCount="indefinite"/>
+        </path>
+        <path d="M140,80 L143,87 L150,88 L145,93 L146,100 L140,97 L134,100 L135,93 L130,88 L137,87 Z">
+            <animate 
+                attributeName="opacity"
+                attributeType="CSS"
+                values="0.5;1;0.5"
+                dur="2s"
+                repeatCount="indefinite"/>
+        </path>
+        <path d="M170,110 L173,117 L180,118 L175,123 L176,130 L170,127 L164,130 L165,123 L160,118 L167,117 Z">
+            <animate 
+                attributeName="opacity"
+                attributeType="CSS"
+                values="0.7;1;0.7"
+                dur="2s"
+                repeatCount="indefinite"/>
+        </path>
+    </g>
+</svg> 

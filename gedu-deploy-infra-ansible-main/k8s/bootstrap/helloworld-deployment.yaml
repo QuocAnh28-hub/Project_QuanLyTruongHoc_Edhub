@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  namespace: ms-service-prod
+  labels:
+    app: hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello
+        image: hashicorp/http-echo
+        args:
+        - "-text=Hello from RKE"
+        ports:
+        - containerPort: 5678
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world
+  namespace: ms-service-prod
+spec:
+  selector:
+    app: hello-world
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5678
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: hello-world
+  namespace: ms-service-prod
+spec:
+  hosts:
+  - "hello.geduhub.vn"
+  gateways:
+  - istio-system/default-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /hello
+    route:
+    - destination:
+        host: hello-world.ms-service-prod.svc.cluster.local
+        port:
+          number: 80

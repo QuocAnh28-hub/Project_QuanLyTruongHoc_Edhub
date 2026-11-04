@@ -1,0 +1,12 @@
+name: gedu_mobile_client_workspace
+description: "Gedu Mobile Client Workspace - Monorepo for Flutter app and libraries"
+publish_to: 'none'
+
+environment:
+  sdk: ^3.8.1
+
+dev_dependencies:
+  melos: ^6.3.3
+
+# This is a workspace root pubspec.yaml for the Gedu Mobile Client monorepo
+# The actual Flutter app is located in app/gedu_mobile_client/

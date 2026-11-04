@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thông báo kết quả tải lên danh sách</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333333;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    .header h1 {
+        color: #0056b3;
+        font-size: 24px;
+    }
+    .content {
+        padding: 20px 0;
+    }
+    .content p {
+        margin-bottom: 10px;
+    }
+    .result-info {
+        background-color: #e9f7ff;
+        border-left: 5px solid #007bff;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+    .result-info p {
+        margin: 5px 0;
+    }
+    .footer {
+        text-align: center;
+        padding-top: 20px;
+        margin-top: 20px;
+        border-top: 1px solid #eeeeee;
+        font-size: 12px;
+        color: #777777;
+    }
+</style>
+</head>
+<body style="background-color: #f4f4f4; padding: 20px;">
+    <div class="container">
+        <div class="header">
+            <h1>Thông báo kết quả tải lên danh sách</h1>
+        </div>
+        <div class="content">
+            <p>Quá trình tải lên file <b>{{fileName}}</b> đã hoàn tất.</p>
+            <p>Kết quả xử lý:</p>
+
+            <div class="result-info">
+                <p><strong>Tổng số dòng:</strong> {{totalCount}}</p>
+                <p><strong>Thành công:</strong> {{successCount}}</p>
+                <p><strong>Lỗi:</strong> {{failureCount}}</p>
+            </div>
+
+            <p>Vui lòng truy cập <a href="{{accessLink}}">Lịch sử tải lên</a> để xem chi tiết kết quả.</p>
+
+            <p>Trân trọng,<br>Đội ngũ Gedu.</p>
+        </div>
+        <div class="footer">
+            <p>Để được hỗ trợ, vui lòng liên hệ qua email: <a href="mailto:hotro@gedu.vn">hotro@gedu.vn</a></p>
+            <p>Email được gửi tự động từ hệ thống Gedu. Vui lòng không phản hồi lại email này.</p>
+        </div>
+    </div>
+</body>
+</html>

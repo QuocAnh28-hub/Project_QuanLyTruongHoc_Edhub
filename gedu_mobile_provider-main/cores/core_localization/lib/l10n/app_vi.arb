@@ -1,0 +1,885 @@
+{
+  "@@locale": "vi",
+  "onboardingWelcomeTitle1": "Chào mừng đến G-Edu",
+  "@onboardingWelcomeTitle1": {
+    "description": "Title for the first onboarding screen"
+  },
+  "onboardingWelcomeDescription1": "Gedu là ứng dụng hỗ trợ đắc lực, giúp Giáo viên: quản lý lớp học hiệu quả và giao tiếp với Phụ huynh dễ dàng, để mỗi giờ lên lớp điều tr và mỗi học sinh đều được quan tâm chu đáo",
+  "@onboardingWelcomeDescription1": {
+    "description": "Description for the first onboarding screen"
+  },
+  "onboardingWelcomeTitle2": "Quản lý lớp học thông minh",
+  "@onboardingWelcomeTitle2": {
+    "description": "Title for the second onboarding screen"
+  },
+  "onboardingWelcomeDescription2": "Điểm danh dễ dàng, cập nhật điểm số và nhận xét học sinh chỉ trong vài thao tác, giúp bạn tiết kiệm thời gian và công sức.",
+  "@onboardingWelcomeDescription2": {
+    "description": "Description for the second onboarding screen"
+  },
+  "onboardingWelcomeTitle3": "Dạy học trực quan, giao bài hiệu quả",
+  "@onboardingWelcomeTitle3": {
+    "description": "Title for the third onboarding screen"
+  },
+  "onboardingWelcomeDescription3": "Quản lý bài giảng, giao bài tập và kiểm tra, giúp bạn theo dõi tiến độ của học sinh một cách trực quan và hiệu quả.",
+  "@onboardingWelcomeDescription3": {
+    "description": "Description for the third onboarding screen"
+  },
+  "onboardingWelcomeTitle4": "Kết nối dễ dàng với Phụ huynh học sinh",
+  "@onboardingWelcomeTitle4": {
+    "description": "Title for the fourth onboarding screen"
+  },
+  "onboardingWelcomeDescription4": "Gửi thông báo nhanh chóng đến cả lớp hoặc trao đổi riêng tư với từng phụ huynh, giúp việc liên lạc trở nên hiệu quả và kịp thời.",
+  "@onboardingWelcomeDescription4": {
+    "description": "Description for the fourth onboarding screen"
+  },
+  "onboardingSkipButton": "Bỏ qua",
+  "@onboardingSkipButton": {
+    "description": "Skip button text for onboarding"
+  },
+  "onboardingNextButton": "Tiếp theo",
+  "@onboardingNextButton": {
+    "description": "Next button text for onboarding"
+  },
+  "onboardingLoginButton": "Đăng nhập",
+  "@onboardingLoginButton": {
+    "description": "Login button text for onboarding"
+  },
+  "loginFirstTimeLabel": "Đăng nhập lần đầu",
+  "@loginFirstTimeLabel": {
+    "description": "First time login label"
+  },
+  "loginTitle": "Đăng nhập",
+  "@loginTitle": {
+    "description": "Login page title"
+  },
+  "loginSubtitle": "Chọn Tỉnh/Thành phố và nhập Số điện thoại đăng ký, mật khẩu được cung cấp.",
+  "@loginSubtitle": {
+    "description": "Login page subtitle"
+  },
+  "loginDepartmentLabel": "Tỉnh/Thành phố",
+  "@loginDepartmentLabel": {
+    "description": "Province/City field label"
+  },
+  "loginDepartmentHint": "Chọn Tỉnh/Thành phố",
+  "@loginDepartmentHint": {
+    "description": "Province/City field hint"
+  },
+  "loginPhoneLabel": "Số điện thoại",
+  "@loginPhoneLabel": {
+    "description": "Phone number field label"
+  },
+  "loginPhoneHint": "Nhập số điện thoại",
+  "@loginPhoneHint": {
+    "description": "Phone number field hint"
+  },
+  "loginPhoneError": "Vui lòng nhập số điện thoại",
+  "@loginPhoneError": {
+    "description": "Phone number validation error"
+  },
+  "loginEmailLabel": "Email",
+  "@loginEmailLabel": {
+    "description": "Label for email input field"
+  },
+  "loginEmailHint": "Nhập email",
+  "@loginEmailHint": {
+    "description": "Hint text for email input field"
+  },
+  "loginEmailError": "Vui lòng nhập email",
+  "@loginEmailError": {
+    "description": "Error message when email is empty"
+  },
+  "loginEmailFormatError": "Vui lòng nhập địa chỉ email hợp lệ",
+  "@loginEmailFormatError": {
+    "description": "Error message when email format is invalid"
+  },
+  "loginPasswordLabel": "Mật khẩu",
+  "@loginPasswordLabel": {
+    "description": "Password field label"
+  },
+  "loginPasswordHint": "Nhập mật khẩu",
+  "@loginPasswordHint": {
+    "description": "Password field hint"
+  },
+  "loginPasswordError": "Vui lòng nhập mật khẩu",
+  "@loginPasswordError": {
+    "description": "Password validation error"
+  },
+  "loginButtonText": "Đăng nhập",
+  "@loginButtonText": {
+    "description": "Login button text"
+  },
+  "loginRememberMeText": "Ghi nhớ tôi",
+  "@loginRememberMeText": {
+    "description": "Remember me checkbox text"
+  },
+  "loginForgotPasswordText": "Quên mật khẩu",
+  "@loginForgotPasswordText": {
+    "description": "Forgot password button text"
+  },
+  "forgotPasswordTitle": "Quên mật khẩu?",
+  "@forgotPasswordTitle": {
+    "description": "Title for forgot password dialog"
+  },
+  "forgotPasswordMessage": "Vui lòng liên hệ Giáo viên chủ nhiệm để được khởi tạo lại mật khẩu.",
+  "@forgotPasswordMessage": {
+    "description": "Message shown in forgot password dialog"
+  },
+  "forgotPasswordButtonText": "Tôi đã hiểu",
+  "@forgotPasswordButtonText": {
+    "description": "Button text to close forgot password dialog"
+  },
+  "changePasswordSuccessTitle": "Đổi mật khẩu thành công",
+  "@changePasswordSuccessTitle": {
+    "description": "Title for change password success page"
+  },
+  "changePasswordSuccessMessage": "Bạn đã đổi mật khẩu thành công và cần đăng nhập lại.",
+  "@changePasswordSuccessMessage": {
+    "description": "Message for change password success page"
+  },
+  "changePasswordSuccessButtonText": "Đăng nhập lại",
+  "@changePasswordSuccessButtonText": {
+    "description": "Button text for change password success page"
+  },
+  "changePasswordTitle": "Đổi mật khẩu",
+  "@changePasswordTitle": {
+    "description": "Title for change password page"
+  },
+  "changePasswordSubtitle": "Tạo mật khẩu mới để bảo vệ tài khoản.",
+  "@changePasswordSubtitle": {
+    "description": "Subtitle for change password page"
+  },
+  "changePasswordCurrentPasswordLabel": "Mật khẩu hiện tại",
+  "@changePasswordCurrentPasswordLabel": {
+    "description": "Current password field label"
+  },
+  "changePasswordCurrentPasswordHint": "Nhập mật khẩu hiện tại",
+  "@changePasswordCurrentPasswordHint": {
+    "description": "Current password field hint"
+  },
+  "changePasswordNavTitle": "Thay đổi mật khẩu",
+  "@changePasswordNavTitle": {
+    "description": "Navigation bar title for change password page"
+  },
+  "changePasswordNewPasswordLabel": "Mật khẩu mới",
+  "@changePasswordNewPasswordLabel": {
+    "description": "Label for new password field"
+  },
+  "changePasswordNewPasswordHint": "Nhập mật khẩu mới",
+  "@changePasswordNewPasswordHint": {
+    "description": "New password field hint"
+  },
+  "changePasswordConfirmPasswordLabel": "Mật khẩu mới",
+  "@changePasswordConfirmPasswordLabel": {
+    "description": "Label for confirm password field"
+  },
+  "changePasswordConfirmPasswordHint": "Xác nhận mật khẩu mới",
+  "@changePasswordConfirmPasswordHint": {
+    "description": "Confirm password field hint"
+  },
+  "changePasswordRequirementsTitle": "Mật khẩu mới phải bao gồm",
+  "@changePasswordRequirementsTitle": {
+    "description": "Title for password requirements section"
+  },
+  "changePasswordRequirementMinChars": "Tối thiểu 8 ký tự",
+  "@changePasswordRequirementMinChars": {
+    "description": "Minimum characters requirement"
+  },
+  "changePasswordRequirementMinLetter": "Tối thiểu 1 chữ cái",
+  "@changePasswordRequirementMinLetter": {
+    "description": "Minimum letter requirement"
+  },
+  "changePasswordRequirementMinNumber": "Tối thiểu 1 số",
+  "@changePasswordRequirementMinNumber": {
+    "description": "Minimum number requirement"
+  },
+  "changePasswordStrengthWeak": "Yếu",
+  "@changePasswordStrengthWeak": {
+    "description": "Weak password strength indicator"
+  },
+  "changePasswordStrengthStrong": "Mạnh",
+  "@changePasswordStrengthStrong": {
+    "description": "Strong password strength indicator"
+  },
+  "changePasswordButtonText": "Đổi mật khẩu",
+  "@changePasswordButtonText": {
+    "description": "Button text for change password"
+  },
+  "changePasswordErrorPasswordsNotMatch": "Mật khẩu không khớp",
+  "@changePasswordErrorPasswordsNotMatch": {
+    "description": "Error message when passwords don't match"
+  },
+  "loginLoadingMessage": "Đang đăng nhập...",
+  "@loginLoadingMessage": {
+    "description": "Loading message shown during login process"
+  },
+  "changePasswordLoadingMessage": "Đang cập nhật...",
+  "@changePasswordLoadingMessage": {
+    "description": "Loading message shown during password change process"
+  },
+  "languageSelectionTitle": "Chọn ngôn ngữ",
+  "@languageSelectionTitle": {
+    "description": "Title for language selection bottom sheet"
+  },
+  "languageEnglish": "English",
+  "@languageEnglish": {
+    "description": "English language option"
+  },
+  "languageVietnamese": "Tiếng Việt",
+  "@languageVietnamese": {
+    "description": "Vietnamese language option"
+  },
+  "languageButtonText": "Ngôn ngữ",
+  "@languageButtonText": {
+    "description": "Text for language selection button"
+  },
+  "studentStatusWaitingForEnrollment": "Chờ nhập học",
+  "@studentStatusWaitingForEnrollment": {
+    "description": "Student status: waiting for enrollment"
+  },
+  "studentStatusCurrentlyStudying": "Đang học",
+  "@studentStatusCurrentlyStudying": {
+    "description": "Student status: currently studying"
+  },
+  "studentStatusOnHold": "Bảo lưu",
+  "@studentStatusOnHold": {
+    "description": "Student status: on hold"
+  },
+  "studentStatusGraduated": "Đã tốt nghiệp",
+  "@studentStatusGraduated": {
+    "description": "Student status: graduated"
+  },
+  "studentStatusDroppedOut": "Đã thôi học",
+  "@studentStatusDroppedOut": {
+    "description": "Student status: dropped out"
+  },
+  "studentGenderMale": "Nam",
+  "@studentGenderMale": {
+    "description": "Student gender: male"
+  },
+  "studentGenderFemale": "Nữ",
+  "@studentGenderFemale": {
+    "description": "Student gender: female"
+  },
+  "provinceSelectionTitle": "Chọn Tỉnh/Thành phố",
+  "@provinceSelectionTitle": {
+    "description": "Province selection title"
+  },
+  "provinceSearchHint": "Tìm kiếm",
+  "@provinceSearchHint": {
+    "description": "Province search hint"
+  },
+  "provinceSearchLabel": "Tìm kiếm",
+  "@provinceSearchLabel": {
+    "description": "Province search label"
+  },
+  "dashboardConfirmLogout": "Đăng xuất",
+  "@dashboardConfirmLogout": {
+    "description": "Dashboard logout confirmation text"
+  },
+  "dashboardLogoutError": "Đăng xuất thất bại: ",
+  "@dashboardLogoutError": {
+    "description": "Dashboard logout error message prefix"
+  },
+  "dashboardTabHome": "Trang chủ",
+  "@dashboardTabHome": {
+    "description": "Dashboard home tab label"
+  },
+  "dashboardTabMessages": "Tin nhắn",
+  "@dashboardTabMessages": {
+    "description": "Dashboard messages tab label"
+  },
+  "dashboardTabNewsFeed": "Bảng tin",
+  "@dashboardTabNewsFeed": {
+    "description": "Dashboard news feed tab label"
+  },
+  "dashboardTabNotifications": "Thông báo",
+  "@dashboardTabNotifications": {
+    "description": "Dashboard notifications tab label"
+  },
+  "dashboardTabAccount": "Tài khoản",
+  "@dashboardTabAccount": {
+    "description": "Dashboard account tab label"
+  },
+  "dashboardGreeting": "Chào ngày mới",
+  "@dashboardGreeting": {
+    "description": "Dashboard greeting text"
+  },
+  "dashboardGreetingWithName": "Chào ngày mới,\n{firstName} {lastName}",
+  "@dashboardGreetingWithName": {
+    "description": "Dashboard greeting with user name",
+    "placeholders": {
+      "firstName": {
+        "type": "String"
+      },
+      "lastName": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardStudentNamePlaceholder": "Tên học sinh",
+  "@dashboardStudentNamePlaceholder": {
+    "description": "Dashboard student name placeholder"
+  },
+  "dashboardClassPlaceholder": "Lớp",
+  "@dashboardClassPlaceholder": {
+    "description": "Dashboard class placeholder"
+  },
+  "dashboardNoClassYet": "Chưa có lớp",
+  "@dashboardNoClassYet": {
+    "description": "Dashboard no class yet placeholder"
+  },
+  "dashboardTeachingClasses": "Lớp đang dạy",
+  "@dashboardTeachingClasses": {
+    "description": "Dashboard teaching classes title"
+  },
+  "dashboardStudentProfile": "Hồ sơ học sinh",
+  "@dashboardStudentProfile": {
+    "description": "Dashboard student profile text"
+  },
+  "dashboardFeatureMessage": "Gửi tin nhắn",
+  "@dashboardFeatureMessage": {
+    "description": "Dashboard message feature text"
+  },
+  "dashboardFeatureSchedule": "Lịch học",
+  "@dashboardFeatureSchedule": {
+    "description": "Dashboard schedule feature text"
+  },
+  "dashboardFeatureMenu": "Thực đơn",
+  "@dashboardFeatureMenu": {
+    "description": "Dashboard menu feature text"
+  },
+  "dashboardFeatureViewSchedule": "Xem lịch học",
+  "@dashboardFeatureViewSchedule": {
+    "description": "Dashboard view schedule feature text"
+  },
+  "dashboardFeatureViewMenu": "Xem thực đơn",
+  "@dashboardFeatureViewMenu": {
+    "description": "Dashboard view menu feature text"
+  },
+  "dashboardNotificationsTitle": "Thông báo mới",
+  "@dashboardNotificationsTitle": {
+    "description": "Dashboard notifications section title"
+  },
+  "dashboardAttendanceTitle": "Trạng thái chuyên cần",
+  "@dashboardAttendanceTitle": {
+    "description": "Dashboard attendance status section title"
+  },
+  "dashboardScheduleTitle": "Lịch học hôm nay",
+  "@dashboardScheduleTitle": {
+    "description": "Dashboard today's schedule section title"
+  },
+  "dashboardSeeAll": "Xem tất cả",
+  "@dashboardSeeAll": {
+    "description": "Dashboard see all button text"
+  },
+  "dashboardAttendancePresent": "Có mặt",
+  "@dashboardAttendancePresent": {
+    "description": "Dashboard attendance present status"
+  },
+  "dashboardScheduleEmpty": "Hôm nay Mỹ An có 5 tiết học sáng và chiều.",
+  "@dashboardScheduleEmpty": {
+    "description": "Dashboard schedule description when student has classes"
+  },
+  "dashboardClassPrefix": "Lớp {className}",
+  "@dashboardClassPrefix": {
+    "description": "Dashboard class name with prefix",
+    "placeholders": {
+      "className": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardFeatureAttendance": "Điểm danh",
+  "@dashboardFeatureAttendance": {
+    "description": "Dashboard attendance feature text"
+  },
+  "dashboardFeatureTuition": "Học phí",
+  "@dashboardFeatureTuition": {
+    "description": "Dashboard tuition feature text"
+  },
+  "dashboardFeatureScores": "Điểm số",
+  "@dashboardFeatureScores": {
+    "description": "Dashboard scores feature text"
+  },
+  "dashboardFeatureLeaveRequest": "Xin nghỉ phép",
+  "@dashboardFeatureLeaveRequest": {
+    "description": "Dashboard leave request feature text"
+  },
+  "dashboardFeatureTranscript": "Bảng điểm số",
+  "@dashboardFeatureTranscript": {
+    "description": "Dashboard digital transcript feature text"
+  },
+  "dashboardFeatureHealthInfo": "Thông tin sức khỏe",
+  "@dashboardFeatureHealthInfo": {
+    "description": "Dashboard health information feature text"
+  },
+  "dashboardViewProfile": "Xem hồ sơ",
+  "@dashboardViewProfile": {
+    "description": "Dashboard view profile button text"
+  },
+  "dashboardRecentNotifications": "Thông báo gần đây",
+  "@dashboardRecentNotifications": {
+    "description": "Dashboard recent notifications section title"
+  },
+  "dashboardNewNotificationsCount": "Bạn có {count} thông báo mới",
+  "@dashboardNewNotificationsCount": {
+    "description": "Dashboard new notifications count message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardSchoolWeek": "Tuần học tập",
+  "@dashboardSchoolWeek": {
+    "description": "Dashboard school week section title"
+  },
+  "dashboardSchoolWeekMessage": "Tuần {week} - Tuần học tập tích cực",
+  "@dashboardSchoolWeekMessage": {
+    "description": "Dashboard school week message",
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "dashboardConfirmStudentInfoPrefix": "Vui lòng kiểm tra và xác nhận thông tin của học sinh",
+  "@dashboardConfirmStudentInfoPrefix": {
+    "description": "Dashboard confirm student info prompt prefix"
+  },
+  "dashboardConfirmStudentInfoSuffix": "để Gedu cung cấp thông tin chính xác nhất.",
+  "@dashboardConfirmStudentInfoSuffix": {
+    "description": "Dashboard confirm student info prompt suffix"
+  },
+  "dashboardCheckAndConfirm": "Kiểm tra và xác nhận",
+  "@dashboardCheckAndConfirm": {
+    "description": "Dashboard check and confirm button text"
+  },
+  "dashboardAccountManagementTitle": "Quản lý tài khoản",
+  "@dashboardAccountManagementTitle": {
+    "description": "Dashboard account management title"
+  },
+  "dashboardChangePassword": "Đổi mật khẩu",
+  "@dashboardChangePassword": {
+    "description": "Dashboard change password text"
+  },
+  "dashboardNotificationSettings": "Cài đặt thông báo",
+  "@dashboardNotificationSettings": {
+    "description": "Dashboard notification settings text"
+  },
+  "dashboardSupportTitle": "Hỗ trợ",
+  "@dashboardSupportTitle": {
+    "description": "Dashboard support title"
+  },
+  "dashboardUserGuide": "Hướng dẫn sử dụng",
+  "@dashboardUserGuide": {
+    "description": "Dashboard user guide text"
+  },
+  "dashboardVideoGuide": "Video hướng dẫn",
+  "@dashboardVideoGuide": {
+    "description": "Dashboard video guide text"
+  },
+  "dashboardFAQ": "Câu hỏi thường gặp",
+  "@dashboardFAQ": {
+    "description": "Dashboard FAQ text"
+  },
+  "dashboardLogout": "Đăng xuất",
+  "@dashboardLogout": {
+    "description": "Dashboard logout text"
+  },
+  "dashboardLogoutConfirmation": "Bạn có muốn thoát khỏi tài khoản không?",
+  "@dashboardLogoutConfirmation": {
+    "description": "Dashboard logout confirmation message"
+  },
+  "dashboardCancel": "Hủy",
+  "@dashboardCancel": {
+    "description": "Dashboard cancel text"
+  },
+  "studentReviewWelcomeTitle": "Chào mừng Phụ Huynh,",
+  "@studentReviewWelcomeTitle": {
+    "description": "Student review welcome title"
+  },
+  "studentReviewInstruction": "Tài khoản của bạn được liên kết với nhiều học sinh. Vui lòng chọn một học sinh để tiếp tục.",
+  "@studentReviewInstruction": {
+    "description": "Student review instruction text"
+  },
+  "studentReviewClassLabel": "Lớp",
+  "@studentReviewSchoolLabel": {
+    "description": "Student review school label"
+  },
+  "studentReviewSchoolLabel": "Trường học",
+  "@studentReviewSchoolLabel": {
+    "description": "Student review school label"
+  },
+  "studentReviewContinueButton": "Tiếp tục",
+  "@studentReviewContinueButton": {
+    "description": "Student review continue button"
+  },
+  "studentReviewErrorMessage": "Có lỗi xảy ra:",
+  "@studentReviewErrorMessage": {
+    "description": "Student review error message prefix"
+  },
+  "studentReviewRetryButton": "Thử lại",
+  "@studentReviewRetryButton": {
+    "description": "Student review retry button"
+  },
+  "studentReviewNoName": "Chưa có tên",
+  "@studentReviewNoName": {
+    "description": "Student review no name placeholder"
+  },
+  "studentReviewClassPlaceholder": "Lớp",
+  "@studentReviewClassPlaceholder": {
+    "description": "Student review class placeholder"
+  },
+  "profileAccountTitle": "Tài khoản",
+  "@profileAccountTitle": {
+    "description": "Profile page title"
+  },
+  "profileStudentProfile": "Hồ sơ học sinh",
+  "@profileStudentProfile": {
+    "description": "Profile student profile text"
+  },
+  "studentSelectionTitle": "Chọn học sinh",
+  "@studentSelectionTitle": {
+    "description": "Student selection sheet title"
+  },
+  "profileNoPhoneYet": "Chưa có số điện thoại",
+  "@profileNoPhoneYet": {
+    "description": "Profile no phone number placeholder"
+  },
+  "studentProfileTitle": "Hồ sơ học sinh",
+  "@studentProfileTitle": {
+    "description": "Student profile page title"
+  },
+  "personalInformationTitle": "Thông tin cá nhân",
+  "@personalInformationTitle": {
+    "description": "Personal information section title"
+  },
+  "personalInformationSubtitle": "Chi tiết học sinh và thông tin liên hệ.",
+  "@personalInformationSubtitle": {
+    "description": "Personal information section subtitle"
+  },
+  "academicPolicyTitle": "Học vụ & Chính sách",
+  "@academicPolicyTitle": {
+    "description": "Academic and policy section title"
+  },
+  "academicPolicySubtitle": "Thông tin học vụ và quy định chung.",
+  "@academicPolicySubtitle": {
+    "description": "Academic and policy section subtitle"
+  },
+  "healthInformationTitle": "Thông tin sức khoẻ",
+  "@healthInformationTitle": {
+    "description": "Health information section title"
+  },
+  "healthInformationSubtitle": "Thông tin về dị ứng và các bệnh lý nền.",
+  "@healthInformationSubtitle": {
+    "description": "Health information section subtitle"
+  },
+  "documentProfileTitle": "Hồ sơ văn bản",
+  "@documentProfileTitle": {
+    "description": "Document profile section title"
+  },
+  "documentProfileSubtitle": "Giấy tờ tùy thân và các văn bản bắt buộc.",
+  "@documentProfileSubtitle": {
+    "description": "Document profile section subtitle"
+  },
+  "needsConfirmationStatus": "CẦN XÁC NHẬN",
+  "@needsConfirmationStatus": {
+    "description": "Status tag for items needing confirmation"
+  },
+  "alreadyConfirmedStatus": "ĐÃ XÁC NHẬN",
+  "@alreadyConfirmedStatus": {
+    "description": "Status tag for items that are already confirmed"
+  },
+  "addToProfileStatus": "BỔ SUNG HỒ SƠ",
+  "@addToProfileStatus": {
+    "description": "Status tag for items that need to be added to profile"
+  },
+  "studentIdLabel": "Mã học sinh",
+  "@studentIdLabel": {
+    "description": "Student ID label"
+  },
+  "classLabel": "Lớp",
+  "@classLabel": {
+    "description": "Class label"
+  },
+  "curriculumLabel": "Chương trình học",
+  "@curriculumLabel": {
+    "description": "Curriculum label"
+  },
+  "primaryContactLabel": "Người liên hệ chính",
+  "@primaryContactLabel": {
+    "description": "Primary contact label"
+  },
+  "fatherLabel": "Cha",
+  "@fatherLabel": {
+    "description": "Father label"
+  },
+  "retry": "Thử lại",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "noClassYet": "Chưa có lớp",
+  "@noClassYet": {
+    "description": "No class yet placeholder"
+  },
+  "loadingStudentProfile": "Đang tải hồ sơ học sinh...",
+  "@loadingStudentProfile": {
+    "description": "Loading message for student profile"
+  },
+  "academicInformationTitle": "Thông tin học vụ",
+  "@academicInformationTitle": {
+    "description": "Academic information section title"
+  },
+  "contactPersonLabel": "Người liên hệ",
+  "@contactPersonLabel": {
+    "description": "Contact person label"
+  },
+  "admissionInformationTitle": "Thông tin nhập học",
+  "@admissionInformationTitle": {
+    "description": "Admission information section title"
+  },
+  "admissionDateLabel": "Ngày nhập học",
+  "@admissionDateLabel": {
+    "description": "Admission date label"
+  },
+  "admissionYearLabel": "Năm học nhập học",
+  "@admissionYearLabel": {
+    "description": "Admission academic year label"
+  },
+  "admissionTypeLabel": "Hình thức nhập học",
+  "@admissionTypeLabel": {
+    "description": "Admission type label"
+  },
+  "admissionTypeInDistrict": "Đúng tuyến",
+  "@admissionTypeInDistrict": {
+    "description": "In district admission type"
+  },
+  "admissionTypeOutOfDistrict": "Trái tuyến",
+  "@admissionTypeOutOfDistrict": {
+    "description": "Out of district admission type"
+  },
+  "admissionTypeTransfer": "Chuyển trường đến",
+  "@admissionTypeTransfer": {
+    "description": "Transfer school admission type"
+  },
+  "classInformationTitle": "Thông tin lớp học",
+  "@classInformationTitle": {
+    "description": "Class information section title"
+  },
+  "statusLabel": "Trạng thái",
+  "@statusLabel": {
+    "description": "Status label"
+  },
+  "currentlyStudyingStatus": "ĐANG HỌC",
+  "@currentlyStudyingStatus": {
+    "description": "Currently studying status"
+  },
+  "regimePolicyTitle": "Chế độ & chính sách",
+  "@regimePolicyTitle": {
+    "description": "Regime and policy section title"
+  },
+  "priorityStatusLabel": "Diện ưu tiên",
+  "@priorityStatusLabel": {
+    "description": "Priority status label"
+  },
+  "disabilityStatusLabel": "Diện khuyết tật",
+  "@disabilityStatusLabel": {
+    "description": "Disability status label"
+  },
+  "medicalInfoGroupUndetermined": "Khác",
+  "@medicalInfoGroupUndetermined": {
+    "description": "Medical info group for undetermined cases"
+  },
+  "medicalInfoGroupAllergy": "Dị ứng",
+  "@medicalInfoGroupAllergy": {
+    "description": "Medical info group for allergies"
+  },
+  "medicalInfoGroupChronicOrUnderlying": "Bệnh mãn tính/Bệnh nền",
+  "@medicalInfoGroupChronicOrUnderlying": {
+    "description": "Medical info group for chronic or underlying diseases"
+  },
+  "medicalInfoTypeUndetermined": "Khác",
+  "@medicalInfoTypeUndetermined": {
+    "description": "Medical info type for undetermined cases"
+  },
+  "medicalInfoTypeFoodAllergy": "Dị ứng Thực phẩm",
+  "@medicalInfoTypeFoodAllergy": {
+    "description": "Medical info type for food allergies"
+  },
+  "medicalInfoTypeDrugAllergy": "Dị ứng Thuốc",
+  "@medicalInfoTypeDrugAllergy": {
+    "description": "Medical info type for drug allergies"
+  },
+  "medicalInfoTypeChronicOrUnderlying": "Bệnh mãn tính/Bệnh nền",
+  "@medicalInfoTypeChronicOrUnderlying": {
+    "description": "Medical info type for chronic or underlying diseases"
+  },
+  "allergiesTitle": "Dị ứng",
+  "@allergiesTitle": {
+    "description": "Allergies section title"
+  },
+  "foodAllergyLabel": "Dị ứng thực phẩm",
+  "@foodAllergyLabel": {
+    "description": "Food allergies label"
+  },
+  "drugAllergyLabel": "Dị ứng thuốc",
+  "@drugAllergyLabel": {
+    "description": "Drug allergies label"
+  },
+  "chronicDiseasesTitle": "Bệnh mãn tính/Bệnh nền",
+  "@chronicDiseasesTitle": {
+    "description": "Chronic diseases section title"
+  },
+  "chronicDiseasesLabel": "Bệnh mãn tính/Bệnh nền",
+  "@chronicDiseasesLabel": {
+    "description": "Chronic diseases label"
+  },
+  "additionalNotesTitle": "Ghi chú thêm (Đặc điểm hoặc thói quen đặc biệt cần lưu ý)",
+  "@additionalNotesTitle": {
+    "description": "Additional notes section title"
+  },
+  "additionalNotesLabel": "Ghi chú thêm",
+  "@additionalNotesLabel": {
+    "description": "Additional notes label"
+  },
+  "profileNeutralStatus": "CÓ THÔNG TIN",
+  "@profileNeutralStatus": {
+    "description": "Profile has information status"
+  },
+  "contactRelationshipFather": "Cha",
+  "@contactRelationshipFather": {
+    "description": "Contact relationship - Father"
+  },
+  "contactRelationshipMother": "Mẹ",
+  "@contactRelationshipMother": {
+    "description": "Contact relationship - Mother"
+  },
+  "contactRelationshipOther": "Khác",
+  "@contactRelationshipOther": {
+    "description": "Contact relationship - Other"
+  },
+  "studentInformationTitle": "Thông tin cá nhân",
+  "@studentInformationTitle": {
+    "description": "Student information page title"
+  },
+  "needsConfirmationStatus": "CẦN XÁC NHẬN",
+  "@needsConfirmationStatus": {
+    "description": "Status when student information needs confirmation"
+  },
+  "confirmedStatus": "ĐÃ XÁC NHẬN",
+  "@confirmedStatus": {
+    "description": "Status when student information is confirmed"
+  },
+  "generalInformationTitle": "Thông tin chung",
+  "@generalInformationTitle": {
+    "description": "General information section title"
+  },
+  "idCccdLabel": "Mã định danh/CCCD",
+  "@idCccdLabel": {
+    "description": "ID/CCCD label"
+  },
+  "dateOfBirthLabel": "Ngày sinh",
+  "@dateOfBirthLabel": {
+    "description": "Date of birth label"
+  },
+  "genderLabel": "Giới tính",
+  "@genderLabel": {
+    "description": "Gender label"
+  },
+  "nationalityLabel": "Quốc tịch",
+  "@nationalityLabel": {
+    "description": "Nationality label"
+  },
+  "religionLabel": "Tôn giáo",
+  "@religionLabel": {
+    "description": "Religion label"
+  },
+  "permanentAddressLabel": "Nơi thường trú",
+  "@permanentAddressLabel": {
+    "description": "Permanent address label"
+  },
+  "temporaryAddressLabel": "Nơi tạm trú",
+  "@temporaryAddressLabel": {
+    "description": "Temporary address label"
+  },
+  "contactInformationTitle": "Thông tin liên hệ",
+  "@contactInformationTitle": {
+    "description": "Contact information section title"
+  },
+  "primaryContactTag": "Người liên hệ chính",
+  "@primaryContactTag": {
+    "description": "Primary contact tag text"
+  },
+  "relationshipToStudentLabel": "Mối quan hệ với học sinh",
+  "@relationshipToStudentLabel": {
+    "description": "Relationship to student label"
+  },
+  "yearOfBirthLabel": "Năm sinh",
+  "@yearOfBirthLabel": {
+    "description": "Year of birth label"
+  },
+  "occupationLabel": "Nghề nghiệp",
+  "@occupationLabel": {
+    "description": "Occupation label"
+  },
+  "phoneNumberLabel": "Số điện thoại",
+  "@phoneNumberLabel": {
+    "description": "Phone number label"
+  },
+  "confirmStudentInformationButton": "Xác nhận thông tin học sinh",
+  "@confirmStudentInformationButton": {
+    "description": "Confirm student information button text"
+  },
+  "requestInformationEditButton": "Yêu cầu chỉnh sửa thông tin",
+  "@requestInformationEditButton": {
+    "description": "Request information edit button text"
+  },
+  "studentInformationSubtitle": "Thông tin cá nhân và liên hệ của học sinh.",
+  "@studentInformationSubtitle": {
+    "description": "Student information card subtitle"
+  },
+  "detailedStudentInfoTitle": "Thông tin chi tiết học sinh",
+  "@detailedStudentInfoTitle": {
+    "description": "Detailed student information section title"
+  },
+  "genderMale": "Nam",
+  "@genderMale": {
+    "description": "Male gender label"
+  },
+  "genderFemale": "Nữ",
+  "@genderFemale": {
+    "description": "Female gender label"
+  },
+  "requestEditInfoTitle": "Yêu cầu chỉnh sửa thông tin",
+  "@requestEditInfoTitle": {"description": "Tiêu đề cho bottom sheet yêu cầu chỉnh sửa"},
+  "requestEditInfoDetailsLabel": "Chi tiết yêu cầu",
+  "@requestEditInfoDetailsLabel": {"description": "Nhãn cho ô nhập chi tiết yêu cầu"},
+  "requestEditInfoDetailsHint": "Vui lòng mô tả thông tin cần được chỉnh sửa...",
+  "@requestEditInfoDetailsHint": {"description": "Gợi ý cho ô nhập chi tiết yêu cầu"},
+  "requestEditInfoSubmittedTitle": "Đã gửi yêu cầu chỉnh sửa",
+  "@requestEditInfoSubmittedTitle": {"description": "Tiêu đề cho bottom sheet đã gửi yêu cầu"},
+  "requestEditInfoSubmittedSubtitle": "Nhà trường sẽ xem xét yêu cầu của bạn và phản hồi trong thời gian sớm nhất.",
+  "@requestEditInfoSubmittedSubtitle": {"description": "Phụ đề cho bottom sheet đã gửi yêu cầu"},
+  "requestEditInfoSend": "Gửi thông tin",
+  "@requestEditInfoSend": {"description": "Nút gửi thông tin"},
+  "iUnderstand": "Tôi đã hiểu",
+  "@iUnderstand": {"description": "Nút tôi đã hiểu"},
+  "welcomeDialogTitle": "Chào mừng {userName}!",
+  "@welcomeDialogTitle": {
+    "description": "Welcome dialog title with user name",
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeDialogMessage": "G-Edu sẽ là trợ thủ đắc lực, giúp cô quản lý công việc và lớp học hiệu quả hơn.",
+  "@welcomeDialogMessage": {
+    "description": "Welcome dialog message"
+  },
+  "welcomeDialogButtonText": "Bắt đầu",
+  "@welcomeDialogButtonText": {
+    "description": "Welcome dialog button text"
+  }
+} 

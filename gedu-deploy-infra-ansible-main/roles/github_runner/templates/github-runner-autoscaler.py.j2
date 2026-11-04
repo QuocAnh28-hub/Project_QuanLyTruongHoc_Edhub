@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+"""
+GitHub Runner Autoscaler
+Monitors GitHub Actions queue and automatically scales runners based on demand.
+"""
+
+import os
+import sys
+import time
+import json
+import logging
+import requests
+import subprocess
+import yaml
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional
+
+# Configuration
+CONFIG_FILE = '/home/{{ github_runner_container_user }}/actions-runner/autoscale-config.yml'
+LOG_FILE = '/home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.log'
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(LOG_FILE),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
+
+class GitHubRunnerAutoscaler:
+    def __init__(self, config_file: str):
+        self.config = self.load_config(config_file)
+        self.github_org = self.config['github_org']
+        self.github_repo = self.config['github_repo']
+        self.github_token = self.config['github_token']
+        self.runner_labels = self.config['runner_labels']
+        self.runner_group = self.config['runner_group']
+        self.min_runners = self.config['min_runners']
+        self.max_runners = self.config['max_runners']
+        self.scaling_rules = self.config['scaling_rules']
+        
+        self.headers = {
+            'Authorization': f'token {self.github_token}',
+            'Accept': 'application/vnd.github.v3+json'
+        }
+        
+        self.base_url = 'https://api.github.com'
+        self.runners_cache = {}
+        self.last_scale_up = None
+        self.last_scale_down = None
+        
+    def load_config(self, config_file: str) -> Dict:
+        """Load configuration from YAML file."""
+        try:
+            with open(config_file, 'r') as f:
+                return yaml.safe_load(f)
+        except Exception as e:
+            logger.error(f"Failed to load config: {e}")
+            sys.exit(1)
+    
+    def get_queued_jobs(self) -> List[Dict]:
+        """Get list of queued jobs from GitHub Actions."""
+        try:
+            if self.github_repo:
+                # Repository-level runners
+                url = f"{self.base_url}/repos/{self.github_org}/{self.github_repo}/actions/runs"
+            else:
+                # Organization-level runners
+                url = f"{self.base_url}/orgs/{self.github_org}/actions/runs"
+            
+            response = requests.get(url, headers=self.headers, params={'status': 'queued'})
+            response.raise_for_status()
+            
+            runs = response.json().get('workflow_runs', [])
+            logger.info(f"Found {len(runs)} queued jobs")
+            return runs
+            
+        except Exception as e:
+            logger.error(f"Failed to get queued jobs: {e}")
+            return []
+    
+    def get_runners(self) -> List[Dict]:
+        """Get list of current runners."""
+        try:
+            if self.github_repo:
+                # Repository-level runners
+                url = f"{self.base_url}/repos/{self.github_org}/{self.github_repo}/actions/runners"
+            else:
+                # Organization-level runners
+                url = f"{self.base_url}/orgs/{self.github_org}/actions/runners"
+            
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            
+            runners = response.json().get('runners', [])
+            logger.info(f"Found {len(runners)} current runners")
+            return runners
+            
+        except Exception as e:
+            logger.error(f"Failed to get runners: {e}")
+            return []
+    
+    def get_idle_runners(self) -> List[Dict]:
+        """Get list of idle runners."""
+        runners = self.get_runners()
+        idle_runners = []
+        
+        for runner in runners:
+            if runner.get('status') == 'online' and runner.get('busy') == False:
+                # Check if runner has been idle for the threshold time
+                updated_at = datetime.fromisoformat(runner['updated_at'].replace('Z', '+00:00'))
+                idle_time = datetime.now(updated_at.tzinfo) - updated_at
+                
+                if idle_time.total_seconds() > self.scaling_rules['scale_down']['idle_time_threshold']:
+                    idle_runners.append(runner)
+        
+        logger.info(f"Found {len(idle_runners)} idle runners")
+        return idle_runners
+    
+    def scale_up(self) -> bool:
+        """Scale up by creating a new runner."""
+        try:
+            # Check if we can scale up
+            current_runners = len(self.get_runners())
+            if current_runners >= self.max_runners:
+                logger.info(f"Cannot scale up: already at max runners ({self.max_runners})")
+                return False
+            
+            # Check cooldown period
+            if self.last_scale_up:
+                time_since_last_scale = (datetime.now() - self.last_scale_up).total_seconds()
+                if time_since_last_scale < self.scaling_rules['scale_up']['scale_up_delay']:
+                    logger.info(f"Scale up cooldown: {self.scaling_rules['scale_up']['scale_up_delay'] - time_since_last_scale:.0f}s remaining")
+                    return False
+            
+            logger.info(f"Scaling up: creating new runner ({current_runners + 1}/{self.max_runners})")
+            
+            # Create new runner using docker-compose
+            runner_name = f"gedu-github-runner-{int(time.time())}"
+            env_vars = {
+                'RUNNER_NAME': runner_name,
+                'REPO_URL': f"https://github.com/{self.github_org}/{self.github_repo}" if self.github_repo else None,
+                'ORG_URL': f"https://github.com/{self.github_org}" if not self.github_repo else None,
+                'RUNNER_TOKEN': self.github_token,
+                'RUNNER_LABELS': self.runner_labels,
+                'RUNNER_GROUP': self.runner_group
+            }
+            
+            # Build docker-compose command
+            compose_cmd = [
+                'docker-compose', '-f', '/home/{{ github_runner_container_user }}/actions-runner/docker-compose.yml',
+                'up', '-d', '--scale', 'github-runner=1'
+            ]
+            
+            # Execute the command
+            result = subprocess.run(compose_cmd, capture_output=True, text=True)
+            
+            if result.returncode == 0:
+                self.last_scale_up = datetime.now()
+                logger.info(f"Successfully scaled up: {runner_name}")
+                return True
+            else:
+                logger.error(f"Failed to scale up: {result.stderr}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error scaling up: {e}")
+            return False
+    
+    def scale_down(self) -> bool:
+        """Scale down by removing an idle runner."""
+        try:
+            # Check if we can scale down
+            current_runners = len(self.get_runners())
+            if current_runners <= self.min_runners:
+                logger.info(f"Cannot scale down: already at min runners ({self.min_runners})")
+                return False
+            
+            # Check cooldown period
+            if self.last_scale_down:
+                time_since_last_scale = (datetime.now() - self.last_scale_down).total_seconds()
+                if time_since_last_scale < self.scaling_rules['scale_down']['scale_down_delay']:
+                    logger.info(f"Scale down cooldown: {self.scaling_rules['scale_down']['scale_down_delay'] - time_since_last_scale:.0f}s remaining")
+                    return False
+            
+            idle_runners = self.get_idle_runners()
+            if not idle_runners:
+                logger.info("No idle runners to scale down")
+                return False
+            
+            # Remove the oldest idle runner
+            runner_to_remove = idle_runners[0]
+            runner_id = runner_to_remove['id']
+            runner_name = runner_to_remove['name']
+            
+            logger.info(f"Scaling down: removing runner {runner_name} ({current_runners - 1}/{self.min_runners})")
+            
+            # Remove runner from GitHub
+            if self.github_repo:
+                url = f"{self.base_url}/repos/{self.github_org}/{self.github_repo}/actions/runners/{runner_id}"
+            else:
+                url = f"{self.base_url}/orgs/{self.github_org}/actions/runners/{runner_id}"
+            
+            response = requests.delete(url, headers=self.headers)
+            
+            if response.status_code == 204:
+                self.last_scale_down = datetime.now()
+                logger.info(f"Successfully removed runner: {runner_name}")
+                return True
+            else:
+                logger.error(f"Failed to remove runner: {response.status_code} - {response.text}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error scaling down: {e}")
+            return False
+    
+    def run(self):
+        """Main autoscaling loop."""
+        logger.info("Starting GitHub Runner Autoscaler")
+        logger.info(f"Configuration: min={self.min_runners}, max={self.max_runners}")
+        
+        while True:
+            try:
+                # Get current state
+                queued_jobs = self.get_queued_jobs()
+                current_runners = self.get_runners()
+                online_runners = [r for r in current_runners if r.get('status') == 'online']
+                
+                logger.info(f"Status: {len(queued_jobs)} queued jobs, {len(online_runners)} online runners")
+                
+                # Scale up logic
+                if len(queued_jobs) > self.scaling_rules['scale_up']['queue_length_threshold']:
+                    logger.info(f"Queue length ({len(queued_jobs)}) exceeds threshold ({self.scaling_rules['scale_up']['queue_length_threshold']})")
+                    self.scale_up()
+                
+                # Scale down logic
+                elif len(queued_jobs) == 0 and len(online_runners) > self.min_runners:
+                    logger.info("No queued jobs, checking for idle runners to scale down")
+                    self.scale_down()
+                
+                # Wait before next check
+                time.sleep(60)  # Check every minute
+                
+            except KeyboardInterrupt:
+                logger.info("Autoscaler stopped by user")
+                break
+            except Exception as e:
+                logger.error(f"Error in main loop: {e}")
+                time.sleep(60)  # Wait before retrying
+
+def main():
+    """Main entry point."""
+    if not os.path.exists(CONFIG_FILE):
+        logger.error(f"Config file not found: {CONFIG_FILE}")
+        sys.exit(1)
+    
+    autoscaler = GitHubRunnerAutoscaler(CONFIG_FILE)
+    autoscaler.run()
+
+if __name__ == "__main__":
+    main() 

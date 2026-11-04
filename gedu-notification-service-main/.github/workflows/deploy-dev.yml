@@ -1,0 +1,113 @@
+name: Deploy to Dev Server
+
+on:
+  push:
+    branches:
+      - dev
+
+env:
+  TAG: ${{ github.sha }}
+  NODE_ENV: development
+  COMPOSE_DOCKER_CLI_BUILD: 1
+  DOCKER_BUILDKIT: 1
+  RUN_MODE: build
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create env files
+        run: |
+          # Create base env file
+          echo "${{ secrets.ENV_DEV }}" > .env
+
+      - name: Build and tag images
+        run: |
+          # Build all images with BuildKit cache
+          docker compose build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --parallel
+          
+          # Tag images with SHA
+          docker tag gedu/notification:${TAG} gedu/notification:${TAG}
+
+      - name: Save Docker images
+        run: |
+          mkdir -p images
+          # Save images with SHA tags
+          docker save gedu/notification:${TAG} > images/notification.tar
+
+          # Verify tar files
+          ls -lh images/
+
+      - name: Copy files to dev server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          source: "images/*.tar,docker-compose.yml,.env*"
+          target: ${{ vars.SERVER_DEPLOY_DIR }}
+          strip_components: 0
+          overwrite: true
+
+      - name: Deploy to dev server
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DEPLOY_TAG: ${{ github.sha }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          envs: DEPLOY_TAG
+          script: |
+            cd ${{ vars.SERVER_DEPLOY_DIR }}
+            
+            # Load new images
+            echo "Loading images..."
+            for service in notification; do
+              echo "Loading $service image..."
+              if ! docker load < images/$service.tar; then
+                echo "Failed to load $service image"
+                exit 1
+              fi
+            done
+
+            # Tag loaded images for deployment
+            docker tag gedu/notification:${DEPLOY_TAG} gedu/notification:latest
+
+            # Stop existing containers gracefully
+            echo "Stopping existing containers..."
+            docker compose down --remove-orphans
+            
+            # Deploy services
+            echo "Starting deployment..."
+            if ! docker compose up -d; then
+              echo "Failed to start services"
+              exit 1
+            fi
+            
+            # Wait for services to start
+            echo "Waiting for services to start..."
+            sleep 30
+            
+            # Check service status
+            echo "Checking service status..."
+            if ! docker compose ps --format json | grep -q "running"; then
+              echo "Services are not running properly"
+              docker compose logs
+              exit 1
+            fi
+            
+            # Cleanup
+            echo "Cleaning up..."
+            rm -rf images
+            # Keep only images from the last 24 hours
+            docker image prune -a -f --filter "until=24h"

@@ -1,0 +1,60 @@
+---
+- name: Deploy HAProxy and Keepalived for Kubernetes API HA
+  hosts: k8s_master_02,k8s_master_03
+  become: true
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: ansible_user
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa_geduhub
+    # Force use of raw commands for older Python compatibility
+    ansible_connection: ssh
+    
+    # HAProxy and Keepalived configuration
+    keepalived_virtual_ip: "10.47.197.30" # Virtual IP for the cluster
+    keepalived_interface: "ens33" # Correct interface for k8s_master_02
+    keepalived_priority: "255"
+    
+    # Kubernetes API configuration
+    kube_api_port: 8443
+    kube_api_backend_name: kubernetes-api
+    kube_api_frontend_name: kubernetes-api-frontend
+    
+    # Istio Ingress Gateway configuration
+    istio_ingress_port: 80
+    istio_ingress_internal_port: 8080  # Internal HTTP port for non-redirected traffic
+    istio_ingress_nodeport: 32001  # HTTP traffic flow: HAProxy VIP:80 -> Istio:80 (NodePort 32001)
+    istio_ingress_backend_name: istio-ingressgateway
+    istio_ingress_frontend_name: istio-ingress-frontend
+    istio_ingress_healthcheck_nodeport: 30105  # Health check NodePort for Istio ingress gateway (maps to port 15021)
+    
+    # Istio Ingress Gateway HTTPS configuration
+    istio_ingress_https_port: 443
+    istio_ingress_https_backend_name: istio-ingressgateway-https
+    istio_ingress_https_frontend_name: istio-ingress-https-frontend
+    istio_ingress_https_nodeport: 32002  # HTTPS NodePort for Istio ingress gateway (maps to port 443)
+    
+    # SSL Configuration Options
+    # Set to 'tcp' for SSL passthrough (current setup) or 'http' for SSL termination at HAProxy
+    haproxy_ssl_mode: "tcp"  # Options: "tcp" (SSL passthrough) or "http" (SSL termination)
+    
+    # SSL Certificate paths (for SSL termination mode)
+    ssl_cert_path: "/etc/haproxy/certs/geduhub.vn.pem"
+    ssl_cert_source: "../20250718_star_geduhub_vn/star_geduhub_fullchain.pem"
+    ssl_key_source: "../20250718_star_geduhub_vn/star_geduhub_vn.key"
+    
+    # HAProxy service configuration
+    haproxy_user: haproxy
+    haproxy_group: haproxy
+    haproxy_config_dir: /etc/haproxy
+    haproxy_config_file: haproxy.cfg
+    
+    # Keepalived configuration
+    keepalived_config_dir: /etc/keepalived
+    keepalived_config_file: keepalived.conf
+    keepalived_vrrp_instance: VI_1
+    keepalived_virtual_router_id: 51
+
+  roles:
+    - haproxy_keepalived

@@ -1,0 +1,29 @@
+name: BugBot Trigger
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - dev
+
+jobs:
+  add-comment:
+    name: Add BugBot Trigger Comment
+    runs-on: ubuntu-latest
+    environment: development
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Add BugBot trigger comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '@bugbot run'
+            }); 

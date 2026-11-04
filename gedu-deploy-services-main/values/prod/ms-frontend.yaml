@@ -1,0 +1,23 @@
+ms-frontend:
+  replicaCount: 3
+  env:
+    - name: API_ENDPOINT
+      value: "http://gedu-deploy-ms-core.ms-service-prod.svc.cluster.local:3000"
+    - name: S3_ENDPOINT
+      value: "http://10.47.198.59:9000"
+
+  image:
+    # repository: registry.eduhub.com/dev/ms-frontend
+    tag: f049e3f
+
+  imagePullSecrets:
+    - name: regcred
+
+  virtualService:
+    enabled: true
+    gateway: istio-system/default-gateway
+    host: angiang.gedu.vn
+    port: 80
+    service: gedu-deploy-ms-frontend
+    uriPrefix: "/"
+

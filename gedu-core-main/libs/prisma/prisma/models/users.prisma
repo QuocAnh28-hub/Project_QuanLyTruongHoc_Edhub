@@ -1,0 +1,241 @@
+model User {
+  id         Int     @id @default(autoincrement())
+  orgId      Int     @map("org_id")
+  email      String?
+  firstName  String  @map("first_name")
+  lastName   String  @map("last_name")
+  phone      String?
+  phone2     String? @map("phone2")
+  avatar     String?
+  personalId Int?    @map("personal_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal          Personal?       @relation(fields: [personalId], references: [id])
+  confirmedStudents Student[]       @relation("StudentConfirmedBy")
+  schoolStaff       SchoolStaff?
+  edStaff           EdStaff?
+  workHistories     WorkHistories[]
+
+  account         Account?
+  student         Student?          @relation("StudentUser")
+  userEduLevels   UserEduLevel[]
+  studentsContact StudentsContact?
+  userPermissions User_Permission[]
+  notifications   Notification[]
+
+  @@unique([orgId, phone])
+  @@index([orgId])
+  @@index([firstName])
+  @@index([lastName])
+  @@map("users")
+}
+
+model Account {
+  id       Int     @id @default(autoincrement())
+  orgId    Int     @map("org_id")
+  userId   Int     @unique @map("user_id")
+  userName String  @unique @map("user_name")
+  password String?
+  roles    String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([orgId, userName])
+  @@map("accounts")
+}
+
+model Personal {
+  id                    Int       @id @default(autoincrement())
+  firstName             String    @map("first_name")
+  lastName              String    @map("last_name")
+  oldCitizenId          String?   @map("old_citizen_id")
+  citizenId             String?   @unique @map("citizen_id")
+  dateOfIssue           DateTime? @map("date_of_issue")
+  dateOfExpiry          DateTime? @map("date_of_expiry")
+  dateOfBirth           DateTime? @map("date_of_birth")
+  placeOfIssue          String?   @map("place_of_issue")
+  sex                   Int?      @default(0) // SEX enum: 0=NO_INFORMATION, 1=MALE, 2=FEMALE
+  maritalStatus         Int?      @default(0) @map("marital_status") // MARITAL_STATUS enum: 0=NO_INFORMATION, 1=SINGLE, 2=MARRIED, 3=DIVORCED
+  occupation            String?   @map("occupation")
+  originPlaceProvinceId Int?      @map("origin_place_province_id")
+  originPlaceWardId     Int?      @map("origin_place_ward_id")
+
+  permanentResidenceProvinceId Int?    @map("permanent_residence_province_id")
+  permanentResidenceWardId     Int?    @map("permanent_residence_ward_id")
+  permanentResidenceAddress    String? @map("permanent_residence_address")
+
+  temporaryResidenceProvinceId Int?    @map("temporary_residence_province_id")
+  temporaryResidenceWardId     Int?    @map("temporary_residence_ward_id")
+  temporaryResidenceAddress    String? @map("temporary_residence_address")
+
+  nationalityId Int? @map("nationality_id")
+  ethnicityId   Int? @map("ethnicity_id")
+  religionId    Int? @map("religion_id")
+
+  createdAt DateTime? @default(now()) @map("created_at")
+  createdBy Int?      @map("created_by")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?      @map("updated_by")
+
+  users User[]
+
+  nation   Nations?   @relation(fields: [nationalityId], references: [id])
+  ethnic   Ethnics?   @relation(fields: [ethnicityId], references: [id])
+  religion Religions? @relation(fields: [religionId], references: [id])
+
+  originPlaceProvince        ProvincesCities? @relation("originProvince", fields: [originPlaceProvinceId], references: [id])
+  permanentResidenceProvince ProvincesCities? @relation("permanentProvince", fields: [permanentResidenceProvinceId], references: [id])
+  temporaryResidenceProvince ProvincesCities? @relation("temporaryProvince", fields: [temporaryResidenceProvinceId], references: [id])
+
+  originPlaceWard         WardsCommunes?           @relation("originWard", fields: [originPlaceWardId], references: [id])
+  permanentResidenceWard  WardsCommunes?           @relation("permanentWard", fields: [permanentResidenceWardId], references: [id])
+  temporaryResidenceWard  WardsCommunes?           @relation("temporaryWard", fields: [temporaryResidenceWardId], references: [id])
+  pioneersUnionsParty     PioneersUnionsParty?
+  qualificationCompetence QualificationCompetence?
+
+  trainingDevelopmentHistories TrainingDevelopmentHistory[]
+  personalAchievements         PersonalAchievement[]
+  personalWorkHistories        PersonalWorkHistory[]
+  personalInsuranceFinance     PersonalInsuranceFinance?
+
+  @@map("personals")
+}
+
+model UserEduLevel {
+  id               Int     @id @default(autoincrement())
+  userId           Int     @map("user_id")
+  orgId            Int     @map("org_id")
+  eduLevelId       Int     @map("edu_level_id")
+  schoolId         Int     @map("school_id")
+  major            String?
+  schoolName       String? @map("school_name")
+  yearOfGraduation Int?    @map("year_of_graduation")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user     User            @relation(fields: [userId], references: [id])
+  school   School          @relation(fields: [orgId], references: [id])
+  eduLevel EducationLevels @relation(fields: [eduLevelId], references: [id])
+
+  @@map("user_edu_levels")
+}
+
+model PioneersUnionsParty {
+  id                          Int       @id @default(autoincrement())
+  personalId                  Int       @unique @map("personal_id")
+  youngPioneerAdmissionDate   DateTime? @map("young_pioneer_admission_date")
+  youthUnionAdmissionDate     DateTime? @map("youth_union_admission_date")
+  communistPartyAdmissionDate DateTime? @map("communist_party_admission_date")
+  startMilitaryServiceDate    DateTime? @map("start_military_service_date")
+  endMilitaryServiceDate      DateTime? @map("end_military_service_date")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("pioneers_unions_parties")
+}
+
+model QualificationCompetence {
+  id         Int @id @default(autoincrement())
+  personalId Int @unique @map("personal_id")
+
+  highestAcademicQualification String? @map("highest_academic_qualification")
+  professionalQualification    String? @map("professional_qualification")
+  fieldOfStudy                 String? @map("field_of_study")
+  foreignLanguageSkill         String? @map("foreign_language_skill")
+  itSkill                      String? @map("it_skill")
+  politicalTheoryQualification String? @map("political_theory_qualification")
+  eduManagementQualification   String? @map("edu_management_qualification")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("qualifications_competences")
+}
+
+model TrainingDevelopmentHistory {
+  id          Int      @id @default(autoincrement())
+  personalId  Int      @map("personal_id")
+  date        DateTime @map("date")
+  description String?  @map("description")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("training_development_history")
+}
+
+model PersonalAchievement {
+  id          Int      @id @default(autoincrement())
+  personalId  Int      @map("personal_id")
+  date        DateTime @map("date")
+  description String?  @map("description")
+  type        Int?     @map("type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("personal_achievements")
+}
+
+model PersonalWorkHistory {
+  id         Int       @id @default(autoincrement())
+  personalId Int       @map("personal_id")
+  fromDate   DateTime  @map("from_date")
+  toDate     DateTime? @map("to_date")
+  orgName    String    @map("org_name")
+  positions  String    @map("positions")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("personal_work_history")
+}
+
+model PersonalInsuranceFinance {
+  id                  Int     @id @default(autoincrement())
+  personalId          Int     @unique @map("personal_id")
+  socialInsuranceCode String? @map("social_insurance_code")
+  pitCode             String? @map("pit_code")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  personal Personal @relation(fields: [personalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("personal_insurance_finance")
+}

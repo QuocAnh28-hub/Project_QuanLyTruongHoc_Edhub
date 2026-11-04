@@ -1,0 +1,55 @@
+# kubectl create secret generic import-db-credentials \
+#   --from-literal=POSTGRES_USER=staging \
+#   --from-literal=POSTGRES_PASSWORD='EduHub@BBB-2025' \
+#   --from-literal=POSTGRES_DB=staging \
+#   -n middleware-prod
+
+
+
+# kubectl apply -f import-jobs-debezium.yaml -n middleware-prod
+
+
+
+apiVersion: debezium.io/v1alpha1
+kind: DebeziumServer
+metadata:
+  name: import-jobs-debezium
+spec:
+  image: quay.io/debezium/server:nightly  # Or pin a stable tag instead of 'latest'
+  quarkus:
+    config:
+      log.console.json: false
+      kubernetes-config.enabled: true
+      kubernetes-config.secrets: import-db-credentials  # You must create this secret
+  runtime:
+    api:
+      enabled: true
+  sink:
+    type: kafka
+    config:
+      producer.bootstrap.servers: gedu-kafka-cluster-kafka-brokers.middleware-prod.svc.cluster.local:9092
+      producer.key.serializer: org.apache.kafka.common.serialization.StringSerializer
+      producer.value.serializer: org.apache.kafka.common.serialization.StringSerializer
+  source:
+    class: io.debezium.connector.postgresql.PostgresConnector
+    offset:
+      memory: {}
+    schemaHistory:
+      memory: {}
+    config:
+      connector.class: io.debezium.connector.postgresql.PostgresConnector
+      tasks.max: "1"
+      database.hostname: 10.47.198.69
+      database.port: "5000"
+      database.user: ${POSTGRES_USER}
+      database.password: ${POSTGRES_PASSWORD}
+      database.dbname: staging
+      database.server.name: gedu-import-service
+      schema.include.list: eduhub
+      table.include.list: eduhub.import_jobs
+      topic.prefix: gedu-import-service
+      plugin.name: pgoutput
+      value.converter: org.apache.kafka.connect.json.JsonConverter
+      value.converter.schemas.enable: "false"
+      key.converter: org.apache.kafka.connect.json.JsonConverter
+      key.converter.schemas.enable: "false"

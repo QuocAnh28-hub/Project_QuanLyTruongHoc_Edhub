@@ -1,0 +1,11 @@
+ms-frontend:
+  image:
+    repository: registry.eduhub.com/dev/ms-frontend
+    tag: 5576f1d
+  imagePullSecrets:
+    - name: regcred
+  env:
+    - name: API_ENDPOINT
+      value: "http://gedu-deploy-ms-core.ms-service-nonprod.svc.cluster.local:3000"
+    - name: S3_ENDPOINT
+      value: "http://10.47.198.59:9000"

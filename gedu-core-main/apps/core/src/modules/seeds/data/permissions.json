@@ -1,0 +1,19 @@
+[
+    { "no": 1, "code": "ed-admin", "title": "Admin Administrator", "desc": "Admin Administrator" },
+    { "no": 2, "code": "ed-mod", "title": "Mod Moderator", "desc": "Mod Moderator" },
+    { "no": 3, "code": "dshbrd_r", "title": "Xem Tổng quan", "desc": "Xem Tổng quan" },
+    { "no": 4, "code": "schlyr_a", "title": "Toàn quyền Năm học & Học kỳ", "desc": "Toàn quyền Năm học & Học kỳ" },
+    { "no": 5, "code": "schlyr_r", "title": "Xem Năm học & Học kỳ", "desc": "Xem Năm học & Học kỳ" },
+    { "no": 6, "code": "grd_a", "title": "Toàn quyền Khối lớp & Lớp học", "desc": "Toàn quyền Khối lớp & Lớp học" },
+    { "no": 7, "code": "grd_r", "title": "Xem Khối lớp & Lớp học", "desc": "Xem Khối lớp & Lớp học" },
+    { "no": 8, "code": "crrclm_a", "title": "Toàn quyền Chương trình & Môn học", "desc": "Toàn quyền Chương trình & Môn học" },
+    { "no": 9, "code": "crrclm_r", "title": "Xem Chương trình & Môn học", "desc": "Xem Chương trình & Môn học" },
+    { "no": 10, "code": "stdnt_a", "title": "Toàn quyền Hồ sơ Học sinh", "desc": "Toàn quyền Hồ sơ Học sinh" },
+    { "no": 11, "code": "stdnt_r", "title": "Xem Hồ sơ Học sinh", "desc": "Xem Hồ sơ Học sinh" },
+    { "no": 12, "code": "stff_a", "title": "Toàn quyền Hồ sơ GV & CB", "desc": "Toàn quyền Hồ sơ GV & CB" },
+    { "no": 13, "code": "stff_r", "title": "Xem Hồ sơ GV & CB", "desc": "Xem Hồ sơ GV & CB" },
+    { "no": 14, "code": "schldprtmnt_a", "title": "Toàn quyền Cấu trúc phòng ban & Chức danh", "desc": "Toàn quyền Cấu trúc phòng ban & Chức danh" },
+    { "no": 15, "code": "schldprtmnt_r", "title": "Xem Cấu trúc phòng ban & Chức danh", "desc": "Xem Cấu trúc phòng ban & Chức danh" },
+    { "no": 16, "code": "prmssn_a", "title": "Toàn quyền Phân quyền", "desc": "Toàn quyền Phân quyền" },
+    { "no": 17, "code": "prmssn_r", "title": "Xem phân quyền", "desc": "Xem phân quyền" }
+]

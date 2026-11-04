@@ -1,0 +1,41 @@
+# Global settings
+global:
+  environment: "nonprod"  # Set deployment environment (e.g., nonprod, staging)
+
+# Redis configuration
+redis:
+  architecture: standalone  # Use standalone Redis (not cluster or sentinel)
+  auth:
+    enabled: true  # Enable Redis password authentication
+    password: redispassword  # Redis password
+  master:
+    persistence:
+      enabled: true  # Enable data persistence for Redis master
+      size: 2Gi      # Set Redis data volume size to 2Gi
+
+# Kafka configuration
+kafka:
+  replicaCount: 1  # Set number of Kafka broker replicas (single-node for nonprod)
+  
+  persistence:
+    enabled: true  # Enable persistent storage for Kafka broker
+    size: 5Gi      # Set Kafka volume size to 5Gi
+
+  # Zookeeper configuration (required by Kafka)
+  zookeeper:
+    enabled: true  # Enable Zookeeper (embedded)
+    replicaCount: 1  # Set number of Zookeeper replicas (single-node for nonprod)
+    persistence:
+      enabled: true  # Enable persistent storage for Zookeeper
+      size: 2Gi      # Set Zookeeper volume size to 2Gi
+
+# Debezium configuration
+debezium:
+  enabled: true  # Enable Debezium connector
+
+  kafka:
+    bootstrapServers: "kafka:9092"  # Kafka bootstrap servers for Debezium
+
+  config:
+    database.history.kafka.bootstrap.servers: "kafka:9092"  # Kafka to store schema history
+    database.history.kafka.topic: "schema-changes.inventory"  # Topic for storing schema change history

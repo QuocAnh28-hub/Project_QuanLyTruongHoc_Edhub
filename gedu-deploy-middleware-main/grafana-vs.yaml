@@ -1,0 +1,27 @@
+# kubectl create namespace monitoring
+
+# helm install monitoring prometheus-community/kube-prometheus-stack \
+#   --namespace monitoring \
+#   --set grafana.persistence.enabled=false \
+#   --set grafana.ingress.enabled=false \
+#   --set grafana.adminPassword='admin123'
+
+
+
+# grafana-vs.yaml
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  hosts:
+    - grafana.geduhub.vn
+  gateways:
+    - istio-system/default-gateway
+  http:
+    - route:
+        - destination:
+            host: monitoring-grafana.monitoring.svc.cluster.local
+            port:
+              number: 80

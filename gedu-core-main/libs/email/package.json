@@ -1,0 +1,12 @@
+{
+  "name": "@gedu/email",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/microservices": "^10.0.0",
+    "uuid": "^11.0.5"
+  }
+} 

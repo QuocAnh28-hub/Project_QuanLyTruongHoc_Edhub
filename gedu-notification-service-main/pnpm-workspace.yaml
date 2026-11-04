@@ -1,0 +1,8 @@
+packages:
+  - apps/*
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - '@swc/core'
+  - nx

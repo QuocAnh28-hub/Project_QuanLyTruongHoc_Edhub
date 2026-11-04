@@ -1,0 +1,19 @@
+model StudentEditRequest {
+  id          Int       @id @default(autoincrement())
+  orgId       Int       @map("org_id")
+  studentId   Int       @map("student_id")
+  submittedBy Int       @map("submitted_by") // User ID of parent
+  content     String // Description of changes or JSON
+  status      Int       @default(1) // 1=Pending, 2=Approved, 3=Rejected
+  reviewedBy  Int?      @map("reviewed_by")
+  reviewNote  String?   @map("review_note")
+  reviewedAt  DateTime? @map("reviewed_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  school  School  @relation(fields: [orgId], references: [id])
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([orgId, status])
+  @@map("student_edit_requests")
+}

@@ -1,0 +1,9 @@
+---
+- name: Deploy Database Cluster
+  hosts: db_cluster
+  become: true
+  tasks:
+    - import_role:
+        name: db_cluster
+      tags:
+        - db_cluster

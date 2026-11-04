@@ -1,0 +1,51 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@gedu/config": ["libs/config/src"],
+      "@gedu/config/*": ["libs/config/src/*"],
+
+      "@gedu/email": ["libs/email/src"],
+      "@gedu/email/*": ["libs/email/src/*"],
+
+      "@gedu/http": ["libs/http/src"],
+      "@gedu/http/*": ["libs/http/src/*"],
+
+      "@gedu/minio": ["libs/minio/src"],
+      "@gedu/minio/*": ["libs/minio/src/*"],
+
+      "@gedu/prisma": ["libs/prisma/src"],
+      "@gedu/prisma/*": ["libs/prisma/src/*"],
+
+      "@gedu/redis": ["libs/redis/src"],
+      "@gedu/redis/*": ["libs/redis/src/*"],
+
+      "@gedu/shared": ["libs/shared/src"],
+      "@gedu/shared/*": ["libs/shared/src/*"],
+      
+      "@gedu/transport": ["libs/transport/src"],
+      "@gedu/transport/*": ["libs/transport/src/*"]
+    }
+  },
+  "include": ["apps/**/*", "libs/**/*", "prisma.config.ts"],
+  "exclude": ["node_modules", "dist", "tmp"]
+}

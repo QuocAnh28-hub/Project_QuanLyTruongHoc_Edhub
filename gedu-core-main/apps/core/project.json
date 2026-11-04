@@ -1,0 +1,54 @@
+{
+  "name": "core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/core/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/core",
+        "main": "apps/core/src/main.ts",
+        "tsConfig": "apps/core/tsconfig.app.json",
+        "webpackConfig": "apps/core/webpack.config.js",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "inspect": true,
+          "sourceMap": true
+        },
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "sourceMap": false
+        }
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies"
+        }
+      ]
+    },
+    "start:dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "start:dev"
+      }
+    },
+    "start:prod": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "start:prod"
+      }
+    }
+  }
+} 

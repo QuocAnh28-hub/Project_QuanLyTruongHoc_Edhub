@@ -1,0 +1,12 @@
+---
+- name: Include system preparation tasks
+  include_tasks: system_prep.yml
+
+- name: Include RKE installation tasks
+  include_tasks: rke_install.yml
+
+- name: Include system configuration tasks
+  include_tasks: system_config.yml
+
+- name: Include verification tasks
+  include_tasks: verification.yml

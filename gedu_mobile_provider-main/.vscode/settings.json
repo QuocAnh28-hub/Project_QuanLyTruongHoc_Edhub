@@ -1,0 +1,16 @@
+{
+    "dart.flutterSdkPath": "/opt/homebrew/Caskroom/flutter/3.32.8/flutter",
+    "dart.flutterSdkPaths": [
+        "/opt/homebrew/Caskroom/flutter/3.32.8/flutter"
+    ],
+    "dart.flutterRunAdditionalArgs": [
+        "--flavor",
+        "development",
+        "-t",
+        "lib/main_development.dart"
+    ]
+}
+
+
+
+

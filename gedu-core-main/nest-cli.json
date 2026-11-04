@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "monorepo": true,
+  "compilerOptions": {
+    "webpack": true,
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "input": "./libs/prisma/prisma/generated/client",
+        "output": "./dist/libs/prisma/prisma/generated/client",
+        "watchAssets": true
+      }
+    ]
+  },
+  "projects": {
+    "core": {
+      "type": "application",
+      "root": "apps/core",
+      "entryFile": "main",
+      "sourceRoot": "apps/core/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/core/tsconfig.app.json",
+        "webpack": true,
+        "plugins": [
+          {
+            "name": "@nestjs/swagger",
+            "options": {
+              "classValidatorShim": true,
+              "introspectComments": true
+            }
+          }
+        ]
+      }
+    },
+    "import": {
+      "type": "application",
+      "root": "apps/import",
+      "entryFile": "main",
+      "sourceRoot": "apps/import/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/import/tsconfig.app.json"
+      }
+    },
+    "config": {
+      "type": "library",
+      "root": "libs/config",
+      "entryFile": "index",
+      "sourceRoot": "libs/config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/config/tsconfig.lib.json"
+      }
+    },
+    "email": {
+      "type": "library",
+      "root": "libs/email",
+      "entryFile": "index",
+      "sourceRoot": "libs/email/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/email/tsconfig.lib.json"
+      }
+    },
+    "minio": {
+      "type": "library",
+      "root": "libs/minio",
+      "entryFile": "index",
+      "sourceRoot": "libs/minio/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/minio/tsconfig.lib.json"
+      }
+    },
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
+      }
+    },
+    "transport": {
+      "type": "library",
+      "root": "libs/transport",
+      "entryFile": "index",
+      "sourceRoot": "libs/transport/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/transport/tsconfig.lib.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    }
+  }
+}

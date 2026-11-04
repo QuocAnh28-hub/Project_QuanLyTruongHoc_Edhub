@@ -1,0 +1,8 @@
+services:
+  react-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./dist:/app/dist
+    command: npm run build

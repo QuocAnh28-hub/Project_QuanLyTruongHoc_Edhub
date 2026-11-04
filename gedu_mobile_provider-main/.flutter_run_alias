@@ -1,0 +1,14 @@
+# Add this to your shell profile (~/.zshrc or ~/.bashrc) for easy access:
+# alias flutter-run-provider="cd /Users/tinphan/gedu_mobile_provider && ./run_provider.sh"
+
+# Or create a simple function:
+flutter_run_provider() {
+    cd /Users/tinphan/gedu_mobile_provider
+    ./run_provider.sh "$@"
+}
+
+
+
+
+
+

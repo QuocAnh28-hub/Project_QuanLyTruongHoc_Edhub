@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: lib_base,lib_utils
+dependency_overrides:
+  lib_base:
+    path: ../../libraries/lib_base
+  lib_utils:
+    path: ../../libraries/lib_utils

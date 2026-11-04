@@ -1,0 +1,25 @@
+---
+- name: Verify Docker is running
+  raw: systemctl is-active docker
+  register: docker_status
+  changed_when: false
+
+- name: Display Docker status
+  debug:
+    msg: "Docker is {{ docker_status.stdout }}"
+
+- name: Verify RKE installation
+  raw: /usr/local/bin/rke --version
+  register: rke_version
+  changed_when: false
+
+- name: Display RKE version
+  debug:
+    msg: "RKE version: {{ rke_version.stdout }}"
+
+- name: Restart kubelet service to pick up new CA certificates
+  systemd:
+    name: kubelet
+    state: restarted
+  when: harbor_enable_cert | default(true)
+  ignore_errors: true

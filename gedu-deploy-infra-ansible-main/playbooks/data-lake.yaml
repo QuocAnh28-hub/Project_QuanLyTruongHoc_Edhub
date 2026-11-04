@@ -1,0 +1,10 @@
+---
+- name: Deploy Data Lake
+  hosts: data_lake
+  become: true
+  tasks:
+    - import_role:
+        name: data_lake
+      tags:
+        - data_lake
+  

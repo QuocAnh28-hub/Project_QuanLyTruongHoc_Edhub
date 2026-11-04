@@ -1,0 +1,56 @@
+#!/bin/bash
+# GitHub Runner Autoscaler Status Check Script
+
+echo "=== GitHub Runner Autoscaler Status ==="
+echo "Timestamp: $(date)"
+echo
+
+# Check autoscaler service status
+echo "1. Autoscaler Service Status:"
+if systemctl is-active --quiet github-runner-autoscaler; then
+    echo "   ✅ Autoscaler service is running"
+    echo "   Service status: $(systemctl is-active github-runner-autoscaler)"
+else
+    echo "   ❌ Autoscaler service is not running"
+    echo "   Service status: $(systemctl is-active github-runner-autoscaler)"
+fi
+echo
+
+# Check autoscaler logs
+echo "2. Recent Autoscaler Logs (last 10 lines):"
+if [ -f /home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.log ]; then
+    tail -10 /home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.log
+else
+    echo "   No log file found"
+fi
+echo
+
+# Check GitHub runners
+echo "3. GitHub Runners Status:"
+if command -v docker &> /dev/null; then
+    echo "   Docker containers:"
+    docker ps --filter "name=github-runner" --format "table {% raw %}{{.Names}}{% endraw %}\t{% raw %}{{.Status}}{% endraw %}\t{% raw %}{{.Ports}}{% endraw %}"
+else
+    echo "   Docker not available"
+fi
+echo
+
+# Check configuration
+echo "4. Autoscaler Configuration:"
+if [ -f /home/{{ github_runner_container_user }}/actions-runner/autoscale-config.yml ]; then
+    echo "   Configuration file exists"
+    echo "   Min runners: $(grep 'min_runners:' /home/{{ github_runner_container_user }}/actions-runner/autoscale-config.yml | awk '{print $2}')"
+    echo "   Max runners: $(grep 'max_runners:' /home/{{ github_runner_container_user }}/actions-runner/autoscale-config.yml | awk '{print $2}')"
+else
+    echo "   Configuration file not found"
+fi
+echo
+
+# Check system resources
+echo "5. System Resources:"
+echo "   CPU usage: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)%"
+echo "   Memory usage: $(free | grep Mem | awk '{printf("%.1f%%", $3/$2 * 100.0)}')"
+echo "   Disk usage: $(df -h / | awk 'NR==2 {print $5}')"
+echo
+
+echo "=== End of Status Report ===" 

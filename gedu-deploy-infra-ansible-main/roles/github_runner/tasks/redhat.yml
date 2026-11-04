@@ -1,0 +1,51 @@
+---
+- name: Install required packages for RHEL/CentOS/Oracle Linux
+  raw: |
+    dnf install -y dnf-plugins-core curl wget git unzip python38 python38-devel gcc make ca-certificates
+  register: package_install
+
+- name: Display package installation result
+  debug:
+    var: package_install.stdout_lines
+
+- name: Add Docker repository
+  raw: |
+    dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install Docker
+  raw: |
+    dnf install -y docker-ce docker-ce-cli containerd.io
+  register: docker_install
+
+- name: Install Docker Compose
+  raw: |
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+  register: docker_compose_install
+
+- name: Display Docker installation result
+  debug:
+    var: docker_install.stdout_lines
+
+- name: Start and enable Docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Add user to docker group
+  user:
+    name: "{{ github_runner_container_user }}"
+    groups: docker
+    append: yes
+
+- name: Install Python requests module
+  raw: |
+    python3.8 -m pip install requests
+  register: requests_install
+
+- name: Display requests installation result
+  debug:
+    var: requests_install.stdout_lines

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <base href="/" />
+  <!-- <base href="/gedu/" /> -->
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gedu</title>
+  <!-- Start Work around for GitHub Pages to support nested route in SPA -->
+  <script type="text/javascript">
+    // (Github does currently not support nested route in Single page application)
+    // https://nguyen-dc.github.com/
+    // MIT license from https://github.com/rafgraph/spa-github-pages
+    // This script checks to see if a redirect is present in the query string,
+    // converts it back into the correct url and adds it to the
+    // browser's history using window.history.replaceState(...),
+    // which won't cause the browser to attempt to load the new url.
+    // When the single page app is loaded further down in this file,
+    // the correct url will be waiting in the browser's history for
+    // the single page app to route accordingly.
+    //
+    // another script to CONVERTS the url is located in /404.html
+    (function (l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function (s) {
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+          l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
+  </script>
+  <!-- End Work around for GitHub Pages to support nested route in SPA -->
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

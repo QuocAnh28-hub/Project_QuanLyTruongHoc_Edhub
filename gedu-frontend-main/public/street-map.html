@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gedu: Báo cáo Phân bố Trường học</title>
+
+  <!-- Tích hợp Tailwind CSS để làm giao diện nhanh và đẹp -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tích hợp LeafletJS để vẽ bản đồ -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Tích hợp plugin MarkerCluster để gom nhóm các điểm -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
+  <style>
+    /* Tùy chỉnh nhỏ để đảm bảo bản đồ hiển thị đầy đủ */
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      /* Tránh cuộn trang */
+    }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Tùy chỉnh giao diện cho Leaflet popup */
+    .leaflet-popup-content-wrapper {
+      border-radius: 8px;
+    }
+
+    .leaflet-popup-content {
+      margin: 14px 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .school-popup-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #1F2937;
+      margin-bottom: 8px;
+    }
+
+    .school-popup-info {
+      color: #4B5563;
+    }
+
+    .school-popup-info strong {
+      color: #374151;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+  <!-- Phần Header và Bộ lọc -->
+  <div class="absolute top-0 left-0 right-0 z-10 p-4 bg-white/80 backdrop-blur-sm shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-blue-600 text-white flex items-center justify-center rounded-lg font-bold text-xl">
+          G
+        </div>
+        <h1 class="text-xl font-bold text-gray-800 hidden sm:block">Báo cáo Phân bố Trường học</h1>
+      </div>
+      <div id="filters" class="flex items-center space-x-4 text-sm">
+        <span class="font-semibold text-gray-600">Cấp học:</span>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" value="Tiểu học"
+            class="filter-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" checked>
+          <span class="text-gray-700">Tiểu học</span>
+        </label>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" value="THCS"
+            class="filter-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" checked>
+          <span class="text-gray-700">THCS</span>
+        </label>
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" value="THPT"
+            class="filter-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" checked>
+          <span class="text-gray-700">THPT</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vùng chứa bản đồ -->
+  <div id="map" class="pt-20"></div>
+  <script>
+    // --- DỮ LIỆU MẪU ---
+    // Đây là nơi chứa dữ liệu giả lập về các trường học.
+    // Bạn có thể dễ dàng thay đổi hoặc thêm bớt dữ liệu này để phù hợp với buổi demo.
+    const schoolData = [
+      // Quận 1
+      { name: "THPT Chuyên Trần Đại Nghĩa", address: "53 Nguyễn Du, Bến Nghé, Quận 1", students: 1500, level: "THPT", lat: 10.779, lng: 106.698 },
+      { name: "Tiểu học Hòa Bình", address: "15 Cô Giang, Cầu Ông Lãnh, Quận 1", students: 800, level: "Tiểu học", lat: 10.765, lng: 106.696 },
+      { name: "THCS Minh Đức", address: "75 Nguyễn Thái Học, Cầu Ông Lãnh, Quận 1", students: 1200, level: "THCS", lat: 10.767, lng: 106.694 },
+
+      // Quận 3
+      { name: "THPT Marie Curie", address: "159 Nam Kỳ Khởi Nghĩa, Võ Thị Sáu, Quận 3", students: 2500, level: "THPT", lat: 10.784, lng: 106.692 },
+      { name: "Tiểu học Lương Định Của", address: "181 Nguyễn Thiện Thuật, Phường 1, Quận 3", students: 950, level: "Tiểu học", lat: 10.769, lng: 106.681 },
+      { name: "THCS Lê Quý Đôn", address: "9B Võ Văn Tần, Võ Thị Sáu, Quận 3", students: 1800, level: "THCS", lat: 10.781, lng: 106.693 },
+
+      // TP. Thủ Đức (Quận 2 cũ)
+      { name: "Trường Quốc tế Úc (AIS)", address: "264 Mai Chí Thọ, An Phú, TP. Thủ Đức", students: 1200, level: "THPT", lat: 10.793, lng: 106.742 },
+      { name: "Tiểu học An Khánh", address: "32D Lương Định Của, An Khánh, TP. Thủ Đức", students: 1100, level: "Tiểu học", lat: 10.788, lng: 106.730 },
+
+      // Quận 7
+      { name: "Trường Quốc tế Nam Sài Gòn (SSIS)", address: "78 Nguyễn Đức Cảnh, Tân Phong, Quận 7", students: 1300, level: "THPT", lat: 10.729, lng: 106.714 },
+      { name: "THCS Huỳnh Tấn Phát", address: "1780 Huỳnh Tấn Phát, TT. Nhà Bè, Quận 7", students: 1600, level: "THCS", lat: 10.695, lng: 106.730 },
+
+      // Thêm 10 trường mẫu khác để bản đồ trông dày đặc hơn
+      { name: "THPT Lương Thế Vinh", address: "131 Cô Bắc, Cô Giang, Quận 1", students: 1700, level: "THPT", lat: 10.766, lng: 106.692 },
+      { name: "Tiểu học Nguyễn Bỉnh Khiêm", address: "2 Bis Tôn Đức Thắng, Bến Nghé, Quận 1", students: 1000, level: "Tiểu học", lat: 10.776, lng: 106.704 },
+      { name: "THCS Colette", address: "10 Hồ Xuân Hương, Võ Thị Sáu, Quận 3", students: 1400, level: "THCS", lat: 10.780, lng: 106.689 },
+      { name: "THPT Nguyễn Thị Minh Khai", address: "275 Điện Biên Phủ, Võ Thị Sáu, Quận 3", students: 2200, level: "THPT", lat: 10.786, lng: 106.688 },
+      { name: "Tiểu học Trần Hưng Đạo", address: "123 Trần Hưng Đạo, P.10, Quận 5", students: 850, level: "Tiểu học", lat: 10.755, lng: 106.670 },
+      { name: "THCS Hồng Bàng", address: "132 Hồng Bàng, Phường 12, Quận 5", students: 1900, level: "THCS", lat: 10.758, lng: 106.662 },
+      { name: "THPT Chuyên Lê Hồng Phong", address: "235 Nguyễn Văn Cừ, Phường 4, Quận 5", students: 1800, level: "THPT", lat: 10.761, lng: 106.682 },
+      { name: "Tiểu học Đinh Tiên Hoàng", address: "1 Đinh Tiên Hoàng, Đa Kao, Quận 1", students: 1200, level: "Tiểu học", lat: 10.788, lng: 106.699 },
+      { name: "THCS Nguyễn Du", address: "139 Nguyễn Du, Bến Thành, Quận 1", students: 1350, level: "THCS", lat: 10.774, lng: 106.695 },
+      { name: "Trường Quốc tế Canada (CIS)", address: "7 Đường số 23, Tân Phú, Quận 7", students: 1100, level: "THPT", lat: 10.735, lng: 106.708 }
+    ];
+
+    // --- KHỞI TẠO BẢN ĐỒ ---
+    // Thiết lập tọa độ trung tâm và mức phóng to ban đầu
+    const map = L.map('map').setView([10.7769, 106.7009], 13); // Tọa độ trung tâm TP.HCM
+
+    // Thêm lớp nền bản đồ từ OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    // Tạo một layer group để chứa các marker, giúp dễ dàng xóa và vẽ lại khi lọc
+    const markers = L.markerClusterGroup();
+
+    // --- HÀM VẼ CÁC ĐIỂM TRƯỜNG LÊN BẢN ĐỒ ---
+    function drawMarkers(filteredData) {
+      // Xóa các marker cũ
+      markers.clearLayers();
+
+      // Lặp qua dữ liệu đã lọc và tạo marker cho mỗi trường
+      filteredData.forEach(school => {
+        const marker = L.marker([school.lat, school.lng]);
+
+        // Tạo nội dung cho popup khi nhấn vào marker
+        const popupContent = `
+                    <div class="school-popup-title">${school.name}</div>
+                    <div class="school-popup-info">
+                        <strong>Địa chỉ:</strong> ${school.address}<br>
+                        <strong>Sĩ số:</strong> ${school.students} học sinh<br>
+                        <strong>Cấp học:</strong> ${school.level}
+                    </div>
+                `;
+        marker.bindPopup(popupContent);
+
+        // Thêm marker vào layer group
+        markers.addLayer(marker);
+      });
+
+      // Thêm layer group vào bản đồ
+      map.addLayer(markers);
+    }
+
+    // --- HÀM LỌC VÀ VẼ LẠI BẢN ĐỒ ---
+    function updateMap() {
+      const selectedLevels = [];
+      // Lấy danh sách các cấp học được chọn từ checkbox
+      document.querySelectorAll('.filter-checkbox:checked').forEach(checkbox => {
+        selectedLevels.push(checkbox.value);
+      });
+
+      // Lọc dữ liệu trường học dựa trên các cấp học đã chọn
+      const filteredData = schoolData.filter(school => selectedLevels.includes(school.level));
+
+      // Vẽ lại các marker với dữ liệu đã được lọc
+      drawMarkers(filteredData);
+    }
+
+    // --- GÁN SỰ KIỆN CHO BỘ LỌC ---
+    // Lắng nghe sự kiện 'change' trên tất cả các checkbox
+    document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', updateMap);
+    });
+
+    // --- VẼ BẢN ĐỒ LẦN ĐẦU TIÊN ---
+    // Gọi hàm updateMap() lần đầu để hiển thị tất cả các trường
+    updateMap();
+
+  </script>
+</body>
+
+</html>

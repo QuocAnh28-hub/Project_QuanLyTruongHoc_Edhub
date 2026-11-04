@@ -1,0 +1,95 @@
+name: Deploy Microservices
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options:
+          - staging
+          - prod
+        default: staging
+
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  deploy:
+    name: Deploy Microservices
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    environment:
+      name: ${{ github.event_name == 'push' && github.ref_name == 'main' && 'production' || 'staging' }}
+
+    env:
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
+      HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+      HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+      HARBOR_REGISTRY: registry.eduhub.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set deployment environment
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "ENV=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+          else
+            echo "ENV=staging" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.14.0
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.30.0
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${KUBECONFIG}" | base64 -d > ~/.kube/config
+
+      - name: Login to Harbor
+        run: make harbor-login
+
+      - name: Fetch Helm dependencies
+        run: make deps
+
+      - name: Lint Helm chart
+        run: make lint
+
+      - name: Helm diff before deployment
+        run: make diff
+        continue-on-error: true
+
+      - name: Upload Helm diff (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-diff-output
+          path: .  # Replace with path to diff output file if you redirect it
+
+      - name: Manual approval (prod only)
+        if: env.ENV == 'prod'
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: user1,user2  # Replace with real GitHub usernames
+          minimum-approvals: 1
+          issue-title: "Approve Production Deployment"
+          issue-body: "Please approve the microservices production release."
+
+      - name: Deploy microservices
+        run: make upgrade ENV=${{ env.ENV }}

@@ -1,0 +1,38 @@
+model AttendanceSession {
+  id           Int      @id @default(autoincrement())
+  orgId        Int      @map("org_id")
+  classId      Int      @map("class_id")
+  schoolYearId Int      @map("school_year_id")
+  date         DateTime @db.Date
+  shift        Int      @default(1) // 1=Morning, 2=Afternoon
+  period       Int? // Lesson period (optional)
+  takenById    Int      @map("taken_by_id") // Teacher/staff ID
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  school     School             @relation(fields: [orgId], references: [id])
+  class      Class              @relation(fields: [classId], references: [id], onDelete: Cascade)
+  schoolYear SchoolYear         @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  records    AttendanceRecord[]
+
+  @@unique([orgId, classId, date, shift, period])
+  @@index([orgId, classId, date])
+  @@map("attendance_sessions")
+}
+
+model AttendanceRecord {
+  id        Int      @id @default(autoincrement())
+  sessionId Int      @map("session_id")
+  studentId Int      @map("student_id")
+  status    Int      @default(1) // 1=Present, 2=Excused Absence, 3=Unexcused Absence, 4=Late
+  note      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@index([studentId, status])
+  @@map("attendance_records")
+}

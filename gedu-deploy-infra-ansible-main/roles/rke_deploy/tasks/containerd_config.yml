@@ -1,0 +1,94 @@
+---
+- name: Create containerd certificates directory for Harbor
+  raw: mkdir -p /etc/rancher/rke2/agent/etc/containerd/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+
+- name: Copy Harbor CA certificate to containerd certificates directory
+  copy:
+    src: ca.crt
+    dest: "/etc/rancher/rke2/agent/etc/containerd/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}/ca.crt"
+    mode: "0644"
+  when: harbor_enable_cert | default(true)
+
+- name: Create containerd config directory
+  raw: mkdir -p /etc/rancher/rke2/agent/etc/containerd
+  changed_when: false
+
+- name: Configure containerd to trust Harbor registry
+  raw: |
+    cat > /etc/rancher/rke2/agent/etc/containerd/config.toml << EOF
+    version = 2
+    root = "/var/lib/rancher/rke2/agent/containerd"
+    state = "/run/k3s/containerd"
+
+    [grpc]
+      address = "unix:///run/k3s/containerd/containerd.sock"
+      uid = 0
+      gid = 0
+
+    [plugins]
+      [plugins."io.containerd.grpc.v1.cri"]
+        sandbox_image = "rancher/mirrored-pause:3.7"
+        stream_server_address = "127.0.0.1"
+        stream_server_port = "10010"
+        enable_selinux = false
+        enable_tls_streaming = false
+        max_container_log_line_size = 16384
+        disable_cgroup = false
+        disable_apparmor = false
+        restrict_oom_score_adj = false
+        max_concurrent_downloads = 3
+        disable_proc_mount = false
+        unset_seccomp_profile = ""
+        tolerate_missing_hugetlb_controller = true
+        ignore_image_defined_volumes = false
+        
+        [plugins."io.containerd.grpc.v1.cri".containerd]
+          snapshotter = "overlayfs"
+          default_runtime_name = "runc"
+          no_pivot = false
+          disable_snapshot_annotations = true
+          discard_unpacked_layers = false
+          
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+            [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+              runtime_type = "io.containerd.runc.v2"
+              
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+                SystemdCgroup = true
+        
+        [plugins."io.containerd.grpc.v1.cri".registry]
+          [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+            [plugins."io.containerd.grpc.v1.cri".registry.mirrors."{{ harbor_hostname | default('registry.eduhub.com') }}"]
+              endpoint = ["https://{{ harbor_hostname | default('registry.eduhub.com') }}"]
+          
+          [plugins."io.containerd.grpc.v1.cri".registry.configs]
+            [plugins."io.containerd.grpc.v1.cri".registry.configs."{{ harbor_hostname | default('registry.eduhub.com') }}".tls]
+              ca_file = "/etc/rancher/rke2/agent/etc/containerd/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}/ca.crt"
+              insecure_skip_verify = false
+    EOF
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+
+- name: Create system CA certificates directory for containerd
+  raw: mkdir -p /etc/rancher/rke2/agent/etc/ssl/certs
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+
+- name: Copy Harbor CA certificate to system CA trust store for containerd
+  copy:
+    src: ca.crt
+    dest: "/etc/rancher/rke2/agent/etc/ssl/certs/{{ harbor_hostname | default('registry.eduhub.com') }}.crt"
+    mode: "0644"
+  when: harbor_enable_cert | default(true)
+
+- name: Update system CA certificates
+  raw: update-ca-certificates
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+
+- name: Ensure containerd config is readable by RKE2
+  raw: chown -R root:root /etc/rancher/rke2/agent/etc/containerd
+  changed_when: false
+  when: harbor_enable_cert | default(true)

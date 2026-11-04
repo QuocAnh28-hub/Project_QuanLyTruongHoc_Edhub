@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "title": "Con thương binh",
+    "short_title": "CTB",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-01T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 2,
+    "title": "Con liệt sĩ",
+    "short_title": "CLS",
+    "is_active": true,
+    "created_at": "2024-01-02T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-02T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 3,
+    "title": "Hộ nghèo",
+    "short_title": "HN",
+    "is_active": true,
+    "created_at": "2024-01-03T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-03T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 4,
+    "title": "Hộ cận nghèo",
+    "short_title": "HCN",
+    "is_active": true,
+    "created_at": "2024-01-04T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-04T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 5,
+    "title": "Dân tộc thiểu số",
+    "short_title": "DTTT",
+    "is_active": true,
+    "created_at": "2024-01-05T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-05T00:00:00Z",
+    "updated_by": 1
+  }
+]

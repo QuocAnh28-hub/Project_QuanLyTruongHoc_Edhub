@@ -1,0 +1,54 @@
+---
+- name: Create Docker certificates directory
+  raw: mkdir -p /etc/docker/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}
+  changed_when: false
+  become: true
+- name: Copy Harbor CA certificate to Docker certificates directory
+  copy:
+    src: ca.crt
+    dest: "/etc/docker/certs.d/{{ harbor_hostname | default('registry.eduhub.com') }}/ca.crt"
+    mode: "0644"
+  become: true
+  when: harbor_enable_cert | default(true)
+
+- name: Create system CA certificates directory
+  raw: mkdir -p /usr/local/share/ca-certificates
+  changed_when: false
+  become: true
+- name: Copy Harbor CA certificate to system CA trust store
+  copy:
+    src: ca.crt
+    dest: "/usr/local/share/ca-certificates/{{ harbor_hostname | default('registry.eduhub.com') }}.crt"
+    mode: "0644"
+  become: true
+  when: harbor_enable_cert | default(true)
+
+- name: Update system CA certificates
+  raw: update-ca-trust
+  changed_when: false
+  when: harbor_enable_cert | default(true)
+  become: true
+  
+- name: Configure Docker daemon with Harbor registry
+  raw: |
+    cat > /etc/docker/daemon.json << EOF
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2",
+      "insecure-registries": ["{{ harbor_hostname | default('registry.eduhub.com') }}"]
+    }
+    EOF
+  changed_when: false
+
+- name: Restart Docker
+  raw: systemctl restart docker
+  changed_when: false
+
+- name: Restart containerd
+  raw: systemctl restart containerd
+  changed_when: false
+  ignore_errors: true

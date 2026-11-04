@@ -1,0 +1,91 @@
+ms-core:
+  replicaCount: 3
+  env:
+    - name: PORT
+      value: "3000"
+
+    - name: JWT_SECRET
+      value: "8da375b5910d125f6094c1b4786bd2da5e05fb13d3f549bd7c10e97e43c09eca92fa83a0c7de03f1"
+
+    - name: DATABASE_URL
+      value: "postgresql://agadmin:AG%40DDC-3301@10.47.198.69:5000/ag?schema=eduhub"
+      # value: "postgresql://staging:EduHub%40BBB-2025@10.47.198.69:5000/staging?schema=eduhub"
+
+    - name: KAFKA_BROKERS
+      value: "gedu-kafka-cluster-kafka-brokers.middleware-prod.svc.cluster.local:9092"
+
+    - name: REDIS_URL
+      value: "default:redispassword@gedu-deploy-redis-master.middleware-prod.svc.cluster.local:6379"
+
+    - name: PROVINCE_ID
+      value: "91"
+
+    - name: MINIO_DOMAIN
+      value: "https://static.gedu.vn"
+
+    - name: MINIO_ENDPOINT
+      value: "10.47.198.59"  
+
+    - name: MINIO_PORT
+      value: "9000"
+
+    - name: MINIO_ACCESS_KEY
+      value: "admin"
+
+    - name: MINIO_SECRET_KEY
+      value: "DDC&GEdu@#2025"
+
+    - name: GRPC_IMPORT_HOST
+      value: "0.0.0.0"
+
+    - name: GRPC_IMPORT_PORT
+      value: "50001"
+
+  image:
+    # repository: registry.eduhub.com/dev/ms-core
+    tag: 7b92c80f  
+
+  imagePullSecrets:
+    - name: regcred
+
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 1
+
+  readinessProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  resources:
+    limits:
+      cpu: 300m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+
+  service:
+    port: 3000
+    grpcPort: 50001
+
+  startupProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 180
+    successThreshold: 1
+    timeoutSeconds: 30

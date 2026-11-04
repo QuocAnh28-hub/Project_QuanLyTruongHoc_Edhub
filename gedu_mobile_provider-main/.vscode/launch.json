@@ -1,0 +1,134 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // Development Flavor - Debug Mode
+    {
+      "name": "🚀 Development (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": ["--dart-define-from-file=assets/config/dev_config.json"],
+      "flutterMode": "debug",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Development Flavor - Profile Mode
+    {
+      "name": "🚀 Development (Profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": ["--dart-define-from-file=assets/config/dev_config.json"],
+      "flutterMode": "profile",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Development Flavor - Release Mode
+    {
+      "name": "🚀 Development (Release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": ["--dart-define-from-file=assets/config/dev_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Staging Flavor - Debug Mode
+    {
+      "name": "🔧 Staging (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--dart-define-from-file=assets/config/staging_config.json"],
+      "flutterMode": "debug",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Staging Flavor - Profile Mode
+    {
+      "name": "🔧 Staging (Profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--dart-define-from-file=assets/config/staging_config.json"],
+      "flutterMode": "profile",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Staging Flavor - Release Mode
+    {
+      "name": "🔧 Staging (Release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--dart-define-from-file=assets/config/staging_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Production Flavor - Debug Mode
+    {
+      "name": "🚀 Production (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--dart-define-from-file=assets/config/prod_config.json"],
+      "flutterMode": "debug",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Production Flavor - Profile Mode
+    {
+      "name": "🚀 Production (Profile)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--dart-define-from-file=assets/config/prod_config.json"],
+      "flutterMode": "profile",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Production Flavor - Release Mode
+    {
+      "name": "🚀 Production (Release)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--dart-define-from-file=assets/config/prod_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    // Build APK Commands (Android only - these can use flavors)
+    {
+      "name": "📱 Build APK - Development",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_development.dart",
+      "args": ["--flavor", "development", "--dart-define-from-file=assets/config/dev_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    {
+      "name": "📱 Build APK - Staging",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "args": ["--flavor", "staging", "--dart-define-from-file=assets/config/staging_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    },
+
+    {
+      "name": "📱 Build APK - Production",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_production.dart",
+      "args": ["--flavor", "production", "--dart-define-from-file=assets/config/prod_config.json"],
+      "flutterMode": "release",
+      "cwd": "app/gedu_mobile_provider"
+    }
+  ]
+}

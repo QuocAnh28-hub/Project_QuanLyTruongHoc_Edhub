@@ -1,0 +1,8 @@
+---
+- name: Deploy RKE on All Nodes
+  hosts: k8s_cluster
+  become: true
+  gather_facts: false
+
+  roles:
+    - rke_deploy # This role includes: system_prep, docker_install, rke_install, system_config, verification

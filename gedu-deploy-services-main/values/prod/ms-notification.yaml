@@ -1,0 +1,85 @@
+ms-notification:
+  replicaCount: 3
+  env:
+    - name: PORT
+      value: "3000"
+    - name: SMTP_HOST
+      value: "smtp.mailersend.net"
+    - name: SMTP_PORT
+      value: "587"
+    - name: SMTP_SECURE
+      value: "false"
+    - name: SMTP_USER
+      value: "MS_jalYAL@geduhub.vn"
+    - name: SMTP_PASS
+      value: "mssp.vMXZQV3.neqvygmy3w5g0p7w.WmWMmnz"
+    - name: SMTP_CIPHERS
+      value: "SSLv3"
+    - name: MAILERSEND_API
+      value: "mlsn.5792a644753d2c70d0ba217e64152e1aefb07744f98b0381c83c6e60ffdec311"
+    - name: MS_GRAPH_TENANT_ID
+      value: "1b6350ff-bee9-41da-b456-220f75a5e3d7"
+    - name: MS_GRAPH_CLIENT_ID
+      value: "c18fcaa8-4b6d-46f0-8d04-0cd3b78b3d86"
+    - name: MS_GRAPH_CLIENT_SECRET
+      value: "2TW8Q~dAFcMgaoOFQb0GAJn2a6U~gR48mwUOwcp5"
+    - name: MAIL_FROM
+      value: "no-reply@gedu.vn"
+    - name: WEB_ACCESS_LINK
+      value: "https://angiang.gedu.vn"
+    - name: WEB_SUPPORT_EMAIL
+      value: "hotro@gedu.vn"
+    - name: WEB_SUPPORT_PHONE
+      value: "0931 441 213"
+    - name: KAFKA_BROKERS
+      value: "gedu-kafka-cluster-kafka-brokers.middleware-prod.svc.cluster.local:9092"
+    - name: REDIS_URL
+      value: "default:redispassword@gedu-deploy-redis-master.middleware-prod.svc.cluster.local:6379"
+
+  image:
+    repository: registry.eduhub.com/prod/ms-notification
+    tag: "016e243"
+
+  imagePullSecrets:
+    - name: regcred
+
+  livenessProbe:
+    failureThreshold: 3
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 1
+
+  readinessProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  resources:
+    limits:
+      cpu: 300m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+
+  service:
+    port: 3000
+
+  startupProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /health
+      port: http
+      scheme: HTTP
+    periodSeconds: 180
+    successThreshold: 1
+    timeoutSeconds: 30

@@ -1,0 +1,144 @@
+model Student {
+  id                    Int       @id @default(autoincrement())
+  orgId                 Int       @map("org_id")
+  userId                Int       @unique @map("user_id")
+  mainContactId         Int?      @map("main_contact_id")
+  code                  String?
+  gradeLevel            Int?      @map("grade_level") // GRADE_LEVEL enum: 1-12 for grades, 13=PRE_NURSERY, 14=NURSERY, 15=PRE_SCHOOL, 16=KINDERGARTEN
+  admissionDate         DateTime? @map("admission_date")
+  admissionSchoolYearId Int?      @map("admission_school_year_id")
+  admissionType         Int?      @map("admission_type") // ADMISSION_TYPE enum: 1=ZONED, 2=NON_ZONED, 3=TRANSFER
+  priorityPolicyId      Int?      @map("priority_policy_id")
+  specialNeedsPolicyId  Int?      @map("special_needs_policy_id")
+  isConfirmedBy         Int?      @map("is_confirmed_by")
+  status                Int       @default(1) // STUDENT_STATUS enum: 1=PENDING, 2=STUDYING, 3=DEFERRED, 4=GRADUATED, 5=DROPPED_OUT
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school             School?          @relation(fields: [orgId], references: [id])
+  user               User?            @relation("StudentUser", fields: [userId], references: [id], onDelete: Cascade)
+  mainStudentContact StudentsContact? @relation("MainStudentContact", fields: [mainContactId], references: [id])
+  schoolYear         SchoolYear?      @relation(fields: [admissionSchoolYearId], references: [id])
+  confirmedBy        User?            @relation("StudentConfirmedBy", fields: [isConfirmedBy], references: [id], onDelete: SetNull)
+
+  studentMedicalInfos StudentMedicalInfo[]
+  studentContacts     StudentContactRelation[]     @relation("StudentToContact")
+  priorityPolicy      StudentPriorityPolicies?     @relation(fields: [priorityPolicyId], references: [id])
+  specialNeedsPolicy  StudentSpecialNeedsPolicies? @relation(fields: [specialNeedsPolicyId], references: [id])
+  studentClasses      StudentClass[]
+  // Temp stored
+  additionalInfo      StudentAdditionalInfo?
+
+  attendanceRecords AttendanceRecord[]
+  scoreEntries      ScoreEntry[]
+  subjectSummaries  SubjectSemesterSummary[]
+  editRequests      StudentEditRequest[]
+
+  // @@unique([orgId, userId])
+  @@unique([orgId, code])
+  // Removed @@index([userId])
+  @@map("students")
+}
+
+model StudentsContact {
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique @map("user_id")
+  grantAccess Boolean @default(false) @map("grant_access")
+  status      Int     @default(1) // CONTACT_STATUS enum: 1=CREATED, 2=ACTIVE, 3=LOCKED, 4=DEACTIVATED
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  students        Student[]                @relation("MainStudentContact")
+  studentContacts StudentContactRelation[] @relation("ContactToStudent")
+
+  @@index([userId])
+  @@map("students_contacts")
+}
+
+model StudentContactRelation {
+  id                Int     @id @default(autoincrement())
+  studentId         Int     @map("student_id")
+  studentContactId  Int     @map("contact_id")
+  relationship      Int     @default(0) @map("relationship") // CONTACT_RELATION enum: 0=NO_INFORMATION, 3=FATHER, 4=MOTHER, 99=OTHER, etc.
+  relationshipTitle String? @map("relationship_title")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  student        Student         @relation("StudentToContact", fields: [studentId], references: [id])
+  studentContact StudentsContact @relation("ContactToStudent", fields: [studentContactId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, studentContactId])
+  @@map("students_students_contacts")
+}
+
+model StudentMedicalInfo {
+  id        Int     @id @default(autoincrement())
+  studentId Int     @map("student_id")
+  group     Int?    @default(1) @map("group")
+  type      Int?    @default(1) @map("type")
+  info      String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@index([studentId])
+  @@map("student_medical_info")
+}
+
+model StudentPriorityPolicies {
+  id         Int     @id @default(autoincrement())
+  title      String
+  shortTitle String? @map("short_title")
+  isActive   Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy Int?      @map("created_by")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?      @map("updated_by")
+  students  Student[]
+
+  @@map("student_priority_policies")
+}
+
+model StudentSpecialNeedsPolicies {
+  id       Int     @id @default(autoincrement())
+  title    String
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy Int?      @map("created_by")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?      @map("updated_by")
+  students  Student[]
+
+  @@map("student_special_needs_policies")
+}
+
+model StudentAdditionalInfo {
+  id        Int @id @default(autoincrement())
+  studentId Int @unique @map("student_id")
+
+  additionalInfo Json? @map("additional_info")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@map("student_additional_info")
+}

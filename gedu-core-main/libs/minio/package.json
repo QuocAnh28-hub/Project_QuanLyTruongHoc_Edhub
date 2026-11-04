@@ -1,0 +1,10 @@
+{
+  "name": "@gedu/minio",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "minio": "^8.0.5"
+  }
+}

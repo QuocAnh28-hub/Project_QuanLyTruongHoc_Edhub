@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "title": "Khuyết tật vận động",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-01T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 2,
+    "title": "Khuyết tật thị giác",
+    "is_active": true,
+    "created_at": "2024-01-02T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-02T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 3,
+    "title": "Khuyết tật thính giác",
+    "is_active": true,
+    "created_at": "2024-01-03T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-03T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 4,
+    "title": "Tự kỷ",
+    "is_active": true,
+    "created_at": "2024-01-04T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-04T00:00:00Z",
+    "updated_by": 1
+  },
+  {
+    "id": 5,
+    "title": "Chậm phát triển trí tuệ",
+    "is_active": true,
+    "created_at": "2024-01-05T00:00:00Z",
+    "created_by": 1,
+    "updated_at": "2024-01-05T00:00:00Z",
+    "updated_by": 1
+  }
+]

@@ -1,0 +1,84 @@
+---
+- name: Deploy GitHub Runner with Docker
+  hosts: github_runner
+  become: true
+  gather_facts: true
+
+  roles:
+    - github_runner
+
+  post_tasks:
+    - name: Get all GitHub runner containers
+      raw: |
+        docker ps --filter "name=actions-runner-github-runner" --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+      register: all_runners_status
+      
+    - name: Display all GitHub runners status
+      debug:
+        msg: "{{ all_runners_status.stdout_lines }}"
+      when: all_runners_status.stdout_lines is defined
+      
+    - name: Count running GitHub runners
+      raw: |
+        docker ps --filter "name=actions-runner-github-runner" --filter "status=running" --format "{{.Names}}" | wc -l
+      register: runner_count
+      
+    - name: Display runner count
+      debug:
+        msg: "Running GitHub runners: {{ runner_count.stdout.strip() }}/{{ github_runner_min_runners }} (min requirement)"
+      when: runner_count.stdout is defined
+      
+    - name: Test Docker access from first GitHub runner container
+      raw: |
+        docker exec actions-runner-github-runner-1 docker ps
+      register: docker_test_from_container
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0
+      
+    - name: Display Docker test results from container
+      debug:
+        msg: "{{ docker_test_from_container.stdout_lines }}"
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0 and docker_test_from_container.stdout_lines is defined
+      
+    - name: Test Harbor registry access from first GitHub runner container
+      raw: |
+        docker exec actions-runner-github-runner-1 sh -c 'echo "10.47.198.51 registry.eduhub.com" >> /etc/hosts && curl -s --connect-timeout 10 https://registry.eduhub.com/v2/ && echo "✓ Harbor registry is accessible!"' || echo "Harbor registry test failed"
+      register: harbor_test_from_container
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0
+      
+    - name: Display Harbor test results from container
+      debug:
+        msg: "{{ harbor_test_from_container.stdout_lines }}"
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0 and harbor_test_from_container.stdout_lines is defined
+      
+    - name: Verify Harbor CA certificate installation in first runner
+      raw: |
+        docker exec actions-runner-github-runner-1 ls -la /usr/local/share/ca-certificates/harbor-ca.crt /etc/docker/certs.d/registry.eduhub.com/ca.crt
+      register: harbor_ca_verification
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0
+      
+    - name: Display Harbor CA certificate verification
+      debug:
+        msg: "{{ harbor_ca_verification.stdout_lines }}"
+      when: runner_count.stdout is defined and runner_count.stdout.strip() | int > 0 and harbor_ca_verification.stdout_lines is defined
+      
+    - name: Check autoscaler status
+      raw: |
+        systemctl is-active github-runner-autoscaler
+      register: autoscaler_status
+      when: github_runner_auto_scaling | bool
+      
+    - name: Display autoscaler status
+      debug:
+        msg: "Autoscaler service is {{ autoscaler_status.stdout.strip() }}"
+      when: github_runner_auto_scaling | bool and autoscaler_status.stdout is defined
+      
+    - name: Show recent autoscaler logs
+      raw: |
+        tail -10 /home/{{ github_runner_container_user }}/actions-runner/github-runner-autoscaler.log
+      register: autoscaler_logs
+      when: github_runner_auto_scaling | bool
+      
+    - name: Display autoscaler logs
+      debug:
+        msg: "{{ autoscaler_logs.stdout_lines }}"
+      when: github_runner_auto_scaling | bool and autoscaler_logs.stdout_lines is defined 

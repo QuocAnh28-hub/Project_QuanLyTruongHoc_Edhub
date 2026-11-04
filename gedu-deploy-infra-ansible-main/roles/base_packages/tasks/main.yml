@@ -1,0 +1,17 @@
+---
+- name: Update apt cache (Debian/Ubuntu)
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Install common utilities (Debian/Ubuntu)
+  apt:
+    name: "{{ common_packages }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install common utilities (RedHat/CentOS/Rocky)
+  yum:
+    name: "{{ common_packages }}"
+    state: present
+  when: ansible_os_family == "RedHat"

@@ -1,0 +1,1 @@
+export const IMPORT_TOPIC = 'gedu-import-service.eduhub.import_jobs';

@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Gedu Team
+  description: Deploy GitHub self-hosted runners as Docker containers
+  company: Gedu
+  license: MIT
+  min_ansible_version: "2.9"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - github
+    - runner
+    - docker
+    - ci-cd
+    - automation
+
+dependencies: []

@@ -1,0 +1,276 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules for School Management System with NestJS
+
+## Project Context
+This is a provincial-level school management system handling millions of data rows. The backend uses **NestJS** with **Fastify** as the web framework, **Prisma ORM** for database operations, and **PostgreSQL** as the primary database. The frontend is built with **ReactJS**, using **Zustand** for state management and **React Query** for API data fetching. The system includes modules for students, teachers, classes, reports, and payments (e.g., VNPay, Stripe), with a focus on performance, scalability, security, and potential microservices architecture.
+
+## General Guidelines
+- Use **TypeScript** for all code to ensure type safety.
+- Follow **NestJS best practices** as per official documentation (`@link https://docs.nestjs.com/`).
+- Use **async/await** for asynchronous operations, avoiding callbacks or Promise chains.
+- Write **JSDoc comments** for all functions, classes, and major components.
+- Maintain a **README.md** in each module directory to document functionality.
+- Use **camelCase** for variables/functions and **PascalCase** for classes/modules.
+
+## Backend Guidelines (NestJS + Fastify + Prisma)
+- **NestJS Structure**:
+  - Organize code in a **modular** structure: `/src/{module}/{module}.module.ts`, `/src/{module}/{module}.controller.ts`, `/src/{module}/{module}.service.ts`, `/src/{module}/{module}.dto.ts`.
+  - Use **NestJS CLI** for generating modules, controllers, and services (e.g., `nest generate module student`).
+  - Example module structure:
+    ```
+    /src/student
+    ├── student.module.ts
+    ├── student.controller.ts
+    ├── student.service.ts
+    ├── student.dto.ts
+    └── student.types.ts
+    ```
+  - Organize code in microservices structure: `/apps/main-app/src`, `/apps/report-service/src`
+- **Fastify Adapter**:
+  - Use `@nestjs/platform-fastify` for high-performance HTTP handling.
+  - Configure Fastify in `main.ts`:
+    ```typescript
+    import { NestFactory } from '@nestjs/core';
+    import { FastifyAdapter } from '@nestjs/platform-fastify';
+    import { AppModule } from './app.module';
+
+    async function bootstrap() {
+      const app = await NestFactory.create(AppModule, new FastifyAdapter());
+      await app.listen(3000);
+    }
+    bootstrap();
+    ```
+- **Prisma Usage**:
+  - Use `@nestjs/prisma` for dependency injection of `PrismaService`.
+  - Implement **explicit `select`** in Prisma queries to reduce data fetching (e.g., `select: { id: true, name: true }`).
+  - Use **pagination** for large datasets (e.g., `skip` and `take`).
+  - Use **transactions** for operations involving multiple tables (e.g., creating a payment and updating student balance).
+  - Add **indexes** in `schema.prisma` for frequently queried fields (e.g., `@index([email])`).
+  - Example:
+    ```typescript
+    async getStudents(page: number, limit: number) {
+      return this.prisma.student.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        select: { id: true, name: true, email: true },
+      });
+    }
+    ```
+- **Controllers**:
+  - Use **RESTful routes** with appropriate HTTP methods (GET, POST, PATCH, DELETE).
+  - Apply **validation** using `class-validator` and DTOs.
+  - Example DTO:
+    ```typescript
+    import { IsString, IsEmail, IsInt } from 'class-validator';
+
+    export class CreateStudentDto {
+      @IsString()
+      name: string;
+
+      @IsEmail()
+      email: string;
+
+      @IsInt()
+      classId: number;
+    }
+    ```
+- **Services**:
+  - Place business logic in services, keeping controllers thin.
+  - Inject dependencies (e.g., `PrismaService`) using `@Injectable()`.
+- **Microservices**:
+  - Use `@nestjs/microservices` for microservices architecture when needed (e.g., `PaymentModule` as a microservice).
+  - Prefer **RabbitMQ** for asynchronous tasks (e.g., payment processing) or **gRPC** for high-performance communication.
+  - Example microservice setup:
+    ```typescript
+    import { NestFactory } from '@nestjs/core';
+    import { Transport } from '@nestjs/microservices';
+    import { PaymentModule } from './payment.module';
+
+    async function bootstrap() {
+      const app = await NestFactory.createMicroservice(PaymentModule, {
+        transport: Transport.RMQ,
+        options: { urls: ['amqp://localhost:5672'], queue: 'payment_queue' },
+      });
+      await app.listen();
+    }
+    bootstrap();
+    ```
+- **Security**:
+  - Use `@nestjs/jwt` and `@nestjs/passport` for authentication (JWT-based).
+  - Apply **guards** to protect routes (e.g., `@UseGuards(JwtAuthGuard)`).
+  - Sanitize inputs to prevent injection attacks using `class-validator`.
+  - Use environment variables for sensitive data (e.g., `DATABASE_URL`, `STRIPE_SECRET_KEY`).
+  - Example guard:
+    ```typescript
+    import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+    import { AuthGuard } from '@nestjs/passport';
+
+    @Injectable()
+    export class JwtAuthGuard extends AuthGuard('jwt') implements CanActivate {}
+    ```
+- **Performance**:
+  - Use **Redis** with `@nestjs/cache-manager` for caching frequently accessed data (e.g., payment statuses).
+  - Optimize database queries with **BRIN** or **GIN indexes** in PostgreSQL.
+  - Implement **rate limiting** using `@nestjs/throttler`.
+- **Payment Integration**:
+  - Create a dedicated `PaymentModule` for payment gateways (e.g., VNPay, Stripe).
+  - Handle **webhooks** for payment events (e.g., Stripe `payment_intent.succeeded`).
+  - Use **Bull** (Redis-based queue) for asynchronous tasks like sending payment confirmation emails.
+  - Example payment service:
+    ```typescript
+    import { Injectable } from '@nestjs/common';
+    import Stripe from 'stripe';
+    import { PrismaService } from '../config/prisma.service';
+
+    @Injectable()
+    export class PaymentService {
+      private stripe: Stripe;
+      constructor(private prisma: PrismaService) {
+        this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
+      }
+
+      async createPayment(studentId: number, amount: number) {
+        return this.prisma.$transaction(async (prisma) => {
+          const paymentIntent = await this.stripe.paymentIntents.create({
+            amount,
+            currency: 'usd',
+            payment_method_types: ['card'],
+          });
+          return prisma.payment.create({
+            data: { studentId, amount, status: 'PENDING', stripeId: paymentIntent.id },
+          });
+        });
+      }
+    }
+    ```
+
+## Frontend Integration
+- Expose **RESTful APIs** or **GraphQL** for frontend consumption with **React Query**.
+- Use **Swagger** (`@nestjs/swagger`) to generate API documentation for frontend developers.
+- Ensure APIs support **pagination** and **filtering** for large datasets (e.g., student lists).
+- Example Swagger setup:
+  ```typescript
+  import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule, new FastifyAdapter());
+    const config = new DocumentBuilder()
+      .setTitle('School Management API')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+    await app.listen(3000);
+  }
+  ```
+
+## Testing
+- Write **unit tests** for services using **Jest** (e.g., `payment.service.spec.ts`).
+- Write **integration tests** for controllers, testing API endpoints with a PostgreSQL test database.
+- Ensure **test coverage** of at least 80% for critical modules (students, payments).
+- Example test:
+  ```typescript
+  import { Test, TestingModule } from '@nestjs/testing';
+  import { PaymentService } from './payment.service';
+  import { PrismaService } from '../config/prisma.service';
+
+  describe('PaymentService', () => {
+    let service: PaymentService;
+    let prisma: PrismaService;
+
+    beforeEach(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [PaymentService, PrismaService],
+      }).compile();
+      service = module.get<PaymentService>(PaymentService);
+      prisma = module.get<PrismaService>(PrismaService);
+    });
+
+    it('should create a payment', async () => {
+      jest.spyOn(prisma.payment, 'create').mockResolvedValue({ id: 1, studentId: 1, amount: 100 });
+      const result = await service.createPayment(1, 100);
+      expect(result).toEqual({ id: 1, studentId: 1, amount: 100 });
+    });
+  });
+  ```
+
+## Error Handling
+- Use **NestJS exception filters** for centralized error handling.
+- Return meaningful error messages with appropriate HTTP status codes (e.g., 400 for bad requests, 500 for server errors).
+- Log errors to a monitoring service (e.g., Sentry) using `@nestjs/terminus`.
+- Example filter:
+  ```typescript
+  import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
+  import { Request, Response } from 'express';
+
+  @Catch(HttpException)
+  export class HttpExceptionFilter implements ExceptionFilter {
+    catch(exception: HttpException, host: ArgumentsHost) {
+      const ctx = host.switchToHttp();
+      const response = ctx.getResponse<Response>();
+      const request = ctx.getRequest<Request>();
+      const status = exception.getStatus();
+
+      response.status(status).json({
+        statusCode: status,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        message: exception.message,
+      });
+    }
+  }
+  ```
+
+## Deployment
+- Use **Docker** and **Kubernetes** for containerized deployment.
+- Deploy on a cloud provider (e.g., AWS EC2, RDS for PostgreSQL, ElastiCache for Redis).
+- Monitor performance with **Prometheus** and **Grafana**.
+- Log errors and metrics to **CloudWatch** or **ELK Stack**.
+- Example Dockerfile:
+  ```dockerfile
+  FROM node:18
+  WORKDIR /app
+  COPY package*.json ./
+  RUN npm install
+  COPY . .
+  RUN npm run build
+  CMD ["node", "dist/main"]
+  ```
+
+## Microservices Guidelines
+- Use **@nestjs/microservices** to create microservices for independent modules (e.g., `PaymentModule`).
+- Prefer **RabbitMQ** for asynchronous tasks or **gRPC** for high-performance communication.
+- Each microservice should have its own **Prisma Client** instance or schema.
+- Example microservice client in monolithic app:
+  ```typescript
+  import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+
+  @Injectable()
+  export class PaymentClient {
+    private client = ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: { urls: ['amqp://localhost:5672'], queue: 'payment_queue' },
+    });
+
+    async createPayment(studentId: number, amount: number) {
+      return this.client.send('create_payment', { studentId, amount }).toPromise();
+    }
+  }
+  ```
+
+## Example References
+- Reference `@file ../src/prisma/schema.prisma` for database schema.
+- Reference `@file ../tsconfig.json` for TypeScript configuration.
+- Reference `@file ../main.ts` for Fastify and Swagger setup.
+
+## AI Behavior
+- **Step-by-step reasoning**: Explain each step before generating code.
+- **Check dependencies**: Verify related files (e.g., `schema.prisma`, `main.ts`) before proposing changes.
+- **No side effects**: Ensure changes do not break existing functionality.
+- **Ask for clarification**: If a prompt is unclear (e.g., specific module or feature), ask for more details before proceeding.
+- **NestJS conventions**: Follow NestJS naming conventions (e.g., `StudentController`, `CreateStudentDto`) and structure.

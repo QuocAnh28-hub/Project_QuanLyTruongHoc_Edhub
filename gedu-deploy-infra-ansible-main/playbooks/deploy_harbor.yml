@@ -1,0 +1,8 @@
+# deploy_harbor.yml
+---
+- name: Deploy Docker Harbor
+  hosts: docker_registry  # Target hosts group
+  gather_facts: true     # Collect system facts
+  become: true           # Run tasks with elevated privileges
+  roles:
+    - { role: harbor_deploy, tags: [harbor] } 

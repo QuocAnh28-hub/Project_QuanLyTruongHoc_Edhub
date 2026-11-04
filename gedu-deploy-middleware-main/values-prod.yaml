@@ -1,0 +1,88 @@
+# Global configuration
+global:
+  environment: "prod"  # Set the deployment environment (e.g., staging, prod)
+redis:
+  # Redis master configuration
+  master:
+    persistence:
+      enabled: false  # Disable persistence for Redis master
+
+  # Redis replica configuration
+  replica:
+    persistence:
+      enabled: false  # Disable persistence for Redis replica
+
+  # General Redis persistence config (used if not overridden by master/replica)
+  persistence:
+    enabled: false  # Disable all Redis persistence
+
+  # Redis authentication settings
+  auth:
+    enabled: true  # Enable Redis authentication
+    password: redispassword  # Password for Redis clients
+
+# Kafka configuration
+kafka:
+  replicaCount: 3  # Number of Kafka broker replicas
+
+  clusterId: "123e4567-e89b-12d3-a456-426614174000"  # Fixed Cluster ID to maintain state during upgrades
+
+  # Authentication configuration
+  auth:
+    enabled: true  # Enable Kafka authentication
+    clientProtocol: sasl  # Client communication protocol
+    interBrokerProtocol: sasl  # Broker-to-broker communication protocol
+    sasl:
+      mechanisms: plain  # SASL mechanism
+      jaas:
+        clientUsers:
+          - geduhub-client  # Kafka client user
+        clientPasswords:
+          - geduhub-password  # Password for the client user
+        interBrokerUser: geduhub-broker  # Internal broker user
+        interBrokerPassword: geduhub-broker-password  # Password for the broker user
+
+  # Listener configuration
+  listeners:
+    external:
+      protocol: SASL_PLAINTEXT  # External listener protocol
+    interBroker:
+      protocol: SASL_PLAINTEXT  # Inter-broker listener protocol
+
+  # Kafka controller persistence settings
+  controller:
+    persistence:
+      enabled: false  # Disable persistence for Kafka controller
+
+  # Kafka broker persistence settings
+  broker:
+    persistence:
+      enabled: false  # Disable persistence for Kafka brokers
+
+  # Kafka log persistence (e.g., log dirs)
+  logPersistence:
+    enabled: false  # Disable log volume persistence
+
+  # Custom Kafka configuration overrides
+  configurationOverrides:
+    log.retention.hours: 6  # Retain logs for 6 hours
+    log.segment.bytes: 1073741824  # Segment size = 1 GiB
+    log.retention.check.interval.ms: 300000  # Check for log retention every 5 minutes
+
+  # Resource requests and limits for Kafka
+  resources:
+    limits:
+      cpu: 1        # Maximum 1 CPU
+      memory: 2Gi   # Maximum 2Gi memory
+    requests:
+      cpu: 500m     # Request 0.5 CPU
+      memory: 1Gi   # Request 1Gi memory
+
+# Debezium configuration
+debezium:
+  enabled: true  # Enable Debezium connector
+  kafka:
+    bootstrapServers: "kafka:9092"  # Kafka bootstrap server for Debezium
+  config:
+    database.history.kafka.bootstrap.servers: "kafka:9092"  # Kafka servers to store DB history
+    database.history.kafka.topic: "schema-changes.inventory"  # Topic to store schema change events

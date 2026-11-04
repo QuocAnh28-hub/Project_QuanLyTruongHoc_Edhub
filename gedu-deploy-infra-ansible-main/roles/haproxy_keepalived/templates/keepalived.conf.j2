@@ -1,0 +1,26 @@
+vrrp_script check_haproxy {
+    script "killall -0 haproxy"
+    interval 2
+    weight 2
+}
+
+vrrp_instance {{ keepalived_vrrp_instance }} {
+    state MASTER
+    interface {{ keepalived_interface }}
+    virtual_router_id {{ keepalived_virtual_router_id }}
+    priority {{ keepalived_priority }}
+    advert_int 1
+    nopreempt
+    garp_master_delay 1
+    garp_master_repeat 1
+    authentication {
+        auth_type PASS
+        auth_pass 1111
+    }
+    virtual_ipaddress {
+        {{ keepalived_virtual_ip }}
+    }
+    track_script {
+        check_haproxy
+    }
+} 

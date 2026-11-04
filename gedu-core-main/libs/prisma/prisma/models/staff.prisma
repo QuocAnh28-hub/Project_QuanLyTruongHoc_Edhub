@@ -1,0 +1,189 @@
+///////////////////////////////////////
+// SCHOOL STAFFS BEGIN
+/////////////////////////////////////// 
+
+model SchoolStaff {
+  id            Int     @id @default(autoincrement())
+  userId        Int     @unique @map("user_id")
+  orgId         Int     @map("org_id")
+  positionId    Int?    @map("position_id")
+  departmentId  Int?    @map("department_id")
+  code          String?
+  isAdmin       Boolean @default(false) @map("is_admin")
+  contactPhone  String? @map("contact_phone")
+  contactPhone2 String? @map("contact_phone_2")
+  status        Int     @default(1) // STAFF_STATUS enum: 1=CREATED, 2=ACTIVE, 3=PAUSED, 4=TERMINATED, 5=RESIGNED, 6=MATERNITY_LEAVE, 7=LONG_TERM_LEAVE
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user                     User                       @relation(fields: [userId], references: [id])
+  school                   School                     @relation(fields: [orgId], references: [id])
+  department               SchoolDepartmentTemplates? @relation(fields: [departmentId], references: [id])
+  position                 SchoolPositionTemplates?   @relation(fields: [positionId], references: [id])
+  schoolStaffPositions     SchoolStaffPositions[]
+  schoolStaffWorkContracts SchoolStaffWorkContract[]
+  classes                  Class[]
+  timetableSchedules       TimetableSchedule[]
+  teachingAssignments      TeachingAssignment[]
+
+  // Temp stored
+  additionalInfo        SchoolStaffAdditionalInfo?
+  schoolStaffSalaries   SchoolStaffSalary[]
+  schoolStaffsAllowance SchoolStaffsAllowance[]
+  schoolStaffUnionInfo  SchoolStaffUnionInfo?
+
+  @@unique([orgId, code])
+  @@map("school_staffs")
+}
+
+model SchoolStaffPositions {
+  id          Int     @id @default(autoincrement())
+  orgId       Int     @map("org_id")
+  staffId     Int     @map("staff_id")
+  positionId  Int?    @map("position_id")
+  isDedicated Boolean @default(false) @map("is_dedicated")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  staff    SchoolStaff              @relation(fields: [staffId], references: [id])
+  position SchoolPositionTemplates? @relation(fields: [positionId], references: [id])
+
+  @@index([orgId, staffId])
+  @@index([positionId])
+  @@map("school_staff_positions")
+}
+
+model SchoolStaffAdditionalInfo {
+  id      Int @id @default(autoincrement())
+  staffId Int @unique @map("staff_id")
+
+  additionalInfo Json? @map("additional_info")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  staff SchoolStaff @relation(fields: [staffId], references: [id])
+
+  @@map("school_staff_additional_info")
+}
+
+model SchoolStaffSalary {
+  id             Int @id @default(autoincrement())
+  orgId          Int @map("org_id")
+  staffId        Int @map("staff_id")
+  workContractId Int @map("work_contract_id")
+
+  gradeCode   String?  @map("grade_code")
+  gradeStep   Int?     @map("grade_step")
+  coefficient Decimal? @map("coefficient")
+
+  bankName              String? @map("bank_name")
+  bankAccountNumber     String? @map("bank_account_number")
+  bankAccountHolderName String? @map("bank_account_holder_name")
+  bankBranch            String? @map("bank_branch")
+
+  /// 1:new, 2:active, 3:ended
+  status Int @default(1)
+
+  // --- Relations ---
+  school       School                  @relation(fields: [orgId], references: [id])
+  staff        SchoolStaff             @relation(fields: [staffId], references: [id])
+  workContract SchoolStaffWorkContract @relation(fields: [workContractId], references: [id])
+
+  @@index([orgId, staffId])
+  @@map("school_staffs_salaries")
+}
+
+model SchoolStaffUnionInfo {
+  id      Int @id @default(autoincrement())
+  orgId   Int @map("org_id")
+  staffId Int @unique @map("staff_id")
+
+  dateOfJoiningUnion DateTime? @map("date_of_joining_union")
+  dateOfJoiningParty DateTime? @map("date_of_joining_party")
+  dateOfEnlistment   DateTime? @map("date_of_enlistment")
+  dateOfDischarge    DateTime? @map("date_of_discharge")
+
+  // --- Relations ---
+  school School      @relation(fields: [orgId], references: [id])
+  staff  SchoolStaff @relation(fields: [staffId], references: [id])
+
+  @@index([orgId])
+  @@map("school_staffs_union_infos")
+}
+
+model WorkHistories {
+  id                      Int       @id @default(autoincrement())
+  userId                  Int       @map("user_id")
+  orgId                   Int       @map("org_id")
+  schoolId                Int       @map("school_id")
+  positionId              Int       @map("position_id")
+  positionTitle           String    @map("position_title")
+  departmentId            Int       @map("department_id")
+  departmentName          String    @map("department_name")
+  concurrentPositionTitle Int?      @map("concurrent_position_title")
+  startDate               DateTime  @map("start_date")
+  endDate                 DateTime? @map("end_date")
+  isCurrent               Boolean   @default(false) @map("is_current")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("work_histories")
+}
+
+model SchoolStaffWorkContract {
+  id              Int       @id @default(autoincrement())
+  orgId           Int       @map("org_id")
+  staffId         Int       @map("staff_id")
+  type            Int?      @map("type")
+  title           String?
+  dateOfSignature DateTime? @map("date_of_signature")
+  dateOfAdmission DateTime? @map("date_of_admission")
+  dateOfExpired   DateTime? @map("date_of_expired")
+  status          Int       @default(1)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school                School                  @relation(fields: [orgId], references: [id])
+  staff                 SchoolStaff             @relation(fields: [staffId], references: [id])
+  schoolStaffSalaries   SchoolStaffSalary[]
+  schoolStaffsAllowance SchoolStaffsAllowance[]
+
+  @@index([orgId, staffId])
+  @@map("school_staffs_work_contracts")
+}
+
+model SchoolStaffsAllowance {
+  id             Int     @id @default(autoincrement())
+  orgId          Int     @map("org_id")
+  staffId        Int     @map("staff_id")
+  workContractId Int     @map("work_contract_id")
+  allowanceType  Int     @map("allowance_type")
+  isActive       Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school       School                  @relation(fields: [orgId], references: [id])
+  staff        SchoolStaff             @relation(fields: [staffId], references: [id])
+  workContract SchoolStaffWorkContract @relation(fields: [workContractId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([orgId, staffId])
+  @@map("school_staffs_allowance")
+}

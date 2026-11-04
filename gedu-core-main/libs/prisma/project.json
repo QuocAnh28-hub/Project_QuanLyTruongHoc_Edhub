@@ -1,0 +1,99 @@
+{
+  "name": "prisma",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/prisma/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/libs/prisma",
+        "tsConfig": "libs/prisma/tsconfig.lib.json",
+        "packageJson": "libs/prisma/package.json",
+        "main": "libs/prisma/src/index.ts",
+        "clean": false,
+        "assets": [
+          {
+            "input": "libs/prisma/prisma",
+            "glob": "schema.prisma",
+            "output": "prisma"
+          },
+          {
+            "input": "libs/prisma/src/data",
+            "glob": "**/*.json",
+            "output": "src/data"
+          },
+          {
+            "input": "libs/prisma/prisma/migrations",
+            "glob": "**/*",
+            "output": "prisma/migrations"
+          }
+        ]
+      },
+      "dependsOn": [
+        {
+          "target": "copy-generated",
+          "projects": ["prisma"]
+        }
+      ]
+    },
+    "prisma:generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma generate",
+        "cwd": "libs/prisma"
+      }
+    },
+    "copy-generated": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -e \"const fs = require('fs'); fs.rmSync('../../dist/libs/prisma/prisma', { recursive: true, force: true }); fs.mkdirSync('../../dist/libs/prisma/prisma', { recursive: true }); fs.cpSync('generated', '../../dist/libs/prisma/generated', { recursive: true });\"",
+        "cwd": "libs/prisma"
+      },
+      "dependsOn": [
+        {
+          "target": "prisma:generate",
+          "projects": ["prisma"]
+        }
+      ]
+    },
+    "prisma:format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma format",
+        "cwd": "libs/prisma"
+      }
+    },
+    "prisma:migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate deploy",
+        "cwd": "libs/prisma"
+      }
+    },
+    "prisma:migrate:dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate dev",
+        "cwd": "libs/prisma"
+      }
+    },
+    "prisma:reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma migrate reset",
+        "cwd": "libs/prisma"
+      }
+    },
+    "prisma:studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prisma studio",
+        "cwd": "libs/prisma"
+      }
+    }
+  }
+}

@@ -1,0 +1,218 @@
+[
+  {
+    "no": 1,
+    "code": "principal",
+    "title": "Hiệu trưởng",
+    "desc": "Hiệu trưởng"
+  },
+  {
+    "no": 2,
+    "code": "vice_principal",
+    "title": "Phó Hiệu trưởng",
+    "desc": "Phó Hiệu trưởng"
+  },
+  {
+    "no": 3,
+    "code": "vice_principal_academics",
+    "title": "Phó Hiệu trưởng Chuyên môn",
+    "desc": "Phó Hiệu trưởng Chuyên môn"
+  },
+  {
+    "no": 4,
+    "code": "vice_principal_facilities",
+    "title": "Phó Hiệu trưởng Cơ sở vật chất",
+    "desc": "Phó Hiệu trưởng Cơ sở vật chất"
+  },
+  {
+    "no": 5,
+    "code": "vice_principal_student_affairs",
+    "title": "Phó Hiệu trưởng Công tác Học sinh",
+    "desc": "Phó Hiệu trưởng Công tác Học sinh"
+  },
+  {
+    "no": 6,
+    "code": "head_of_administrative_dept",
+    "title": "Tổ trưởng Tổ Văn phòng",
+    "desc": "Tổ trưởng Tổ Văn phòng"
+  },
+  {
+    "no": 7,
+    "code": "administrative_staff_archives",
+    "title": "Nhân viên Văn thư - Lưu trữ",
+    "desc": "Nhân viên Văn thư - Lưu trữ"
+  },
+  {
+    "no": 8,
+    "code": "head_of_hr_dept",
+    "title": "Trưởng phòng Nhân sự",
+    "desc": "Trưởng phòng Nhân sự"
+  },
+  {
+    "no": 9,
+    "code": "hr_specialist",
+    "title": "Chuyên viên Nhân sự",
+    "desc": "Chuyên viên Nhân sự"
+  },
+  {
+    "no": 10,
+    "code": "admissions_specialist",
+    "title": "Chuyên viên Tuyển sinh",
+    "desc": "Chuyên viên Tuyển sinh"
+  },
+  {
+    "no": 11,
+    "code": "chief_accountant",
+    "title": "Kế toán trưởng",
+    "desc": "Kế toán trưởng"
+  },
+  {
+    "no": 12,
+    "code": "accountant",
+    "title": "Kế toán viên",
+    "desc": "Kế toán viên"
+  },
+  {
+    "no": 13,
+    "code": "treasurer",
+    "title": "Thủ quỹ",
+    "desc": "Thủ quỹ"
+  },
+  {
+    "no": 14,
+    "code": "head_of_management_dept",
+    "title": "Trưởng phòng Quản trị",
+    "desc": "Trưởng phòng Quản trị"
+  },
+  {
+    "no": 15,
+    "code": "equipment_lab_manager",
+    "title": "Nhân viên Quản lý Thiết bị - Thí nghiệm",
+    "desc": "Nhân viên Quản lý Thiết bị - Thí nghiệm"
+  },
+  {
+    "no": 16,
+    "code": "security_guard",
+    "title": "Nhân viên Bảo vệ",
+    "desc": "Nhân viên Bảo vệ"
+  },
+  {
+    "no": 17,
+    "code": "janitor",
+    "title": "Nhân viên Lao công",
+    "desc": "Nhân viên Lao công"
+  },
+  {
+    "no": 18,
+    "code": "school_nurse",
+    "title": "Nhân viên Y tế học đường",
+    "desc": "Nhân viên Y tế học đường"
+  },
+  {
+    "no": 19,
+    "code": "librarian",
+    "title": "Nhân viên Thư viện",
+    "desc": "Nhân viên Thư viện"
+  },
+  {
+    "no": 20,
+    "code": "it_support_staff",
+    "title": "Nhân viên IT Hỗ trợ",
+    "desc": "Nhân viên IT Hỗ trợ"
+  },
+  {
+    "no": 21,
+    "code": "head_of_professional_dept",
+    "title": "Tổ trưởng Chuyên môn",
+    "desc": "Tổ trưởng Chuyên môn"
+  },
+  {
+    "no": 22,
+    "code": "deputy_head_of_professional_dept",
+    "title": "Tổ phó Chuyên môn",
+    "desc": "Tổ phó Chuyên môn"
+  },
+  {
+    "no": 23,
+    "code": "head_of_homeroom_dept",
+    "title": "Tổ trưởng Tổ chủ nhiệm",
+    "desc": "Tổ trưởng Tổ chủ nhiệm"
+  },
+  {
+    "no": 24,
+    "code": "homeroom_teacher",
+    "title": "Giáo viên Chủ nhiệm",
+    "desc": "Giáo viên Chủ nhiệm"
+  },
+  {
+    "no": 25,
+    "code": "subject_teacher",
+    "title": "Giáo viên Bộ môn",
+    "desc": "Giáo viên Bộ môn"
+  },
+  {
+    "no": 26,
+    "code": "testing_specialist",
+    "title": "Chuyên viên khảo thí",
+    "desc": "Chuyên viên khảo thí"
+  },
+  {
+    "no": 27,
+    "code": "teaching_assistant",
+    "title": "Bảo mẫu / Trợ giảng",
+    "desc": "Bảo mẫu / Trợ giảng"
+  },
+  {
+    "no": 28,
+    "code": "head_of_youth_union",
+    "title": "Tổng phụ trách Đội",
+    "desc": "Tổng phụ trách Đội"
+  },
+  {
+    "no": 29,
+    "code": "boarding_manager",
+    "title": "Quản lý Bán trú",
+    "desc": "Quản lý Bán trú"
+  },
+  {
+    "no": 30,
+    "code": "cafeteria_staff",
+    "title": "Nhân viên Bếp ăn/Dinh dưỡng",
+    "desc": "Nhân viên Bếp ăn/Dinh dưỡng"
+  },
+  {
+    "no": 31,
+    "code": "head_of_student_affairs_dept",
+    "title": "Trưởng phòng Công tác Học sinh",
+    "desc": "Trưởng phòng Công tác Học sinh"
+  },
+  {
+    "no": 32,
+    "code": "student_management_staff",
+    "title": "Nhân viên Quản lý Học sinh (Giám thị)",
+    "desc": "Nhân viên Quản lý Học sinh (Giám thị)"
+  },
+  {
+    "no": 33,
+    "code": "career_counselor",
+    "title": "Chuyên viên Tư vấn Hướng nghiệp",
+    "desc": "Chuyên viên Tư vấn Hướng nghiệp"
+  },
+  {
+    "no": 34,
+    "code": "school_psychologist",
+    "title": "Chuyên viên Tư vấn Tâm lý học đường",
+    "desc": "Chuyên viên Tư vấn Tâm lý học đường"
+  },
+  {
+    "no": 35,
+    "code": "youth_union_secretary",
+    "title": "Bí thư đoàn trường",
+    "desc": "Bí thư đoàn trường"
+  },
+  {
+    "no": 36,
+    "code": "youth_assistant",
+    "title": "Trợ lí thanh niên",
+    "desc": "Trợ lí thanh niên"
+  }
+]

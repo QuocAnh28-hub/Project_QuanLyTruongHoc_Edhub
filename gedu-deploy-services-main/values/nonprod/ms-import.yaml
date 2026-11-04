@@ -1,0 +1,33 @@
+ms-import:
+  image:
+    repository: registry.eduhub.com/prod/ms-import
+    tag: 3cd6219
+  imagePullSecrets:
+    - name: regcred
+  env:
+    - name: PORT
+      value: "3000"
+    - name: JWT_SECRET
+      value: "****"
+    - name: DATABASE_URL
+      value: "postgresql://staging:EduHub%40BBB-2025@10.47.198.69:5000/staging?schema=eduhub"
+    - name: KAFKA_BROKERS
+      value: "gedu-kafka-cluster-kafka-brokers.middleware-prod.svc.cluster.local:9092"
+    - name: REDIS_URL
+      value: "default:redispassword@gedu-deploy-redis-master.middleware-prod.svc.cluster.local:6379"
+    - name: PROVINCE_ID
+      value: "91"
+    - name: MINIO_DOMAIN
+      value: "https://static.geduhub.vn"
+    - name: MINIO_ENDPOINT
+      value: "10.47.198.59"
+    - name: MINIO_PORT
+      value: "9000"
+    - name: MINIO_ACCESS_KEY
+      value: "****"
+    - name: MINIO_SECRET_KEY
+      value: "****"
+    - name: GRPC_IMPORT_HOST
+      value: "0.0.0.0"
+    - name: GRPC_IMPORT_PORT
+      value: "50001"

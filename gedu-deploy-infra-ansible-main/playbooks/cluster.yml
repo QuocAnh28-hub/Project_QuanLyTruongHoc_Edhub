@@ -1,0 +1,46 @@
+nodes:
+  - address: 10.47.197.31
+    user: ansible_user
+    role: [controlplane, etcd]
+  - address: 10.47.197.32
+    user: ansible_user
+    role: [controlplane, etcd]
+  - address: 10.47.197.33
+    user: ansible_user
+    role: [controlplane, etcd, worker]
+  - address: 10.47.197.34
+    user: ansible_user
+    role: [worker]
+  - address: 10.47.197.35
+    user: ansible_user
+    role: [worker]
+  - address: 10.47.197.36
+    user: ansible_user
+    role: [worker]
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h
+    retention: 24h
+
+  kube-api:
+    service_node_port_range: "30000-32767"
+
+  kube-controller:
+    cluster_cidr: 192.168.0.0/16
+
+  kubelet:
+    cluster_domain: cluster.local
+    cluster_dns_server: 10.43.0.10
+
+  scheduler: {}
+  kubeproxy: {}
+
+network:
+  plugin: canal
+
+authentication:
+  strategy: x509
+
+cluster_name: gedu-prod-cluster

@@ -1,0 +1,23 @@
+model TeachingAssignment {
+  id           Int      @id @default(autoincrement())
+  orgId        Int      @map("org_id")
+  classId      Int      @map("class_id")
+  subjectId    Int      @map("subject_id")
+  staffId      Int      @map("staff_id")
+  schoolYearId Int      @map("school_year_id")
+  semesterId   Int?     @map("semester_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  school     School      @relation(fields: [orgId], references: [id])
+  class      Class       @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subject    Subject     @relation(fields: [subjectId], references: [id])
+  teacher    SchoolStaff @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  schoolYear SchoolYear  @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
+  semester   Semester?   @relation(fields: [semesterId], references: [id], onDelete: SetNull)
+
+  @@unique([classId, subjectId, schoolYearId, semesterId])
+  @@index([orgId, staffId])
+  @@map("teaching_assignments")
+}
+

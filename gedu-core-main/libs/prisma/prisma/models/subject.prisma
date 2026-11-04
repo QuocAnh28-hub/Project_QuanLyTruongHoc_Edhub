@@ -1,0 +1,62 @@
+model Subject {
+  id       Int     @id @default(autoincrement())
+  orgId    Int     @map("org_id")
+  code     String
+  name     String
+  canApply Boolean @default(false) @map("can_apply")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school              School                   @relation(fields: [orgId], references: [id])
+  curriculumSubjects  CurriculumSubject[]
+  subjectOptions      SubjectOption[]
+  departmentSubjects  DepartmentSubject[]
+  timetableSchedules  TimetableSchedule[]
+  teachingAssignments TeachingAssignment[]
+  scoreEntries        ScoreEntry[]
+  subjectSummaries    SubjectSemesterSummary[]
+
+  @@index([orgId])
+  @@map("subjects")
+}
+
+model SubjectOption {
+  id        Int    @id @default(autoincrement())
+  subjectId Int    @map("subject_id")
+  code      String
+  name      String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  subject Subject @relation(fields: [subjectId], references: [id])
+
+  @@index([subjectId])
+  @@map("subject_options")
+}
+
+model DepartmentSubject {
+  id           Int @id @default(autoincrement())
+  orgId        Int @map("org_id")
+  departmentId Int @map("department_id")
+  subjectId    Int @map("subject_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy Int?     @map("created_by")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  updatedBy Int?     @map("updated_by")
+
+  school     School                    @relation(fields: [orgId], references: [id])
+  department SchoolDepartmentTemplates @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  subject    Subject                   @relation(fields: [subjectId], references: [id])
+
+  @@unique([orgId, departmentId, subjectId])
+  // @@index([orgId, departmentId])
+  @@index([orgId, subjectId])
+  @@map("department_subjects")
+}

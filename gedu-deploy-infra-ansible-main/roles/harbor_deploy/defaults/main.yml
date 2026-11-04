@@ -1,0 +1,6 @@
+harbor_version: "v2.13.1"
+harbor_installer: "harbor-online-installer-{{ harbor_version }}.tgz"
+harbor_install_dir: "/opt/harbor"
+harbor_hostname: "registry.eduhub.com"
+harbor_ip: "10.47.198.51"
+harbor_cert_dir: "{{ harbor_install_dir }}/certs"

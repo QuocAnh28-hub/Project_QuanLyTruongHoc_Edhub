@@ -1,0 +1,22 @@
+---
+dependencies:
+  - role: docker
+
+galaxy_info:
+  author: GEDU Infrastructure Team
+  description: Deploy RKE (Rancher Kubernetes Engine) on CentOS/RHEL nodes
+  company: GEDU
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+  galaxy_tags:
+    - kubernetes
+    - rancher
+    - rke
+    - docker
+    - centos
+    - rhel

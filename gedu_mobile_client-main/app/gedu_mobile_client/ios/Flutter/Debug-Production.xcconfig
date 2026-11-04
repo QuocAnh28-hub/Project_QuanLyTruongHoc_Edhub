@@ -1,0 +1,6 @@
+#include "Debug.xcconfig"
+FLUTTER_BUILD_MODE=debug
+PRODUCT_BUNDLE_IDENTIFIER=com.gedu.app
+PRODUCT_NAME=Gedu
+FLAVOR=production
+API_BASE_URL=https://api.lazeout.com 

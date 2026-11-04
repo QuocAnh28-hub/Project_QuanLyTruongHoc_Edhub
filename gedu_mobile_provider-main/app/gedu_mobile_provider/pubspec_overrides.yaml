@@ -1,0 +1,22 @@
+# melos_managed_dependency_overrides: core_auth,core_localization,core_network,core_storage,core_students,feature_auth,feature_home,lib_base,lib_design_system,lib_utils
+dependency_overrides:
+  core_auth:
+    path: ../../cores/core_auth
+  core_localization:
+    path: ../../cores/core_localization
+  core_network:
+    path: ../../cores/core_network
+  core_storage:
+    path: ../../cores/core_storage
+  core_students:
+    path: ../../cores/core_students
+  feature_auth:
+    path: ../../features/feature_auth
+  feature_home:
+    path: ../../features/feature_home
+  lib_base:
+    path: ../../libraries/lib_base
+  lib_design_system:
+    path: ../../libraries/lib_design_system
+  lib_utils:
+    path: ../../libraries/lib_utils

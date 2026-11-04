@@ -1,0 +1,122 @@
+{
+  "name": "eduhub",
+  "version": "1.0.0",
+  "description": "A modern, scalable school management system",
+  "author": "",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "setup": "pnpm install",
+    "build": "nx run-many --target=build",
+    "build:core": "nx build core",
+    "build:import": "nx build import",
+    "format": "prettier --write \"**/*.ts\"",
+    "start:dev": "dotenv -- nx run-many --target=start:dev",
+    "start:dev:core": "dotenv -- nx start:dev core",
+    "start:dev:import": "dotenv -- nx start:dev import",
+    "lint": "nx run-many --target=lint",
+    "test": "nx run-many --target=test",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "start:debug": "dotenv -- nx start:dev core",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:generate": "nx run prisma:prisma:generate",
+    "prisma:format": "nx run prisma:prisma:format",
+    "prisma:migrate": "nx run prisma:prisma:migrate",
+    "prisma:migrate:dev": "nx run prisma:prisma:migrate:dev",
+    "prisma:reset": "nx run prisma:prisma:reset",
+    "prisma:studio": "nx run prisma:prisma:studio",
+    "prisma:seed": "nx run prisma:prisma:seed",
+    "db:setup": "pnpm prisma:generate && pnpm prisma:migrate && pnpm prisma:seed",
+    "db:reset": "prisma migrate reset --force",
+    "graph": "nx graph",
+    "clean": "rm -rf node_modules dist .turbo .nx"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@fastify/view": "^8.0.0",
+    "@nestjs/schematics": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
+    "@nx/eslint": "21.2.1",
+    "@nx/eslint-plugin": "21.2.1",
+    "@nx/jest": "21.2.1",
+    "@nx/js": "21.2.1",
+    "@nx/nest": "21.2.1",
+    "@nx/node": "^21.2.1",
+    "@nx/webpack": "^21.2.1",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@types/node": "^20.3.1",
+    "@types/papaparse": "^5.3.16",
+    "@types/passport-jwt": "^3.0.8",
+    "@types/xml2js": "^0.4.14",
+    "@typescript-eslint/eslint-plugin": "^7.16.0",
+    "@typescript-eslint/parser": "^7.16.0",
+    "axios": "^1.9.0",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "~8.57.0",
+    "eslint-config-prettier": "^10.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "handlebars-loader": "^1.7.3",
+    "jsonc-eslint-parser": "^2.1.0",
+    "node-gyp": "^11.2.0",
+    "node-loader": "^2.1.0",
+    "nx": "^21.2.1",
+    "prettier": "^3.0.0",
+    "prisma": "6.13.0",
+    "raw-loader": "^4.0.2",
+    "source-map-support": "^0.5.21",
+    "terser-webpack-plugin": "^5.3.14",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "typescript": "~5.8.2",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@gedu/(.*)$": "<rootDir>/libs/$1/src",
+      "^shared/(.*)$": "<rootDir>/libs/shared/src/$1"
+    }
+  },
+  "nx": {
+    "includedScripts": []
+  },
+  "dependencies": {
+    "@keyv/redis": "^4.6.0",
+    "@nestjs/cache-manager": "^3.0.1",
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/microservices": "^10.0.0",
+    "cache-manager": "^7.0.1",
+    "cacheable": "^1.10.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "keyv": "^5.3.4",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.3.0"
+  }
+}

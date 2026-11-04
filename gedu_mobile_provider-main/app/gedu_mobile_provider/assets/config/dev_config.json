@@ -1,0 +1,11 @@
+{
+  "flavor": "development",
+  "appName": "Gedu Provider Dev",
+  "appId": "com.gedu.provider.dev",
+  "baseUrl": "https://demo.lazeout.com",
+  "timeoutSeconds": 30,
+  "enableLogging": true,
+  "appIcon": "@mipmap/ic_launcher_dev",
+  "appVersion": "1.0.0",
+  "buildNumber": "1"
+}
