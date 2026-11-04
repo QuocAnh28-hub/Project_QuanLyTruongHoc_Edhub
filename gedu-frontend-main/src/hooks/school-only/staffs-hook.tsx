@@ -14,14 +14,14 @@ export function useStaffDetail(id?: number) {
 
 export function useStaffs(page = 1, size = 20, query?: string, dept?: number | string, pos?: number | string, ready: boolean = true) {
   const [request, setRequest] = useState({ url: null as string | null, params: null })
-  const { data, fetching, error } = useGetData(request.url, request.params, false)
+  const { data, fetching, error, mutate } = useGetData(request.url, request.params, false)
 
   useEffect(() => {
     const params = { page, size, q: query, dept, pos } as any
     setRequest({ url: ready ? fetching_apis.school_staffs : null, params })
   }, [page, size, query, dept, pos, ready])
 
-  return { data: data?.data, total: data?.total, fetching, error } as { data: StaffRow[] | null, total: number, fetching: boolean, error: any }
+  return { data: data?.data, total: data?.total, fetching, error, mutate } as { data: StaffRow[] | null, total: number, fetching: boolean, error: any, mutate: any }
 }
 
 export function useStaffDetailMajor(id?: number | null) {

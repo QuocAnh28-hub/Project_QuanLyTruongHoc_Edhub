@@ -4,6 +4,7 @@ export class SubjectRow {
   code: string = ''
   name: string = ''
   canApply: boolean | null = null
+  departments?: any[]
 }
 export class SubjectRequest {
   id: number = 0

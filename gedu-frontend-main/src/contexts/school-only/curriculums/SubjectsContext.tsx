@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import ForbiddenState from "../../../components/molecules/forbidden-state";
-import { callActiveSubject, useSubjects } from "../../../hooks/school-only/subjects-hook";
+import { callActiveSubject, callUpdateASubject, useSubjects } from "../../../hooks/school-only/subjects-hook";
 import { SubjectRow } from "../../../models/subject-model";
 import { PAGINATE_DEFAULT_SIZE, PAGINATE_MAX_SIZE } from "../../../utils/constants";
 import { useLayoutContext } from "../../SchoolLayoutContext";
@@ -15,7 +15,8 @@ const context = createContext({
   query: undefined as string | undefined,
   fetching: true,
   mutate: () => { },
-  activeSubject: (_subject_id: number, _can_apply: boolean) => { }
+  activeSubject: (_subject_id: number, _can_apply: boolean) => { },
+  updateSubject: (_subject_id: number, _value: any): any => { }
 });
 interface Props {
   children: ReactNode
@@ -52,12 +53,29 @@ export default function SubjectsProvider({ children }: Props) {
     return result
   }
 
+  async function updateSubject(subject_id: number, value: any) {
+    const { data, error } = await callUpdateASubject(subject_id, value) as any
+    let result = false
+    if (data) {
+      callMessage('Cập nhật môn học thành công', 'success')
+      result = true
+    } else {
+      if (error?.message) {
+        callMessage(error.message, 'error')
+      } else {
+        callMessage('Có lỗi trong quá trình cập nhật', 'error')
+      }
+    }
+    return result
+  }
+
   return <context.Provider value={{
     ___testing: false,
     data, page, size,
     query, total,
     fetching, mutate,
-    activeSubject
+    activeSubject,
+    updateSubject
   }}>
     {error?.status == 403 && <ForbiddenState />}
     {data && children}

@@ -148,15 +148,14 @@ export class StaffRepository {
   }
 
   async findHomeroomTeacherByStaffId(orgId: number, staffId: number) {
-    const HOME_ROOM_TEACHER = 'GVCN';
-
     return await this.prisma.schoolStaff.findFirst({
       where: {
         orgId,
         id: staffId,
-        position: {
-          code: HOME_ROOM_TEACHER,
-        },
+        OR: [
+          { position: { code: { in: ['GVCN', 'GVBM'] } } },
+          { schoolStaffPositions: { some: { position: { code: { in: ['GVCN', 'GVBM'] } } } } },
+        ],
       },
       include: {
         user: true,

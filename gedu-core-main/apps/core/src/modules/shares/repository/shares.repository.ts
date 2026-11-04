@@ -265,14 +265,13 @@ export class SharesRepository {
   }
 
   async findHomeroomTeachers(orgId: number) {
-    const HOMEROOM_TEACHER = 'GVCN';
-
     return this.prisma.schoolStaff.findMany({
       where: {
         orgId,
-        position: {
-          code: HOMEROOM_TEACHER,
-        },
+        OR: [
+          { position: { code: { in: ['GVCN', 'GVBM'] } } },
+          { schoolStaffPositions: { some: { position: { code: { in: ['GVCN', 'GVBM'] } } } } },
+        ],
       },
       include: {
         user: true,

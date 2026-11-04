@@ -40,6 +40,13 @@ import { EdPositionsModule } from './modules/school-departments/edu-departments/
 import { EduStaffModule } from './modules/school-departments/edu-departments/edu-staffs/edu-staffs.module';
 import { KafkaModule } from './modules/kafka/kafka.module';
 import { EmailModule } from '@gedu/email';
+import { TeachingAssignmentsModule } from './modules/teaching-assignments/teaching-assignments.module';
+import { AttendancesModule } from './modules/attendances/attendances.module';
+import { TimetablesModule } from './modules/timetables/timetables.module';
+import { GradesModule } from './modules/grades/grades.module';
+import { StudentRequestsModule } from './modules/student-requests/student-requests.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ExportsModule } from './modules/exports/exports.module';
 
 @Module({
   imports: [
@@ -90,7 +97,14 @@ import { EmailModule } from '@gedu/email';
     SubjectsModule,
     EduDepartmentModule,
     EdPositionsModule,
-    EduStaffModule  
+    EduStaffModule,
+    TeachingAssignmentsModule,
+    AttendancesModule,
+    TimetablesModule,
+    GradesModule,
+    StudentRequestsModule,
+    NotificationsModule,
+    ExportsModule,  
   ],
   providers: [
     {

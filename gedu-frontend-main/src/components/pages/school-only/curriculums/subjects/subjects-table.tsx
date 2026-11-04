@@ -8,12 +8,25 @@ import { SubjectRow } from "../../../../../models/subject-model";
 import { nav_links } from "../../../../../utils/routes";
 import GText from "../../../../atoms/g-text";
 import { FormOutlined } from "../../../../atoms/svg/outlined-icons";
+import UpdateSubjectModal from "./update-subject-modal";
 
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 export default function SubjectsTable() {
   const { authority } = useAppContext()
-  const { data, page, size, total, fetching } = useSubjectsContext()
+  const { data, page, size, total, fetching, mutate } = useSubjectsContext()
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selected, setSelected] = useState<SubjectRow | null>(null)
+  const [open_update, setOpenUpdate] = useState<boolean>(false)
+
+  function handleClose() {
+    setSelected(null)
+    setOpenUpdate(false)
+  }
+
+  function handleOk() {
+    handleClose()
+    mutate()
+  }
 
   function onTableChange(_pagination: any, _filters: any) {
     const newParams = new URLSearchParams(searchParams);
@@ -53,7 +66,13 @@ export default function SubjectsTable() {
       dataIndex: 'id',
       hidden: !authority?.can_touch_curriculum,
       render: (_value, _record) => <Flex gap={8}>
-        <Button icon={<FormOutlined />} />
+        <Button
+          icon={<FormOutlined />}
+          onClick={() => {
+            setSelected(_record)
+            setOpenUpdate(true)
+          }}
+        />
       </Flex>
     },
   ];
@@ -72,6 +91,13 @@ export default function SubjectsTable() {
       dataSource={data ? data : undefined}
       onChange={onTableChange}
     />
+    {open_update && selected && (
+      <UpdateSubjectModal
+        record={selected}
+        close={handleClose}
+        ok={handleOk}
+      />
+    )}
   </Fragment>
 }
 interface SProps {

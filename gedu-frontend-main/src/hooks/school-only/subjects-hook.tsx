@@ -41,15 +41,18 @@ export async function callCreateASubject(subject: SubjectRequest) {
   return { data: res?.response, error: res.error }
 }
 
-export async function callUpdateASubject(subject_id?: number, subject?: SubjectDetail) {
+export async function callUpdateASubject(subject_id?: number, subject?: any) {
   if (!subject_id || !subject) return null
   const res = await callPut(fetching_apis.subject_update.replace('{id}', subject_id + ''), subject)
-  return { data: res?.response, error: res.error }
+  if (res?.error) {
+    return { data: null, error: res.error }
+  }
+  return { data: res?.response ?? res, error: null }
 }
 export async function callUpdateACurriculumSubject(curr_id?: number | null, subj_id?: number, grade?: number, _subject?: any) {
   if (!curr_id || !subj_id || !grade || !_subject) return null
   const res = await callPut(fetching_apis.curriculum_subject_update.replace('{id}', curr_id + '').replace('{subject_id}', subj_id + '') + '?grd=' + grade, _subject)
-  return { data: res?.response, error: res.error }
+  return { data: res?.response ?? res, error: res.error }
 }
 export async function callActiveSubject(subject_id: number, can_apply: boolean) {
   let res = null as any
@@ -57,5 +60,8 @@ export async function callActiveSubject(subject_id: number, can_apply: boolean) 
     res = await callPut(fetching_apis.subject_activate.replace('{id}', subject_id + ''))
   else
     res = await callPut(fetching_apis.subject_deactivate.replace('{id}', subject_id + ''))
-  return { data: res?.response, error: res.error }
+  if (res?.error) {
+    return { data: null, error: res.error }
+  }
+  return { data: res?.response ?? res, error: null }
 }

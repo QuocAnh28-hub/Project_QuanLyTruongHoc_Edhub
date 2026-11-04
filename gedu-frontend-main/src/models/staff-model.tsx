@@ -2,6 +2,7 @@
 export class StaffRow {
   id: number = 0
   userId: number = 0
+  code?: string = ''
   firstName: string = ''
   lastName: string = ''
   schoolDepartment?: { id: number, name: string }

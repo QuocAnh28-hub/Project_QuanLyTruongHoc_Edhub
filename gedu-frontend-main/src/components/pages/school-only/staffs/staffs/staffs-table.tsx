@@ -1,9 +1,11 @@
-import { Button, Flex, Table, TableProps, Tag } from "antd";
+import { Button, Flex, Modal, Table, TableProps, Tag } from "antd";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppContext } from "../../../../../contexts/AppContext";
 import { useStaffsContext } from "../../../../../contexts/school-only/staffs/StaffsContext";
+import { useLayoutContext } from "../../../../../contexts/SchoolLayoutContext";
 import { useMetaSchoolDepartments, useMetaSchoolPositions } from "../../../../../hooks/school-only/shared-data-hook";
+import { callActivateASchoolStaff } from "../../../../../hooks/school-only/staffs-hook";
 import { SchoolStaffStatusEnum } from "../../../../../models/enums";
 import { StaffRow } from "../../../../../models/staff-model";
 import { nav_links } from "../../../../../utils/routes";
@@ -14,10 +16,37 @@ import NameCardSimple from "../../../../molecules/name-card-simple";
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 export default function StaffsTable() {
   const { authority } = useAppContext()
-  const { data, page, size, total, fetching } = useStaffsContext()
+  const { data, page, size, total, fetching, mutate } = useStaffsContext()
+  const { callMessage } = useLayoutContext()
   const { data: dept } = useMetaSchoolDepartments()
   const { data: pos } = useMetaSchoolPositions(null)
   const [searchParams, setSearchParams] = useSearchParams();
+
+  async function handleActivate(record: StaffRow) {
+    Modal.confirm({
+      title: 'Xác nhận Kích hoạt Cán bộ & Giáo viên',
+      content: (
+        <Flex vertical gap={8}>
+          <div>Bạn có chắc chắn muốn kích hoạt tài khoản cho:</div>
+          <div>
+            <strong>{record.lastName} {record.firstName}</strong> (Mã: {record.code || record.email})
+          </div>
+          <div>Sau khi kích hoạt, trạng thái công tác sẽ chuyển thành &quot;Đang làm việc&quot; và giáo viên có thể đăng nhập vào hệ thống.</div>
+        </Flex>
+      ),
+      okText: 'Kích hoạt',
+      cancelText: 'Huỷ bỏ',
+      onOk: async () => {
+        const res = await callActivateASchoolStaff(record.id)
+        if (res?.error?.message) {
+          callMessage(res.error.message, 'error')
+        } else {
+          callMessage('Kích hoạt tài khoản thành công', 'success')
+          mutate?.()
+        }
+      },
+    })
+  }
   const { dept_list, pos_list } = useMemo(() => {
     const dept_list = dept?.map((_d: { id: number; name: string; }) => ({
       value: _d.id,
@@ -95,14 +124,14 @@ export default function StaffsTable() {
     },
     {
       fixed: 'right',
-      width: 48,
+      width: 110,
       dataIndex: 'status',
       hidden: !authority?.can_touch_staff,
-      render: (_value) => <Flex gap={8}>
+      render: (_value, _record) => <Flex gap={8}>
         {_value == SchoolStaffStatusEnum.MoiTao.enum ?
           <Button size='small'
             icon={<ThunderboltOutlined />}
-          // onClick={() => { setOpenModal(!open_modal) }}
+            onClick={() => handleActivate(_record)}
           >Kích hoạt</Button> : null}
       </Flex>,
     },

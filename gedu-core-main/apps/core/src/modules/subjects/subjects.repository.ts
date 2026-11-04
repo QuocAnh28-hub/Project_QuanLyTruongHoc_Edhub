@@ -133,52 +133,45 @@ export class SubjectsRepository {
     orgId: number,
     data: UpdateSubjectRequestDto,
   ) {
-    const subject = await this.prisma.subject.findUnique({
+    const subject = await this.prisma.subject.findFirst({
       where: { id: subjectId, orgId },
       select: {
-        departmentSubjects: true,
+        id: true,
       },
     });
 
     if (!subject) throw new AppError(AppException.SUBJECT_NOT_FOUND);
 
-    return await this.prisma.$transaction(async (prisma) => {
-      await prisma.departmentSubject.deleteMany({
-        where: {
-          subjectId,
-          orgId,
-        },
-      });
-
-      if (data.departments && data.departments.length > 0) {
-        const departments = data.departments.map((dept) => ({
-          subjectId,
-          departmentId: dept,
-          orgId,
-        }));
-
-        await prisma.departmentSubject.createMany({
-          data: departments,
+    await this.prisma.$transaction(async (prisma) => {
+      if (data.name !== undefined) {
+        await prisma.subject.updateMany({
+          where: { id: subjectId, orgId },
+          data: { name: data.name },
         });
       }
 
-      return prisma.subject.findFirst({
-        where: { id: subjectId, orgId },
-        select: {
-          id: true,
-          departmentSubjects: {
-            select: {
-              department: {
-                select: {
-                  id: true,
-                  name: true,
-                  code: true,
-                },
-              },
-            },
+      if (data.departments !== undefined) {
+        await prisma.departmentSubject.deleteMany({
+          where: {
+            subjectId,
+            orgId,
           },
-        },
-      });
+        });
+
+        if (Array.isArray(data.departments) && data.departments.length > 0) {
+          const departments = data.departments.map((dept) => ({
+            subjectId,
+            departmentId: Number(dept),
+            orgId,
+          }));
+
+          await prisma.departmentSubject.createMany({
+            data: departments,
+          });
+        }
+      }
     });
+
+    return this.findOneWithDetail(subjectId, orgId);
   }
 }

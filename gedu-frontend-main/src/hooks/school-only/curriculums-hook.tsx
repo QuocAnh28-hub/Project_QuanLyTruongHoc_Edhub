@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { CurriculumDetail, CurriculumRequest, CurriculumRow } from "../../models/curriculum-model"
 import { callPost, callPut, fetching_apis, useGetData } from "../../utils/api-helpers"
 
@@ -33,7 +33,31 @@ export function useCurriculumSubjects(curriculum_id?: number, page = 1, size = 2
     setRequest({ url: curriculum_id ? fetching_apis.curriculum_subjects.replace('{id}', curriculum_id + '') : null, params })
   }, [curriculum_id, page, size])
 
-  return { data: data, total: data?.total, fetching, error, mutate } as { data: any[] | null, total: number, fetching: boolean, error: any, mutate: any }
+  const normalizedList = useMemo(() => {
+    if (!data) return [];
+    const raw = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
+    return raw.map((item: any) => {
+      const id = item.subjectId || item.id || item.subject?.id;
+      const name = item.name || item.subject?.name || item.subjectName || "Môn học";
+      const code = item.code || item.subject?.code || item.subjectCode || "";
+      return {
+        ...item,
+        id,
+        subjectId: id,
+        name,
+        code,
+        subject: item.subject || { id, name, code },
+      };
+    });
+  }, [data]);
+
+  return {
+    data: normalizedList,
+    total: data?.total ?? normalizedList.length,
+    fetching,
+    error,
+    mutate,
+  } as { data: any[] | null, total: number, fetching: boolean, error: any, mutate: any }
 }
 export async function callCreateACurriculum(curriculum: CurriculumRequest) {
   if (!curriculum) return null

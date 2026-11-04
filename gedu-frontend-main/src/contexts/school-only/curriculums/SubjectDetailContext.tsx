@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ForbiddenState from "../../../components/molecules/forbidden-state";
-import { callUpdateACurriculumSubject, useSubjectCurriculums, useSubjectDetail } from "../../../hooks/school-only/subjects-hook";
+import { callUpdateACurriculumSubject, callUpdateASubject, useSubjectCurriculums, useSubjectDetail } from "../../../hooks/school-only/subjects-hook";
 import { SubjectCurriculumRow, SubjectDetail } from "../../../models/subject-model";
 import { PAGINATE_DEFAULT_SIZE, PAGINATE_MAX_SIZE } from "../../../utils/constants";
 import { nav_links } from "../../../utils/routes";
@@ -12,6 +12,7 @@ const context = createContext({
   data: null as SubjectDetail | null,
   fetching: true,
   error: null,
+  mutate: () => { },
   curriculums: null as SubjectCurriculumRow[] | null,
   total: 0,
   page: 1,
@@ -20,6 +21,7 @@ const context = createContext({
   curriculums_error: null,
   curriculums_mutate: () => { },
   updateCurriculumSubject: (_curr_id: number, _subj_id: number, _grade: number, _value: any): any => { },
+  updateSubject: (_subj_id: number, _value: any): any => { },
 });
 interface Props {
   children: ReactNode
@@ -33,7 +35,7 @@ export default function SubjectDetailProvider({ children }: Props) {
     if (!id) return
     return Number(id)
   }, [id])
-  const { data, fetching, error } = useSubjectDetail(subject_id)
+  const { data, fetching, error, mutate } = useSubjectDetail(subject_id)
   const { page, size } = useMemo(() => {
     let page = searchParams.get('page') as any
     let size = searchParams.get('size') as any
@@ -76,14 +78,32 @@ export default function SubjectDetailProvider({ children }: Props) {
     return result
   }
 
+  async function updateSubject(subj_id: number, _value: any) {
+    const { data, error } = await callUpdateASubject(subj_id, _value) as any
+    let result = false
+    if (data) {
+      callMessage('Cập nhật môn học thành công', 'success')
+      mutate?.()
+      result = true
+    } else {
+      if (error?.message) {
+        callMessage(error.message, 'error')
+      } else {
+        callMessage('Có lỗi trong quá trình cập nhật', 'error')
+      }
+    }
+    return result
+  }
+
   return <context.Provider value={{
     ___testing: false,
-    data, fetching, error,
+    data, fetching, error, mutate,
     curriculums, page, size, total,
     curriculums_fetching,
     curriculums_error,
     curriculums_mutate,
-    updateCurriculumSubject
+    updateCurriculumSubject,
+    updateSubject
   }}>
     {error?.status == 403 && <ForbiddenState />}
     {data && children}

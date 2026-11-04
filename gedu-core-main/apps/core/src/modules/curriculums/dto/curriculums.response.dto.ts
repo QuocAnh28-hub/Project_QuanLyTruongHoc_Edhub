@@ -7,6 +7,14 @@ import { Exclude, Expose, Transform } from 'class-transformer';
 
 export class CurriculumSubjectResponseDto {
   @Expose()
+  @Transform(({ obj }) => obj.subjectId ?? obj.id)
+  subjectId: number;
+
+  @Expose()
+  @Transform(({ obj }) => obj.id ?? obj.subjectId)
+  id: number;
+
+  @Expose()
   @Transform(({ obj }) => obj.gradeLevel)
   gradeLevel: number;
 
@@ -15,14 +23,19 @@ export class CurriculumSubjectResponseDto {
   type: number;
 
   @Expose()
-  @Transform(({ obj }) => obj.subject.name)
+  @Transform(({ obj }) => obj.subject?.name ?? obj.name)
   name: string;
 
   @Expose()
-  @Transform(({ obj }) => obj.subject.code)
+  @Transform(({ obj }) => obj.subject?.code ?? obj.code)
   code: string;
 
-  @Exclude()
+  @Expose()
+  @Transform(({ obj }) => obj.subject ?? {
+    id: obj.subjectId ?? obj.id,
+    name: obj.name,
+    code: obj.code,
+  })
   subject: Subject;
 
   @Transform(({ obj }) => obj.gradeLevels)

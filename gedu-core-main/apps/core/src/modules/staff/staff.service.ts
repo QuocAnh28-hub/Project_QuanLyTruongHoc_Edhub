@@ -1023,7 +1023,7 @@ export class StaffService {
     const staffs = await this.prisma.schoolStaff.findMany({
       where: {
         orgId,
-        userId: { in: userIds },
+        OR: [{ userId: { in: userIds } }, { id: { in: userIds } }],
         status: STATUS.CREATED,
       },
       include: {

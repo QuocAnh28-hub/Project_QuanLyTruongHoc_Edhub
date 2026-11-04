@@ -14,7 +14,8 @@ const context = createContext({
   query: undefined as string | undefined,
   dept: undefined as number | string | undefined,
   pos: undefined as number | string | undefined,
-  fetching: true
+  fetching: true,
+  mutate: () => { }
 });
 interface Props {
   children: ReactNode
@@ -34,11 +35,11 @@ export default function StaffsProvider({ children }: Props) {
     if (size > PAGINATE_MAX_SIZE) size = PAGINATE_MAX_SIZE
     return { page, size, query, dept, pos }
   }, [searchParams])
-  const { data, total, fetching, error } = useStaffs(page, size, query, dept, pos)
+  const { data, total, fetching, error, mutate } = useStaffs(page, size, query, dept, pos)
 
   return <context.Provider value={{
     ___testing: false,
-    data, page, size, query, dept, pos, total, fetching
+    data, page, size, query, dept, pos, total, fetching, mutate
   }}>
     {error?.status == 403 && <ForbiddenState />}
     {data && children}

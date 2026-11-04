@@ -1,4 +1,5 @@
 import { Button, Card, Col, Flex, Row, Skeleton } from "antd";
+import { useState } from "react";
 import { useAppContext } from "../../../../contexts/AppContext";
 import SubjectDetailProvider, { useSubjectDetailContext } from "../../../../contexts/school-only/curriculums/SubjectDetailContext";
 import { nav_links } from "../../../../utils/routes";
@@ -7,13 +8,16 @@ import GText from "../../../atoms/g-text";
 import GTitle from "../../../atoms/g-title";
 import { FormOutlined } from "../../../atoms/svg/outlined-icons";
 import SubjectMembersTable from "./subjects/subject-member-table";
+import UpdateSubjectModal from "./subjects/update-subject-modal";
 
 const SubjectDetail = () => <SubjectDetailProvider><Content /></SubjectDetailProvider>
 export default SubjectDetail
 
 function Content() {
   const { authority } = useAppContext()
-  const { data, fetching } = useSubjectDetailContext()
+  const { data, fetching, mutate, updateSubject } = useSubjectDetailContext()
+  const [open_update, setOpenUpdate] = useState<boolean>(false)
+
   return <Flex vertical gap={24}>
     <Flex gap={12}>
       <GBack default_route={nav_links.subjects.route} />
@@ -22,7 +26,15 @@ function Content() {
     {data ? <Flex vertical gap={12}>
       <Flex justify="space-between">
         <GTitle level={5}>Thông tin chung</GTitle>
-        {authority?.can_touch_curriculum && <Button size="small" icon={<FormOutlined />}>Chỉnh sửa</Button>}
+        {authority?.can_touch_curriculum && (
+          <Button
+            size="small"
+            icon={<FormOutlined />}
+            onClick={() => setOpenUpdate(true)}
+          >
+            Chỉnh sửa
+          </Button>
+        )}
       </Flex>
       <Row gutter={[16, 16]}>
         <Col xs={24} md={12} xl={8}>
@@ -58,5 +70,16 @@ function Content() {
       </Flex>
       <SubjectMembersTable />
     </Flex> : null}
+    {open_update && data && (
+      <UpdateSubjectModal
+        record={data}
+        close={() => setOpenUpdate(false)}
+        ok={() => {
+          setOpenUpdate(false)
+          mutate?.()
+        }}
+        onUpdate={updateSubject}
+      />
+    )}
   </Flex>
 }

@@ -93,6 +93,44 @@ export const callDelete = async (path: string) => {
   response.error = response.errors?.[0]
   return response
 }
+
+export const downloadAuthenticatedFile = async (path: string, fallbackFilename: string) => {
+  let token = StorageHelper.get(STORE_KEY_TOKEN, StorageHelper.types.local)
+  if (!token) token = StorageHelper.get(STORE_KEY_TOKEN, StorageHelper.types.session)
+  const headers: Record<string, string> = {}
+  if (token) {
+    headers['Authorization'] = 'Bearer ' + token
+  }
+
+  const res = await fetch(ENDPOINT_GATEWAY.api + path, {
+    method: 'GET',
+    headers,
+  })
+
+  if (!res.ok) {
+    throw new Error(`Tải tệp thất bại (HTTP ${res.status})`)
+  }
+
+  // Extract filename from Content-Disposition if present
+  let filename = fallbackFilename
+  const disposition = res.headers.get('Content-Disposition')
+  if (disposition && disposition.includes('filename=')) {
+    const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/)
+    if (match && match[1]) {
+      filename = decodeURIComponent(match[1].replace(/['"]/g, ''))
+    }
+  }
+
+  const blob = await res.blob()
+  const blobUrl = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = blobUrl
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(blobUrl)
+}
 export const callPublicGet = async (path: string) => {
   return await public_fetcher(path, HTTP_METHOD.GET)
 }
@@ -255,6 +293,31 @@ export const fetching_apis = {
   import_schools: '/imports/schools',
   import_staffs: '/imports/staffs',
   import_students: '/imports/students',
+
+  // academic & core operational apis
+  teaching_assignments: '/teaching-assignments',
+  teaching_assignments_batch: '/teaching-assignments/batch',
+  teaching_assignment_detail: '/teaching-assignments/{id}',
+
+  attendances_session: '/attendances/classes/{classId}/session',
+  attendances_submit: '/attendances/classes/{classId}/submit',
+  attendances_history: '/attendances/classes/{classId}/history',
+  attendances_statistics: '/attendances/classes/{classId}/statistics',
+
+  timetables_periods: '/timetables/periods',
+  timetables_periods_init: '/timetables/periods/init',
+  timetables_class: '/timetables/classes/{classId}',
+  timetables_class_schedules: '/timetables/classes/{classId}/schedules',
+  timetables_schedule_item: '/timetables/schedules/{id}',
+
+  grades_bulk: '/grades/classes/{classId}/bulk',
+  grades_scoreboard: '/grades/classes/{classId}/subjects/{subjectId}',
+  grades_calculate: '/grades/classes/{classId}/calculate-summary',
+  grades_student_transcript: '/grades/students/{studentId}/transcript',
+
+  exports_class_students: '/exports/classes/{classId}/students',
+  exports_class_scoreboard: '/exports/classes/{classId}/scoreboard',
+  exports_class_attendance: '/exports/classes/{classId}/attendance',
 }
 
 export const fetching_shared_apis = {

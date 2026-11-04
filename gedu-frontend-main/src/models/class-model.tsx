@@ -18,6 +18,8 @@ export class ClassDetail {
   code: string = ''
   name: string = ''
   gradeLevel: number | null = null
+  schoolYearId: number | null = null
+  curriculumId: number | null = null
   curriculumName: string = ''
   firstForeignLanguageName: string = ''
   secondForeignLanguageName: string = ''
