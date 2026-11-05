@@ -21,7 +21,7 @@ export default function EDTemplate() {
 }
 function LayoutContent() {
   const { breadcrumb } = useLayoutContext()
-  return <Content style={{ display: 'flex', flexDirection: 'column', padding: '0 24px 24px', overflow: 'auto' }}>
+  return <Content style={{ display: 'flex', flexDirection: 'column', padding: '0 24px 24px', overflowY: 'auto', overflowX: 'hidden' }}>
     {breadcrumb?.length ?
       <div style={{
         paddingTop: 16, paddingBottom: 16,

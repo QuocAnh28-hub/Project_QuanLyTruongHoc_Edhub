@@ -13,6 +13,8 @@ export class CurriculumRepository {
 
   async findCurriculums(orgId: number, query: GetCurriculumsDto) {
     const { page = 1, size = 100 } = query;
+    const isEd = orgId < 100000;
+    const where = isEd ? {} : { orgId };
 
     const curriculums = await this.prisma.curriculum.findMany({
       include: {
@@ -23,21 +25,23 @@ export class CurriculumRepository {
         },
         gradeLevels: true,
       },
-      where: { orgId },
+      where,
       orderBy: { id: ORDER_ENUM.DESC },
       skip: (page - 1) * size,
       take: size,
     });
 
     const total = await this.prisma.curriculum.count({
-      where: { orgId },
+      where,
     });
     return { curriculums, total };
   }
 
   async findCurriculumById(orgId: number, id: number) {
-    return await this.prisma.curriculum.findUnique({
-      where: { id, orgId },
+    const isEd = orgId < 100000;
+    const where = isEd ? { id } : { id, orgId };
+    return await this.prisma.curriculum.findFirst({
+      where,
       include: {
         gradeLevels: true,
         instructionLanguage: {
@@ -61,11 +65,10 @@ export class CurriculumRepository {
   }
 
   async findCurriculumBySubject(orgId: number, curriculumId: number) {
+    const isEd = orgId < 100000;
+    const where = isEd ? { curriculumId } : { orgId, curriculumId };
     const curriculumSubjects = await this.prisma.curriculumSubject.findMany({
-      where: {
-        orgId,
-        curriculumId,
-      },
+      where,
       include: {
         instructionLanguage: {
           select: {
@@ -138,8 +141,9 @@ export class CurriculumRepository {
   }
 
   async findCurriculumByOrgIdAndId(orgId: number, id: number) {
-    const curriculum = await this.prisma.curriculum.findUnique({
-      where: { id, orgId },
+    const isEd = orgId < 100000;
+    const curriculum = await this.prisma.curriculum.findFirst({
+      where: { id, ...(isEd ? {} : { orgId }) },
       include: {
         gradeLevels: true,
         instructionLanguage: {

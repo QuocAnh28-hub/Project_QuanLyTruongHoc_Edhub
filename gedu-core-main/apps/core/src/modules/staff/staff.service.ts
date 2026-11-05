@@ -73,8 +73,16 @@ export class StaffService {
       orderBy = 'id',
     } = query;
 
+    const isEd = orgId < 100000;
+    const targetOrgId =
+      isEd && (query as any).schoolId
+        ? Number((query as any).schoolId)
+        : isEd
+        ? undefined
+        : orgId;
+
     const filters: Prisma.SchoolStaffWhereInput = {
-      orgId,
+      ...(targetOrgId ? { orgId: targetOrgId } : {}),
     };
 
     if (keyword) {
@@ -168,10 +176,11 @@ export class StaffService {
   }
 
   async getStaffById(orgId: number, id: number) {
-    const staff = await this.prisma.schoolStaff.findUnique({
+    const isEd = orgId < 100000;
+    const staff = await this.prisma.schoolStaff.findFirst({
       where: {
-        orgId,
         id,
+        ...(isEd ? {} : { orgId }),
       },
       select: {
         id: true,

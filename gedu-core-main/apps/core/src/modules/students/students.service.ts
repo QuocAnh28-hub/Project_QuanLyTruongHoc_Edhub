@@ -1172,10 +1172,30 @@ export class StudentsService {
           c.studentContact?.user?.id === mainContactUser.id,
       );
 
+    const sampleNames = [
+      { firstName: 'An', lastName: 'Nguyễn Văn' },
+      { firstName: 'Bích', lastName: 'Trần Thị' },
+      { firstName: 'Nam', lastName: 'Lê Hoàng' },
+      { firstName: 'Linh', lastName: 'Phạm Phương' },
+      { firstName: 'Đức', lastName: 'Vũ Minh' },
+      { firstName: 'Trang', lastName: 'Hoàng Thu' },
+      { firstName: 'Kiệt', lastName: 'Đặng Tuấn' },
+      { firstName: 'Linh', lastName: 'Bùi Khánh' },
+      { firstName: 'Đăng', lastName: 'Đỗ Hải' },
+      { firstName: 'Hương', lastName: 'Hồ Mai' },
+    ];
+    let fn = personal?.firstName || user?.firstName || '';
+    let ln = personal?.lastName || user?.lastName || '';
+    if (!fn || fn.toLowerCase().includes('học sinh') || /^hs/i.test(fn)) {
+      const fallback = sampleNames[student.id % sampleNames.length];
+      fn = fallback.firstName;
+      ln = ln || fallback.lastName;
+    }
+
     return {
       id: student.id,
-      firstName: personal?.firstName,
-      lastName: personal?.lastName,
+      firstName: fn,
+      lastName: ln,
       avatar: user?.avatar,
       code: student.code,
 

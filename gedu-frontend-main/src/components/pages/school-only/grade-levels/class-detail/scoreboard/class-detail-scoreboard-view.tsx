@@ -27,6 +27,7 @@ import {
   useClassScoreboard,
 } from "../../../../../../hooks/school-only/academic-hooks";
 import { useCurriculumSubjects } from "../../../../../../hooks/school-only/curriculums-hook";
+import { useSubjects } from "../../../../../../hooks/school-only/subjects-hook";
 import {
   downloadAuthenticatedFile,
   fetching_apis,
@@ -51,6 +52,24 @@ export default function ClassDetailScoreboardView() {
   // Local scores edit buffer: { [studentId]: Partial<StudentScoreRow> }
   const [scoresBuffer, setScoresBuffer] = useState<Record<number, Partial<StudentScoreRow>>>({});
 
+  // Standard High School Subjects Catalog
+  const STANDARD_SUBJECTS_MAP: Record<number, { name: string; code: string }> = {
+    1: { name: "Toán học", code: "TOAN" },
+    2: { name: "Ngữ văn", code: "VAN" },
+    3: { name: "Tiếng Anh", code: "ANH" },
+    4: { name: "Vật lí", code: "VATLY" },
+    5: { name: "Hóa học", code: "HOA" },
+    6: { name: "Sinh học", code: "SINH" },
+    7: { name: "Lịch sử", code: "SU" },
+    8: { name: "Địa lí", code: "DIA" },
+    9: { name: "Giáo dục kinh tế và pháp luật", code: "GDKTPL" },
+    10: { name: "Tin học", code: "TIN" },
+    11: { name: "Công nghệ", code: "CONGNGHE" },
+    12: { name: "Giáo dục thể chất", code: "GDTC" },
+    13: { name: "Giáo dục quốc phòng và an ninh", code: "GDQP" },
+    14: { name: "Hoạt động trải nghiệm, hướng nghiệp", code: "HDTN" },
+  };
+
   // Curriculum subjects to choose from
   const { data: curriculumSubjects, fetching: loadingSubjects } = useCurriculumSubjects(
     classData?.curriculumId || undefined,
@@ -58,20 +77,53 @@ export default function ClassDetailScoreboardView() {
     100
   );
 
+  // All school subjects for authoritative names and codes fallback
+  const { data: allSubjects } = useSubjects(1, 100);
+
   // Subject selector options
   const subjectOptions = useMemo(() => {
-    if (!curriculumSubjects || !Array.isArray(curriculumSubjects)) return [];
-    return curriculumSubjects.map((item: any) => {
+    const allMap = new Map<number, { name: string; code: string }>();
+    if (allSubjects && Array.isArray(allSubjects)) {
+      allSubjects.forEach((s: any) => {
+        allMap.set(s.id, { name: s.name, code: s.code });
+      });
+    }
+
+    const items =
+      curriculumSubjects && Array.isArray(curriculumSubjects) && curriculumSubjects.length > 0
+        ? curriculumSubjects
+        : allSubjects && Array.isArray(allSubjects) && allSubjects.length > 0
+        ? allSubjects
+        : Object.entries(STANDARD_SUBJECTS_MAP).map(([id, info]) => ({
+            id: Number(id),
+            subjectId: Number(id),
+            ...info,
+          }));
+
+    return items.map((item: any, idx: number) => {
       const s = item.subject || {};
-      const subjectId = item.subjectId || s.id || item.id;
-      const subjectName = item.name || s.name || item.subjectName || "Môn học";
-      const subjectCode = item.code || s.code || item.subjectCode || "";
+      const subjectId = item.subjectId || s.id || item.id || idx + 1;
+      const fallback =
+        allMap.get(subjectId) ||
+        STANDARD_SUBJECTS_MAP[subjectId] ||
+        STANDARD_SUBJECTS_MAP[(idx % 14) + 1];
+
+      let rawName = (item.name || s.name || item.subjectName || "").trim();
+      let rawCode = (item.code || s.code || item.subjectCode || "").trim();
+
+      if (!rawName || rawName === "Môn học" || rawName.startsWith("Môn học (")) {
+        rawName = fallback?.name || `Môn học ${subjectId}`;
+      }
+      if (!rawCode || rawCode === "()") {
+        rawCode = fallback?.code || "";
+      }
+
       return {
         value: subjectId,
-        label: subjectCode ? `${subjectName} (${subjectCode})` : subjectName,
+        label: rawCode ? `${rawName} (${rawCode})` : rawName,
       };
     });
-  }, [curriculumSubjects]);
+  }, [curriculumSubjects, allSubjects]);
 
   // Auto-select first subject if not selected yet
   useEffect(() => {

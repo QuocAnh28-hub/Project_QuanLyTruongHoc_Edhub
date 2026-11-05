@@ -15,10 +15,10 @@ interface Props {
 export default function EDLayoutProvider({ children }: Props) {
   const [breadcrumb, setBreadcrumb] = useState<BreadcrumbItemType[] | undefined>(undefined)
   const [messageApi, contextHolder] = message.useMessage();
-  function setPageInfo(breadcrumb?: BreadcrumbItemType[], title?: string) {
+  const setPageInfo = useCallback((breadcrumb?: BreadcrumbItemType[], title?: string) => {
     setBreadcrumb(breadcrumb)
     document.title = title ? PAGE_TITLE_PREFIX + ' ~ ' + title : PAGE_TITLE_PREFIX;
-  }
+  }, []);
   const callMessage = useCallback((_message: string, _type: MessageType = 'info', _onClose?: VoidFunction) => {
     switch (_type) {
       case 'success':
@@ -42,7 +42,7 @@ export default function EDLayoutProvider({ children }: Props) {
   }, [messageApi])
   const contextValue = useMemo(() => ({
     breadcrumb, setPageInfo, callMessage
-  }), [breadcrumb, callMessage])
+  }), [breadcrumb, setPageInfo, callMessage])
   return <context.Provider value={contextValue}>
     {contextHolder}
     {children}

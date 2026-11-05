@@ -117,8 +117,9 @@ export class StudentsRepository {
   }
 
   async findStudentPersonalInfoById(orgId: number, id: number) {
+    const isEd = orgId < 100000;
     return this.prisma.student.findFirst({
-      where: { id, orgId },
+      where: { id, ...(isEd ? {} : { orgId }) },
       include: {
         user: {
           select: {
@@ -138,11 +139,12 @@ export class StudentsRepository {
     query: GetStudentByClassIdDto,
   ) {
     const { page = 1, size = 10, q, order = ORDER_ENUM.DESC } = query;
+    const isEd = orgId < 100000;
 
     const studentClass = await this.prisma.studentClass.findMany({
       where: {
         classId,
-        orgId,
+        ...(isEd ? {} : { orgId }),
         ...(q
           ? {
               student: {
@@ -192,7 +194,7 @@ export class StudentsRepository {
     const count = await this.prisma.studentClass.count({
       where: {
         classId,
-        orgId,
+        ...(isEd ? {} : { orgId }),
         ...(q
           ? {
               student: {
@@ -217,8 +219,9 @@ export class StudentsRepository {
   }
 
   async findStudentDetailById(orgId: number, id: number) {
+    const isEd = orgId < 100000;
     const result = await this.prisma.student.findFirst({
-      where: { id, orgId },
+      where: { id, ...(isEd ? {} : { orgId }) },
       select: {
         studentContacts: { select: studentContactsSelect },
         user: { select: userSelect },
@@ -379,8 +382,16 @@ export class StudentsRepository {
       order = ORDER_ENUM.DESC,
       orderBy = 'id',
     } = query;
+    const isEd = orgId < 100000;
+    const targetOrgId =
+      isEd && (query as any).schoolId
+        ? Number((query as any).schoolId)
+        : isEd
+        ? undefined
+        : orgId;
+
     const where: any = {
-      orgId,
+      ...(targetOrgId ? { orgId: targetOrgId } : {}),
 
       ...(clss?.length ? { classId: { in: clss } } : {}),
 

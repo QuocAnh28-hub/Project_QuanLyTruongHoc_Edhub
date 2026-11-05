@@ -172,12 +172,17 @@ export function useGetData(path: string | null, params: any = null, immutable = 
         } : undefined,
       }
     )
+  const paramsStr = params ? JSON.stringify(params) : '';
   useEffect(() => {
     //tempo header
-    if (!path) return
-    const endpoint = toEndpoint(path, params)
-    setEndpoint(endpoint)
-  }, [path, params]);
+    if (!path) {
+      setEndpoint(null);
+      return;
+    }
+    const targetEndpoint = toEndpoint(path, params)
+    setEndpoint(prev => prev === targetEndpoint ? prev : targetEndpoint)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, paramsStr]);
   return { data: data?.response, fetching: isLoading, refreshing: isValidating, error: data ? data.errors?.[0] : error, mutate };
 }
 export const fetching_apis = {
