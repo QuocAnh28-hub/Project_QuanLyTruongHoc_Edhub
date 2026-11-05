@@ -61,6 +61,60 @@ class HomeRoutes {
     name: 'student-information',
   );
 
+  /// Student grades route
+  static final AppRoute studentGrades = AppRoute(
+    path: '/student-grades',
+    name: 'student-grades',
+  );
+
+  /// Timetable route
+  static final AppRoute timetable = AppRoute(
+    path: '/timetable',
+    name: 'timetable',
+  );
+
+  /// Leave request route
+  static final AppRoute leaveRequest = AppRoute(
+    path: '/leave-request',
+    name: 'leave-request',
+  );
+
+  /// Attendance history route
+  static final AppRoute attendanceHistory = AppRoute(
+    path: '/attendance-history',
+    name: 'attendance-history',
+  );
+
+  /// Chat detail route
+  static final AppRoute chatDetail = AppRoute(
+    path: '/chat-detail',
+    name: 'chat-detail',
+  );
+
+  /// Teacher Class Attendance route
+  static final AppRoute teacherAttendance = AppRoute(
+    path: '/teacher-attendance',
+    name: 'teacher-attendance',
+  );
+
+  /// Teacher Leave Approval route
+  static final AppRoute teacherLeaveApproval = AppRoute(
+    path: '/teacher-leave-approval',
+    name: 'teacher-leave-approval',
+  );
+
+  /// Teacher Gradebook route
+  static final AppRoute teacherGradebook = AppRoute(
+    path: '/teacher-gradebook',
+    name: 'teacher-gradebook',
+  );
+
+  /// Teacher Teaching Schedule route
+  static final AppRoute teacherSchedule = AppRoute(
+    path: '/teacher-schedule',
+    name: 'teacher-schedule',
+  );
+
   List<AppRoute> get all => [
     home,
     studentReview,
@@ -72,6 +126,15 @@ class HomeRoutes {
     academicPolicy,
     healthInformation,
     studentInformation,
+    studentGrades,
+    timetable,
+    leaveRequest,
+    attendanceHistory,
+    chatDetail,
+    teacherAttendance,
+    teacherLeaveApproval,
+    teacherGradebook,
+    teacherSchedule,
   ];
 }
 

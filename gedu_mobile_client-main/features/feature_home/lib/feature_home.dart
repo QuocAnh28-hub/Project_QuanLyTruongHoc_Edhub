@@ -17,6 +17,15 @@ export 'src/pages/student_profile_page.dart';
 export 'src/pages/academic_policy_page.dart';
 export 'src/pages/health_information_page.dart';
 export 'src/pages/student_information_page.dart';
+export 'src/pages/student_grades_page.dart';
+export 'src/pages/timetable_page.dart';
+export 'src/pages/leave_request_page.dart';
+export 'src/pages/attendance_history_page.dart';
+export 'src/pages/chat_detail_page.dart';
+export 'src/pages/teacher_attendance_page.dart';
+export 'src/pages/teacher_leave_approval_page.dart';
+export 'src/pages/teacher_gradebook_page.dart';
+export 'src/pages/teacher_schedule_page.dart';
 
 // Export widgets
 export 'src/pages/widgets/health_information_app_bar.dart';
@@ -33,6 +42,9 @@ export 'src/routes/home_routes.dart';
 
 // Export router
 export 'src/router/home_router.dart';
+
+// Export services
+export 'src/services/notification_service.dart';
 
 // Export utilities
 export 'src/utils/utils.dart';

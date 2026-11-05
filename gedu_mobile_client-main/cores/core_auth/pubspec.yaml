@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   core_network: ^0.0.1
+  core_storage: ^0.0.1
   lib_base: ^0.0.1
   lib_design_system: ^0.0.1
   freezed_annotation: ^3.1.0

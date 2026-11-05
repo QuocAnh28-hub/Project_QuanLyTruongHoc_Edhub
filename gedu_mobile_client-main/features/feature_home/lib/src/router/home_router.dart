@@ -42,6 +42,30 @@ class HomeRouter {
     context.go('/notifications');
   }
 
+  /// Navigate to teacher attendance screen
+  static void navigateToTeacherAttendance(BuildContext context) {
+    Log.d('$_tag: Navigating to teacher attendance screen');
+    context.push('/teacher-attendance');
+  }
+
+  /// Navigate to teacher leave approval screen
+  static void navigateToTeacherLeaveApproval(BuildContext context) {
+    Log.d('$_tag: Navigating to teacher leave approval screen');
+    context.push('/teacher-leave-approval');
+  }
+
+  /// Navigate to teacher gradebook screen
+  static void navigateToTeacherGradebook(BuildContext context) {
+    Log.d('$_tag: Navigating to teacher gradebook screen');
+    context.push('/teacher-gradebook');
+  }
+
+  /// Navigate to teacher schedule screen
+  static void navigateToTeacherSchedule(BuildContext context) {
+    Log.d('$_tag: Navigating to teacher schedule screen');
+    context.push('/teacher-schedule');
+  }
+
   /// Navigate back to previous screen
   static void goBack(BuildContext context) {
     Log.d('$_tag: Going back to previous screen');

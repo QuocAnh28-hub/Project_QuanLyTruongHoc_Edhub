@@ -120,7 +120,7 @@ function Content() {
         dataType: "Xác thực định danh CCCD học sinh",
         recordsCount: 678,
         triggerType: "MANUAL",
-        triggeredBy: "admin.sogd@local.test",
+        triggeredBy: "admin.sogd@hanoi.edu.vn",
         startedAt: "04/11/2026 11:30:15",
         duration: "2.8s",
         status: "SUCCESS",
@@ -543,7 +543,7 @@ function Content() {
             Cập nhật lần cuối: {dayjs().format("DD/MM/YYYY HH:mm:ss")}
           </GText>
         }
-        style={{ width: "100%", borderRadius: 8 }}
+        style={{ width: "100%", borderRadius: 8, overflow: "hidden" }}
       >
         <Table
           columns={columns}

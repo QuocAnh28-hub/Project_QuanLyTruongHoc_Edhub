@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ErrorResponse } from "react-router-dom";
 import useSWR from "swr";
 import { FETCH_ERROR } from "../models/common";
@@ -159,7 +159,13 @@ function toEndpoint(endpoint: string, params: any) {
   return endpoint
 }
 export function useGetData(path: string | null, params: any = null, immutable = true): any {
-  const [endpoint, setEndpoint] = useState<null | string>(null);
+  const paramsStr = params ? JSON.stringify(params) : '';
+  const endpoint = useMemo(() => {
+    if (!path) return null;
+    return toEndpoint(path, params);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [path, paramsStr]);
+
   const { data, error, isLoading, isValidating, mutate }
     = useSWR(
       endpoint, auth_fetcher,
@@ -172,17 +178,6 @@ export function useGetData(path: string | null, params: any = null, immutable = 
         } : undefined,
       }
     )
-  const paramsStr = params ? JSON.stringify(params) : '';
-  useEffect(() => {
-    //tempo header
-    if (!path) {
-      setEndpoint(null);
-      return;
-    }
-    const targetEndpoint = toEndpoint(path, params)
-    setEndpoint(prev => prev === targetEndpoint ? prev : targetEndpoint)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path, paramsStr]);
   return { data: data?.response, fetching: isLoading, refreshing: isValidating, error: data ? data.errors?.[0] : error, mutate };
 }
 export const fetching_apis = {

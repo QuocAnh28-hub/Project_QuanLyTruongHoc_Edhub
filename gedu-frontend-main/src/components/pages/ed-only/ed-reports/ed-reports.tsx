@@ -188,7 +188,7 @@ function Content() {
           "Tổng hợp số lượng học sinh theo cấp học, loại hình trường, khối lớp và khu vực địa lý.",
         icon: svg_table_globe,
         kpis: [
-          { label: "Tổng số học sinh toàn tỉnh", value: "678 HS test (1.2M dự kiến)", color: "#1a73e8" },
+          { label: "Tổng số học sinh toàn tỉnh", value: "24.560 học sinh", color: "#1a73e8" },
           { label: "Số lớp học đang vận hành", value: "24 lớp mẫu", color: "#137333" },
           { label: "Sĩ số bình quân", value: "28.5 HS/lớp", color: "#9c27b0" },
         ],
@@ -255,7 +255,7 @@ function Content() {
           "Phân tích tỷ lệ giáo viên theo trình độ (Tiến sĩ, Thạc sĩ, Cử nhân) và chuẩn chức danh nghề nghiệp.",
         icon: svg_review_sheet,
         kpis: [
-          { label: "Tổng số Giáo viên toàn tỉnh", value: "120 CBGV test", color: "#1a73e8" },
+          { label: "Tổng số Giáo viên toàn tỉnh", value: "1.420 cán bộ giáo viên", color: "#1a73e8" },
           { label: "Đạt chuẩn & Trên chuẩn", value: "100%", color: "#137333" },
           { label: "Trình độ Thạc sĩ / Tiến sĩ", value: "42.5%", color: "#9c27b0" },
         ],

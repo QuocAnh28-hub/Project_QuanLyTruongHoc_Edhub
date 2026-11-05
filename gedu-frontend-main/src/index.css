@@ -71,7 +71,13 @@ body {
 }
 
 .ant-table-cell {
-  max-width: 290px;
+  max-width: 320px;
+  word-break: normal;
+}
+
+/* Prevent double horizontal scrollbar in Ant Design tables */
+.ant-table-sticky-scroll {
+  display: none !important;
 }
 
 .ant-chart-title {

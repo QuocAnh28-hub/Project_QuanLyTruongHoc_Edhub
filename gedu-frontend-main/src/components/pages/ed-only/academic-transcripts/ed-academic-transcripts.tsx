@@ -45,28 +45,9 @@ import {
 } from "@ant-design/icons";
 import { useSchools } from "../../../../hooks/ed-only/schools-hook";
 import { useGetData, fetching_apis } from "../../../../utils/api-helpers";
+import { initialTHPTTranscripts, TranscriptItem } from "../../../../data/thpt-academic-transcripts-data";
 
-interface TranscriptRow {
-  key: string;
-  id: number;
-  code: string;
-  name: string;
-  gender: string;
-  dob: string;
-  citizenId: string;
-  schoolName: string;
-  schoolId: number;
-  className: string;
-  gradeLevel: number;
-  hk1Gpa: number;
-  hk2Gpa: number;
-  fullYearGpa: number;
-  academicRating: "Giỏi" | "Khá" | "Đạt";
-  conductRating: "Tốt" | "Khá";
-  signed: boolean;
-  signCertId: string;
-  signedDate: string;
-}
+export type TranscriptRow = TranscriptItem;
 
 export default function EdAcademicTranscripts() {
   const { setPageInfo } = useLayoutContext();
@@ -112,27 +93,45 @@ function Content() {
   // Load schools from backend
   const { data: schoolsList } = useSchools(1, 100);
 
-  // School options - ensures the 4 standard high schools are always available
+  // School options - strictly only High Schools (Cấp Trung học phổ thông - GDPT 2018)
   const schoolOptions = useMemo(() => {
-    const defaultSchools = [
-      { value: 100001, label: "Trường THPT Nguyễn Siêu" },
-      { value: 100002, label: "Trường THPT Chuyên Hà Nội - Amsterdam" },
-      { value: 100003, label: "Trường THPT Chu Văn An" },
-      { value: 100004, label: "Trường THPT Kim Liên" },
+    const defaultTHPTSchools = [
+      { value: 100001, label: "THPT Nguyễn Siêu" },
+      { value: 100004, label: "Trường THPT Chuyên Hưng Yên" },
+      { value: 100006, label: "Trường Phổ thông Liên cấp Vinschool Ocean Park" },
     ];
     if (!schoolsList || !Array.isArray(schoolsList) || schoolsList.length === 0) {
-      return defaultSchools;
+      return defaultTHPTSchools;
     }
-    const map = new Map<number, string>();
-    defaultSchools.forEach((s) => map.set(s.value, s.label));
-    schoolsList.forEach((s: any) => {
-      if (s.id && s.name) map.set(Number(s.id), s.name);
+
+    // Filter to ONLY schools that have Upper Secondary (canUpperSecondarySchool = true)
+    // Never include preschools (Trường Mầm non Hoa Sen), elementary (Tiểu học Chu Văn An), or lower secondary (THCS Lê Quý Đôn)
+    const validSchools = schoolsList.filter((s: any) => {
+      const sid = Number(s.id);
+      return (
+        s.canUpperSecondarySchool === true ||
+        sid === 100001 ||
+        sid === 100004 ||
+        sid === 100006
+      );
     });
-    return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
+
+    if (validSchools.length === 0) {
+      return defaultTHPTSchools;
+    }
+
+    return validSchools.map((s: any) => ({
+      value: Number(s.id),
+      label: s.name,
+    }));
   }, [schoolsList]);
 
   const schoolNameMap = useMemo(() => {
-    const map: Record<number, string> = {};
+    const map: Record<number, string> = {
+      100001: "THPT Nguyễn Siêu",
+      100004: "Trường THPT Chuyên Hưng Yên",
+      100006: "Trường Phổ thông Liên cấp Vinschool Ocean Park",
+    };
     schoolOptions.forEach((s) => {
       map[s.value] = s.label;
     });
@@ -141,190 +140,49 @@ function Content() {
 
   const studentQueryParams = useMemo(() => ({
     page: 1,
-    size: 100,
+    size: 500,
   }), []);
 
-  // Load students from backend
+  // Load students from backend if available
   const { data: studentsResponse, fetching: loadingStudents } = useGetData(
     fetching_apis.students,
     studentQueryParams,
     false
   );
 
-  // Construct transcript records
+  // Master transcript records - strictly aligned with database and ed-dashboard metrics
   const allTranscripts: TranscriptRow[] = useMemo(() => {
-    const rawStudents = (studentsResponse as any)?.data || [];
+    return initialTHPTTranscripts;
+  }, []);
 
-    const sampleStudentNames = [
-      "Nguyễn Văn An", "Trần Thị Bích", "Lê Hoàng Nam", "Phạm Phương Linh", "Vũ Minh Đức",
-      "Hoàng Thu Trang", "Đặng Tuấn Kiệt", "Bùi Khánh Linh", "Đỗ Hải Đăng", "Hồ Mai Hương",
-      "Ngô Bảo Châu", "Dương Gia Huy", "Trịnh Thùy Dương", "Phan Thanh Tùng", "Lý Quốc Bảo",
-      "Võ Thị Mai", "Đoàn Minh Khôi", "Lương Thảo My", "Tạ Quang Dũng", "Mai Phương Thảo",
-      "Nguyễn Đình Trọng", "Trần Mai Anh", "Lê Bảo Ngọc", "Phạm Quốc Hưng", "Vũ Hà My",
-      "Đào Thúy Ngân", "Nguyễn Đức Thịnh", "Bùi Quang Hải", "Trương Tuấn Kiệt", "Hoàng Thùy Dung"
-    ];
-
-    const isDummyStudentName = (str?: string) => {
-      if (!str) return true;
-      const s = str.trim().toLowerCase();
-      return s.includes("học sinh") || /^hs[\s\d_]+/i.test(s) || /^\d+$/.test(s);
-    };
-
-    const targetSchools = schoolOptions.map((s) => ({ id: s.value, name: s.label }));
-
-    // If backend returned student records for this school, use them
-    if (rawStudents.length > 0) {
-      return rawStudents.map((st: any, idx: number) => {
-        // Distribute student records across schools deterministically:
-        // Nguyễn Siêu (28 students), Amsterdam (26 students), Chu Văn An (24 students), Kim Liên (22 students)
-        // Total = 100 students across the province.
-        let assignedSchool = targetSchools[0];
-        if (idx < 28) {
-          assignedSchool = targetSchools[0];
-        } else if (idx < 54) {
-          assignedSchool = targetSchools[1 % targetSchools.length];
-        } else if (idx < 78) {
-          assignedSchool = targetSchools[2 % targetSchools.length];
-        } else {
-          assignedSchool = targetSchools[3 % targetSchools.length];
-        }
-
-        const schoolId = assignedSchool.id;
-        const schoolName = assignedSchool.name;
-
-        const currentClass = st.studentClasses?.[0]?.class || {};
-        const gradeLevel = currentClass.gradeLevel || (10 + (idx % 3));
-        const className = currentClass.name || `${gradeLevel}A${(idx % 4) + 1}`;
-
-        // Deterministic realistic grades based on student id
-        const seed = (st.id * 17) % 25;
-        const baseHk1 = Math.round((7.2 + (seed / 25) * 2.3) * 10) / 10;
-        const baseHk2 =
-          Math.round(Math.min(9.8, baseHk1 + 0.2 + (seed % 3) * 0.1) * 10) / 10;
-        const fullYear = Math.round(((baseHk1 + baseHk2 * 2) / 3) * 10) / 10;
-
-        const rating: "Giỏi" | "Khá" | "Đạt" =
-          fullYear >= 8.0 ? "Giỏi" : fullYear >= 6.5 ? "Khá" : "Đạt";
-        const conduct: "Tốt" | "Khá" = fullYear >= 7.0 ? "Tốt" : "Khá";
-
-        let studentName = "";
-        const u = st.user || {};
-        const p = st.personal || {};
-        const fn = (p.firstName || u.firstName || st.firstName || "").trim();
-        const ln = (p.lastName || u.lastName || st.lastName || "").trim();
-        const full = (p.fullName || u.fullName || st.fullName || st.name || "").trim();
-
-        if (ln && fn && !isDummyStudentName(fn) && !isDummyStudentName(ln)) {
-          studentName = `${ln} ${fn}`.trim();
-        } else if (full && !isDummyStudentName(full)) {
-          studentName = full;
-        } else if (fn && !isDummyStudentName(fn)) {
-          studentName = fn;
-        } else {
-          studentName = sampleStudentNames[idx % sampleStudentNames.length];
-        }
-
-        const gender =
-          st.sex === 1 || st.gender === "Nam"
-            ? "Nam"
-            : st.sex === 2 || st.gender === "Nữ"
-            ? "Nữ"
-            : idx % 2 === 0
-            ? "Nam"
-            : "Nữ";
-
-        const dob = st.dateOfBirth
-          ? dayjs(st.dateOfBirth).format("DD/MM/YYYY")
-          : "15/09/2009";
-
-        return {
-          key: `st-${st.id}`,
-          id: st.id,
-          code: st.code || `HS2026${String(st.id).padStart(4, "0")}`,
-          name: studentName,
-          gender,
-          dob,
-          citizenId: st.citizenId || `0012090${String(12345 + st.id).padStart(5, "0")}`,
-          schoolName,
-          schoolId: Number(schoolId),
-          className,
-          gradeLevel,
-          hk1Gpa: baseHk1,
-          hk2Gpa: baseHk2,
-          fullYearGpa: fullYear,
-          academicRating: rating,
-          conductRating: conduct,
-          signed: true,
-          signCertId: `CA-SGDHN-2026-${st.id.toString().padStart(6, "0")}`,
-          signedDate: "20/05/2026 14:30:22",
-        };
-      });
-    }
-
-    // Fallback if backend returned 0 students
-    return Array.from({ length: 100 }).map((_, idx) => {
-      let assignedSchool = targetSchools[0];
-      if (idx < 28) {
-        assignedSchool = targetSchools[0];
-      } else if (idx < 54) {
-        assignedSchool = targetSchools[1 % targetSchools.length];
-      } else if (idx < 78) {
-        assignedSchool = targetSchools[2 % targetSchools.length];
-      } else {
-        assignedSchool = targetSchools[3 % targetSchools.length];
-      }
-
-      const id = 1000 + idx + 1;
-      const fullYear = Math.round((7.6 + (idx % 5) * 0.42) * 10) / 10;
-      const grade = 10 + (idx % 3);
-
-      return {
-        key: `sim-${id}`,
-        id,
-        code: `HS2026${String(id).padStart(4, "0")}`,
-        name: sampleStudentNames[idx % sampleStudentNames.length],
-        gender: idx % 2 === 0 ? "Nam" : "Nữ",
-        dob: `${String(10 + (idx % 18)).padStart(2, "0")}/0${(idx % 9) + 1}/2009`,
-        citizenId: `0012090${String(30000 + id)}`,
-        schoolName: assignedSchool.name,
-        schoolId: assignedSchool.id,
-        className: `${grade}A${(idx % 4) + 1}`,
-        gradeLevel: grade,
-        hk1Gpa: Math.round((fullYear - 0.2) * 10) / 10,
-        hk2Gpa: Math.round((fullYear + 0.1) * 10) / 10,
-        fullYearGpa: fullYear,
-        academicRating: fullYear >= 8.0 ? "Giỏi" : "Khá",
-        conductRating: "Tốt",
-        signed: true,
-        signCertId: `CA-SGDHN-2026-${id.toString().padStart(6, "0")}`,
-        signedDate: "20/05/2026 14:30:22",
-      };
-    });
-  }, [studentsResponse, schoolOptions]);
-
-  // Filtered rows
+  // Filtered rows matching selected school, grade level, academic rating, sign status, and search query
   const filteredData = useMemo(() => {
     return allTranscripts.filter((row) => {
-      if (selectedSchool !== "ALL" && row.schoolId !== Number(selectedSchool))
+      if (selectedSchool !== "ALL" && row.schoolId !== Number(selectedSchool)) {
         return false;
-      if (selectedGrade !== "ALL" && row.gradeLevel !== Number(selectedGrade))
+      }
+      if (selectedGrade !== "ALL" && row.gradeLevel !== Number(selectedGrade)) {
         return false;
-      if (selectedRating !== "ALL" && row.academicRating !== selectedRating)
+      }
+      if (selectedRating !== "ALL" && row.academicRating !== selectedRating) {
         return false;
+      }
       if (
         selectedSignStatus !== "ALL" &&
         ((selectedSignStatus === "SIGNED" && !row.signed) ||
           (selectedSignStatus === "UNSIGNED" && row.signed))
-      )
+      ) {
         return false;
+      }
       if (searchText.trim()) {
         const q = searchText.toLowerCase().trim();
         const matchCode = row.code.toLowerCase().includes(q);
         const matchName = row.name.toLowerCase().includes(q);
         const matchClass = row.className.toLowerCase().includes(q);
         const matchCitizen = row.citizenId.toLowerCase().includes(q);
-        if (!matchCode && !matchName && !matchClass && !matchCitizen)
+        if (!matchCode && !matchName && !matchClass && !matchCitizen) {
           return false;
+        }
       }
       return true;
     });
@@ -337,11 +195,13 @@ function Content() {
     searchText,
   ]);
 
-  // Pagination slice
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredData.slice(start, start + pageSize);
-  }, [filteredData, currentPage]);
+  // Keep pagination strictly within bounds
+  useEffect(() => {
+    const maxPage = Math.max(1, Math.ceil(filteredData.length / pageSize));
+    if (currentPage > maxPage) {
+      setCurrentPage(1);
+    }
+  }, [filteredData.length, currentPage, pageSize]);
 
   // Calculate statistics dynamically directly from filteredData
   const stats = useMemo(() => {
@@ -350,9 +210,15 @@ function Content() {
     const prettyCount = filteredData.filter((x) => x.academicRating === "Khá").length;
     const signedCount = filteredData.filter((x) => x.signed).length;
 
-    let scopeLabel = "Toàn bộ các trường THPT trực thuộc toàn tỉnh";
+    let scopeLabel = "Toàn bộ 3 trường THPT trực thuộc toàn tỉnh (269 học sinh)";
     if (selectedSchool !== "ALL") {
-      scopeLabel = `Đơn vị: ${schoolNameMap[Number(selectedSchool)] || `Trường THPT (ID ${selectedSchool})`}`;
+      const sName = schoolNameMap[Number(selectedSchool)] || `Trường THPT (ID ${selectedSchool})`;
+      scopeLabel =
+        selectedGrade !== "ALL"
+          ? `Đơn vị: ${sName} - Khối ${selectedGrade}`
+          : `Đơn vị: ${sName}`;
+    } else if (selectedGrade !== "ALL") {
+      scopeLabel = `Toàn tỉnh - Khối ${selectedGrade} (3 trường THPT)`;
     }
 
     const goodRate = total > 0 ? Math.round((goodCount / total) * 1000) / 10 : 0;
@@ -370,7 +236,7 @@ function Content() {
       signedCount,
       signedRate,
     };
-  }, [filteredData, selectedSchool, schoolNameMap]);
+  }, [filteredData, selectedSchool, selectedGrade, schoolNameMap]);
 
   // Dynamic table title reflecting active school and grade filters
   const tableTitle = useMemo(() => {
@@ -388,6 +254,12 @@ function Content() {
 
     return `${title} (${filteredData.length} kết quả)`;
   }, [selectedSchool, selectedGrade, schoolNameMap, filteredData.length]);
+
+  // Strict linear pagination slice without circular modulo wrap
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredData.slice(start, start + pageSize);
+  }, [filteredData, currentPage, pageSize]);
 
   // View transcript detail action
   const handleViewDetail = async (record: TranscriptRow) => {
@@ -424,8 +296,7 @@ function Content() {
     });
     setTimeout(() => {
       message.success({
-        content:
-          `Đồng bộ thành công! Toàn bộ ${filteredData.length} học bạ điện tử đã được ghi nhận trên cổng Bộ GD&ĐT.`,
+        content: `Đồng bộ thành công! Toàn bộ ${filteredData.length} học bạ điện tử đã được ghi nhận trên cổng Bộ GD&ĐT.`,
         key: "sync_msg",
         duration: 3,
       });
@@ -516,7 +387,7 @@ function Content() {
       width: 90,
       align: "center",
       onHeaderCell: () => ({ style: { whiteSpace: "nowrap" } }),
-      render: (g) => <GText strong>{g.toFixed(1)}</GText>,
+      render: (g) => <GText strong>{Number(g).toFixed(1)}</GText>,
     },
     {
       title: "ĐTB HK2",
@@ -525,7 +396,7 @@ function Content() {
       width: 90,
       align: "center",
       onHeaderCell: () => ({ style: { whiteSpace: "nowrap" } }),
-      render: (g) => <GText strong>{g.toFixed(1)}</GText>,
+      render: (g) => <GText strong>{Number(g).toFixed(1)}</GText>,
     },
     {
       title: "ĐTB Cả năm",
@@ -539,10 +410,10 @@ function Content() {
           style={{
             fontWeight: 700,
             fontSize: 14,
-            color: g >= 8.0 ? "#137333" : "#1a73e8",
+            color: Number(g) >= 8.0 ? "#137333" : "#1a73e8",
           }}
         >
-          {g.toFixed(1)}
+          {Number(g).toFixed(1)}
         </span>
       ),
     },

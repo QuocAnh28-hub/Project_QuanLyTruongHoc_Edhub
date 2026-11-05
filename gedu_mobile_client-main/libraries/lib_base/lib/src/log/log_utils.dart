@@ -15,6 +15,11 @@ class Log {
     _log('🛠️ $message', name: name ?? '', time: time);
   }
 
+  /// Warning log
+  static void w(Object? message, {String? name, DateTime? time}) {
+    _log('⚠️ $message', name: name ?? '', time: time);
+  }
+
   static void e(
     Object? errorMessage, {
     String? name,

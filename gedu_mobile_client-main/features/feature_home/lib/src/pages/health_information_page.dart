@@ -241,15 +241,17 @@ class _HealthInformationPageState extends State<HealthInformationPage> {
     if (medicalInfo?.description != null &&
         medicalInfo!.description!.isNotEmpty) {
       return Row(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Assets.images.home.homeShield.designSystemSvg(width: 20, height: 20),
           const SizedBox(width: AppSpacing.space1x),
-          Text(
-            medicalInfo.description!,
-            style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
+          Expanded(
+            child: Text(
+              medicalInfo.description!,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],

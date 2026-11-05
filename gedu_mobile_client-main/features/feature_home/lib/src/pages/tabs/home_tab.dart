@@ -18,6 +18,20 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  String _getUserRole(HomeState state) {
+    if (state is HomeSuccess && state.accountInfo != null) {
+      final email = state.accountInfo!.email.toLowerCase();
+      final phone = state.accountInfo!.phone ?? '';
+      if (email.contains('hocsinh') || phone == '0901234567') {
+        return 'student';
+      }
+      if (email.contains('giaovien') || phone == '0988888888') {
+        return 'teacher';
+      }
+    }
+    return 'parent';
+  }
+
   Future<void> _pushAndRefresh(
     BuildContext context,
     String route, {
@@ -34,6 +48,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
+        final role = _getUserRole(state);
         return Scaffold(
           backgroundColor: AppColors.background,
           body: Stack(
@@ -82,13 +97,13 @@ class _HomeTabState extends State<HomeTab> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildFeatureGrid(context),
+                              _buildFeatureGrid(context, role),
                               const SizedBox(height: AppSpacing.space6x),
-                              _buildNewNotificationSection(context),
+                              _buildNewNotificationSection(context, role),
                               const SizedBox(height: AppSpacing.space4x),
-                              _buildAttendanceSection(context),
+                              _buildAttendanceSection(context, role),
                               const SizedBox(height: AppSpacing.space4x),
-                              _buildTodayScheduleSection(context),
+                              _buildTodayScheduleSection(context, role),
                               const SizedBox(height: AppSpacing.space6x),
                             ],
                           ),
@@ -106,296 +121,328 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildHeader(BuildContext context, HomeState state) {
+    final role = _getUserRole(state);
+    final account = state is HomeSuccess ? state.accountInfo : null;
+
+    String greetingRole = 'phụ huynh';
+    String roleBadge = 'Phụ huynh học sinh';
+    Color badgeColor = Colors.orange;
+
+    if (role == 'student') {
+      greetingRole = 'học sinh';
+      roleBadge = 'Học sinh';
+      badgeColor = Colors.blue;
+    } else if (role == 'teacher') {
+      greetingRole = 'cô giáo';
+      roleBadge = 'Giáo viên';
+      badgeColor = Colors.purple;
+    }
+
+    final userName = account != null ? '${account.lastName} ${account.firstName}' : 'Người dùng';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // User profile section
         Row(
           children: [
-            // User profile picture
+            // User profile picture with role color
             CircleAvatar(
               radius: 24,
-              backgroundColor: Colors.white.withValues(alpha: 0.2),
-              child: state is HomeSuccess && state.accountInfo != null
-                  ? Text(
-                      state.accountInfo!.firstName.isNotEmpty
-                          ? state.accountInfo!.firstName[0].toUpperCase()
-                          : '?',
-                      style: AppTypography.headlineMedium.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  : const Icon(Icons.person, color: Colors.white, size: 28),
+              backgroundColor: badgeColor.withValues(alpha: 0.2),
+              child: Text(
+                account != null && account.firstName.isNotEmpty
+                    ? account.firstName[0].toUpperCase()
+                    : 'G',
+                style: AppTypography.headlineMedium.copyWith(
+                  color: badgeColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             const SizedBox(width: AppSpacing.space2x),
             // Greeting text
             Expanded(
-              child: state is HomeSuccess && state.accountInfo != null
-                  ? RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Chào ngày mới,\n',
-                            style: AppTypography.bodyLarge.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.normal,
-                            ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          'Chào $greetingRole, ',
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.textPrimary,
                           ),
-                          TextSpan(
-                            text:
-                                '${state.accountInfo!.lastName} ${state.accountInfo!.firstName}',
-                            style: AppTypography.bodyLarge.copyWith(
-                              color: AppColors.textPrimary,
-                              fontWeight: FontWeight.bold,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: badgeColor.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: badgeColor.withValues(alpha: 0.4)),
+                        ),
+                        child: Text(
+                          roleBadge,
+                          style: TextStyle(
+                            color: badgeColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    userName,
+                    style: AppTypography.titleMedium.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.space2x),
+        // Sub-info: Student / Class context
+        Padding(
+          padding: const EdgeInsets.only(left: AppSpacing.space10x),
+          child: role == 'student'
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.blue.withValues(alpha: 0.25)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.school, size: 20, color: Colors.blue),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Lớp 10A1 • THPT Nguyễn Siêu • Mã HS: HS000601636',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: Colors.blue.shade900,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : role == 'teacher'
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.purple.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.purple.withValues(alpha: 0.25)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.assignment_ind, size: 20, color: Colors.purple),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              'GVCN Lớp 10A1 • Môn Toán học • Sĩ số: 38 học sinh',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: Colors.purple.shade900,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     )
-                  : Text(
-                      AppLocalizations.of(context)?.dashboardGreeting ??
-                          'Chào ngày mới',
-                      style: AppTypography.bodyLarge.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.space2x),
-        // Student information and action section
-        Padding(
-          padding: const EdgeInsets.only(left: AppSpacing.space10x),
-          child: Row(
-            children: [
-              // Student avatar with notification badge
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.white.withValues(alpha: 0.2),
-                    child: state is HomeSuccess && state.currentStudent != null
-                        ? Text(
-                            state.currentStudent!.firstName.isNotEmpty
-                                ? state.currentStudent!.firstName[0]
-                                      .toUpperCase()
-                                : '?',
-                            style: AppTypography.headlineMedium.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : Icon(Icons.school, color: Colors.white, size: 32),
-                  ),
-                ],
-              ),
-              const SizedBox(width: AppSpacing.space3x),
-              // Student details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      state is HomeSuccess && state.currentStudent != null
-                          ? state.currentStudent!.displayName
-                          : (AppLocalizations.of(
-                                  context,
-                                )?.dashboardStudentNamePlaceholder ??
-                                'Student Name'),
-                      style: AppTypography.titleSmall.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.space1x),
-                    Text(
-                      state is HomeSuccess && state.currentStudent != null
-                          ? (state.currentStudent!.currentClassName != null
-                                ? (AppLocalizations.of(
-                                        context,
-                                      )?.dashboardClassPrefix(
-                                        state.currentStudent!.currentClassName!,
-                                      ) ??
-                                      'Lớp ${state.currentStudent!.currentClassName}')
-                                : (AppLocalizations.of(
-                                        context,
-                                      )?.dashboardNoClassYet ??
-                                      'No class yet'))
-                          : (AppLocalizations.of(
-                                  context,
-                                )?.dashboardClassPlaceholder ??
-                                'Class'),
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppSpacing.space2x),
-              // Switch profile button
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      print('🎯 Switch profile tapped!');
-                      _showStudentSelectionBottomSheet(context);
-                    },
-                    child: Assets.images.switchProfile.designSystemSvg(
-                      width: AppSpacing.space6x,
-                      height: AppSpacing.space6x,
-                      color: AppColors.selectionBlue,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.space2x),
-                  Container(
-                    height: 18,
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Colors.black.withValues(alpha: 0.10),
+                  : Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white.withValues(alpha: 0.3),
+                          child: const Icon(Icons.child_care, color: Colors.orange, size: 22),
                         ),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigate to student profile and refresh on return
-                      _pushAndRefresh(context, '/student-profile');
-                    },
-                    style:
-                        AppButtonStyles.custom(
-                          backgroundColor: AppColors.transparent,
-                          foregroundColor: AppColors.selectionBlue,
-                          elevation: 0,
-                        ).copyWith(
-                          padding: WidgetStateProperty.all(
-                            AppSpacing.all(AppSpacing.space2x),
+                        const SizedBox(width: AppSpacing.space2x),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state is HomeSuccess && state.currentStudent != null
+                                    ? 'Học sinh: ${state.currentStudent!.displayName}'
+                                    : 'Học sinh: Trần Mỹ An',
+                                style: AppTypography.bodyMedium.copyWith(
+                                  color: AppColors.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                state is HomeSuccess && state.currentStudent != null
+                                    ? 'Lớp ${state.currentStudent!.className ?? "10A1"} • ${state.currentStudent!.schoolName ?? "THPT Nguyễn Siêu"}'
+                                    : 'Lớp 10A1 • THPT Nguyễn Siêu',
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                    child: Text(
-                      AppLocalizations.of(context)?.dashboardViewProfile ??
-                          'View Profile',
-                      style: AppTypography.bodyLarge.copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        // Confirmation prompt if confirmedById is null
-        if (state is HomeSuccess &&
-            state.currentStudent != null &&
-            state.currentStudent?.confirmedById == null) ...[
-          const SizedBox(height: AppSpacing.space4x),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.space4x,
-              vertical: AppSpacing.space2x,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFF7E7),
-              borderRadius: BorderRadius.circular(AppSpacing.borderRadius12px),
-              border: Border.all(
-                color: AppColors.warning.withValues(alpha: 0.3),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Alert icon, message, and button in one row
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Alert icon - aligned to top
-                    _buildAlertIcon(),
-                    const SizedBox(width: AppSpacing.space3x),
-                    // Message and button
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Single title with highlight text
-                          RichText(
-                            text: TextSpan(
-                              style: AppTypography.bodyMedium.copyWith(
-                                color: AppColors.textPrimary,
-                              ),
+                        // Switch profile button
+                        GestureDetector(
+                          onTap: () => _showStudentSelectionBottomSheet(context),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.selectionBlue.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
                               children: [
-                                TextSpan(
-                                  text:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.dashboardConfirmStudentInfoPrefix ??
-                                      'Please check and confirm the information of ',
+                                Assets.images.switchProfile.designSystemSvg(
+                                  width: 18,
+                                  height: 18,
+                                  color: AppColors.selectionBlue,
                                 ),
-                                TextSpan(
-                                  text:
-                                      ' ${state.currentStudent!.displayName} ',
-                                  style: AppTypography.bodyMedium.copyWith(
-                                    color: AppColors.textPrimary,
+                                const SizedBox(width: 4),
+                                const Text(
+                                  'Đổi con',
+                                  style: TextStyle(
+                                    color: AppColors.selectionBlue,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                TextSpan(
-                                  text:
-                                      AppLocalizations.of(
-                                        context,
-                                      )?.dashboardConfirmStudentInfoSuffix ??
-                                      ' so Gedu can provide the most accurate information.',
-                                ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.space2x),
-                          // Action button
-                          GestureDetector(
-                            onTap: () {
-                              _pushAndRefresh(context, '/student-profile');
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  AppLocalizations.of(
-                                        context,
-                                      )?.dashboardCheckAndConfirm ??
-                                      'Check and confirm',
-                                  style: AppTypography.bodyMedium.copyWith(
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                                const SizedBox(width: AppSpacing.space2x),
-                                const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: AppColors.primary,
-                                  size: 16,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ],
     );
   }
 
-  Widget _buildFeatureGrid(BuildContext context) {
+  Widget _buildFeatureGrid(BuildContext context, String role) {
+    List<Widget> cards = [];
+
+    if (role == 'student') {
+      cards = [
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCalendar,
+            title: 'Thời khóa biểu',
+            onTap: () => context.push('/timetable'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeScore,
+            title: 'Bảng điểm',
+            onTap: () => context.push('/student-grades'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCheckIn,
+            title: 'Hỏi bài GVCN',
+            onTap: () => context.push('/chat-detail'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeFoodMenu,
+            title: 'Thông báo',
+            onTap: () => context.push('/notifications'),
+          ),
+        ),
+      ];
+    } else if (role == 'teacher') {
+      cards = [
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCheckIn,
+            title: 'Sĩ số điểm danh',
+            onTap: () => context.push('/teacher-attendance'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeScore,
+            title: 'Duyệt đơn nghỉ',
+            onTap: () => context.push('/teacher-leave-approval'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeScore,
+            title: 'Sổ điểm điện tử',
+            onTap: () => context.push('/teacher-gradebook'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCalendar,
+            title: 'Lịch giảng dạy',
+            onTap: () => context.push('/teacher-schedule'),
+          ),
+        ),
+      ];
+    } else {
+      // Parent
+      cards = [
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCheckIn,
+            title:
+                AppLocalizations.of(context)?.dashboardFeatureMessage ??
+                'Gửi tin nhắn',
+            onTap: () => context.push('/chat-detail'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeScore,
+            title:
+                AppLocalizations.of(context)?.dashboardFeatureLeaveRequest ??
+                'Xin nghỉ phép',
+            onTap: () => context.push('/leave-request'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeCalendar,
+            title:
+                AppLocalizations.of(context)?.dashboardFeatureViewSchedule ??
+                'Xem lịch học',
+            onTap: () => context.push('/timetable'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.space2x),
+        Expanded(
+          child: _buildFeatureCard(
+            icon: Assets.images.home.homeFoodMenu,
+            title: 'Xem điểm số',
+            onTap: () => context.push('/student-grades'),
+          ),
+        ),
+      ];
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -404,48 +451,35 @@ class _HomeTabState extends State<HomeTab> {
       padding: AppSpacing.all(AppSpacing.space4x),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: _buildFeatureCard(
-              icon: Assets.images.home.homeCheckIn,
-              title:
-                  AppLocalizations.of(context)?.dashboardFeatureMessage ??
-                  'Gửi tin nhắn',
-            ),
-          ),
-          SizedBox(width: AppSpacing.space2x),
-          Expanded(
-            child: _buildFeatureCard(
-              icon: Assets.images.home.homeScore,
-              title:
-                  AppLocalizations.of(context)?.dashboardFeatureLeaveRequest ??
-                  'Xin nghỉ phép',
-            ),
-          ),
-          SizedBox(width: AppSpacing.space2x),
-          Expanded(
-            child: _buildFeatureCard(
-              icon: Assets.images.home.homeCalendar,
-              title:
-                  AppLocalizations.of(context)?.dashboardFeatureViewSchedule ??
-                  'Xem lịch học',
-            ),
-          ),
-          SizedBox(width: AppSpacing.space2x),
-          Expanded(
-            child: _buildFeatureCard(
-              icon: Assets.images.home.homeFoodMenu,
-              title:
-                  AppLocalizations.of(context)?.dashboardFeatureViewMenu ??
-                  'Xem thực đơn',
-            ),
-          ),
-        ],
+        children: cards,
       ),
     );
   }
 
-  Widget _buildNewNotificationSection(BuildContext context) {
+  Widget _buildNewNotificationSection(BuildContext context, String role) {
+    String sectionTitle = 'Thông báo mới';
+    String cardTitle = 'Đợt thu tiền tháng 11/2026\ncủa học sinh Trần Mỹ An';
+    String badgeText = 'Đợt thu mới';
+    Color badgeColor = Colors.pink;
+    Color iconBgColor = Colors.pink.shade50;
+    IconData iconData = Icons.receipt_long;
+
+    if (role == 'student') {
+      sectionTitle = 'Nhiệm vụ & Bài tập học sinh';
+      cardTitle = 'Kiểm tra 15 phút môn Toán (Sáng mai)\nNội dung: Hệ phương trình bậc nhất';
+      badgeText = 'Bài tập & KT';
+      badgeColor = Colors.blue;
+      iconBgColor = Colors.blue.shade50;
+      iconData = Icons.assignment;
+    } else if (role == 'teacher') {
+      sectionTitle = 'Công việc cần xử lý ngay';
+      cardTitle = '01 Đơn xin nghỉ phép cần xét duyệt\nTừ phụ huynh em Trần Mỹ An (10A1)';
+      badgeText = 'Cần xét duyệt';
+      badgeColor = Colors.orange;
+      iconBgColor = Colors.orange.shade50;
+      iconData = Icons.pending_actions;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -453,17 +487,21 @@ class _HomeTabState extends State<HomeTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppLocalizations.of(context)?.dashboardNotificationsTitle ??
-                  'Thông báo mới',
-              style: AppTypography.titleMedium.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                sectionTitle,
+                style: AppTypography.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+            const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-                // Navigate to notifications
+                context.push(role == 'teacher' ? '/teacher-leave-approval' : '/notifications');
               },
               child: Text(
                 AppLocalizations.of(context)?.dashboardSeeAll ?? 'Xem tất cả',
@@ -477,80 +515,106 @@ class _HomeTabState extends State<HomeTab> {
         ),
         const SizedBox(height: AppSpacing.space3x),
         // Notification card
-        Container(
-          padding: AppSpacing.all(AppSpacing.space4x),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Colors.pink.withValues(alpha: 0.2),
-              width: 1,
-            ),
-          ),
-          child: Row(
-            children: [
-              // Notification icon (pink circular with document)
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.pink.shade50,
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Icon(Icons.receipt_long, color: Colors.pink, size: 24),
+        GestureDetector(
+          onTap: () => context.push(role == 'teacher' ? '/teacher-leave-approval' : '/notifications'),
+          child: Container(
+            padding: AppSpacing.all(AppSpacing.space4x),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: badgeColor.withValues(alpha: 0.2),
+                width: 1,
               ),
-              const SizedBox(width: AppSpacing.space3x),
-              // Notification content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppSpacing.space2x,
-                            vertical: AppSpacing.space0_5x,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.pink,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            'Đọt thu mới',
-                            style: AppTypography.bodySmall.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
+            ),
+            child: Row(
+              children: [
+                // Notification icon
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: iconBgColor,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Icon(iconData, color: badgeColor, size: 24),
+                ),
+                const SizedBox(width: AppSpacing.space3x),
+                // Notification content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.space2x,
+                              vertical: AppSpacing.space0_5x,
+                            ),
+                            decoration: BoxDecoration(
+                              color: badgeColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              badgeText,
+                              style: AppTypography.bodySmall.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.space2x),
-                    Text(
-                      'Đọt thu tiền tháng 9/2025\ncủa học sinh Trần Mỹ An',
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w500,
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: AppSpacing.space2x),
+                      Text(
+                        cardTitle,
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // Arrow icon
-              Icon(
-                Icons.chevron_right,
-                color: AppColors.textSecondary,
-                size: 20,
-              ),
-            ],
+                // Arrow icon
+                Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textSecondary,
+                  size: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildAttendanceSection(BuildContext context) {
+  Widget _buildAttendanceSection(BuildContext context, String role) {
+    String headerTitle = 'Trạng thái chuyên cần';
+    String badgeTitle = 'Có mặt';
+    String attendanceText = 'Trần Mỹ An đã có mặt tại trường\nlúc 7:30 sáng.';
+    IconData icon = Icons.directions_bus;
+    Color iconColor = Colors.orange.shade600;
+    Color iconBg = Colors.orange.shade100;
+
+    if (role == 'student') {
+      headerTitle = 'Trạng thái điểm danh của bạn';
+      badgeTitle = 'Đúng giờ';
+      attendanceText = 'Bạn đã quét thẻ NFC lúc 7:25 sáng tại Cổng trường.\nTham gia đầy đủ các tiết học.';
+      icon = Icons.qr_code_scanner;
+      iconColor = Colors.blue.shade600;
+      iconBg = Colors.blue.shade100;
+    } else if (role == 'teacher') {
+      headerTitle = 'Báo cáo điểm danh Lớp 10A1';
+      badgeTitle = '38/38 Có mặt';
+      attendanceText = 'Sĩ số: 38/38 học sinh có mặt đúng giờ.\n0 vắng, 0 đi muộn. Lớp học đúng lịch.';
+      icon = Icons.groups;
+      iconColor = Colors.purple.shade600;
+      iconBg = Colors.purple.shade100;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -558,17 +622,21 @@ class _HomeTabState extends State<HomeTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppLocalizations.of(context)?.dashboardAttendanceTitle ??
-                  'Trạng thái chuyên cần',
-              style: AppTypography.titleMedium.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
+            Expanded(
+              child: Text(
+                headerTitle,
+                style: AppTypography.titleMedium.copyWith(
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+            const SizedBox(width: 8),
             GestureDetector(
               onTap: () {
-                // Navigate to attendance
+                context.push(role == 'teacher' ? '/teacher-attendance' : '/attendance-history');
               },
               child: Text(
                 AppLocalizations.of(context)?.dashboardSeeAll ?? 'Xem tất cả',
@@ -582,9 +650,11 @@ class _HomeTabState extends State<HomeTab> {
         ),
         const SizedBox(height: AppSpacing.space3x),
         // Attendance card
-        Container(
-          padding: AppSpacing.all(AppSpacing.space4x),
-          decoration: BoxDecoration(
+        GestureDetector(
+          onTap: () => context.push(role == 'teacher' ? '/teacher-attendance' : '/attendance-history'),
+          child: Container(
+            padding: AppSpacing.all(AppSpacing.space4x),
+            decoration: BoxDecoration(
             color: AppColors.success.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(16),
           ),
@@ -601,8 +671,7 @@ class _HomeTabState extends State<HomeTab> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)?.dashboardAttendancePresent ??
-                      'Có mặt',
+                  badgeTitle,
                   style: AppTypography.bodySmall.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -610,17 +679,17 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
               const SizedBox(width: AppSpacing.space3x),
-              // Bus icon
+              // Icon
               Container(
                 width: 60,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.orange.shade100,
+                  color: iconBg,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  Icons.directions_bus,
-                  color: Colors.orange.shade600,
+                  icon,
+                  color: iconColor,
                   size: 28,
                 ),
               ),
@@ -628,7 +697,7 @@ class _HomeTabState extends State<HomeTab> {
               // Attendance text
               Expanded(
                 child: Text(
-                  'Trần Mỹ An đã có mặt tại trường\nlúc 7:30 sáng.',
+                  attendanceText,
                   style: AppTypography.bodyMedium.copyWith(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w500,
@@ -638,18 +707,29 @@ class _HomeTabState extends State<HomeTab> {
             ],
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
-  Widget _buildTodayScheduleSection(BuildContext context) {
+  Widget _buildTodayScheduleSection(BuildContext context, String role) {
+    String headerTitle = 'Lịch học hôm nay';
+    String description = 'Hôm nay Mỹ An có 5 tiết học sáng và chiều.';
+
+    if (role == 'student') {
+      headerTitle = 'Thời khóa biểu hôm nay';
+      description = 'Hôm nay bạn có 5 tiết học (Phòng 201 - Dãy A).';
+    } else if (role == 'teacher') {
+      headerTitle = 'Lịch giảng dạy & Sinh hoạt hôm nay';
+      description = 'Cô có 3 tiết dạy môn Toán (Tiết 2, 4 tại 10A1; Tiết 5 tại 10A3).';
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section header
         Text(
-          AppLocalizations.of(context)?.dashboardScheduleTitle ??
-              'Lịch học hôm nay',
+          headerTitle,
           style: AppTypography.titleMedium.copyWith(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w600,
@@ -658,8 +738,7 @@ class _HomeTabState extends State<HomeTab> {
         const SizedBox(height: AppSpacing.space2x),
         // Schedule description
         Text(
-          AppLocalizations.of(context)?.dashboardScheduleEmpty ??
-              'Hôm nay Mỹ An có 5 tiết học sáng và chiều.',
+          description,
           style: AppTypography.bodyMedium.copyWith(
             color: AppColors.textSecondary,
           ),
@@ -709,10 +788,10 @@ class _HomeTabState extends State<HomeTab> {
         // View all schedule link
         GestureDetector(
           onTap: () {
-            // Navigate to full schedule
+            context.push(role == 'teacher' ? '/teacher-schedule' : '/timetable');
           },
           child: Text(
-            'Xem tất cả lịch học',
+            role == 'teacher' ? 'Xem toàn bộ lịch giảng dạy tuần' : 'Xem tất cả lịch học',
             style: AppTypography.bodyMedium.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w500,
@@ -799,41 +878,50 @@ class _HomeTabState extends State<HomeTab> {
     required SvgGenImage icon,
     required String title,
     bool hasNotification = false,
+    VoidCallback? onTap,
   }) {
-    return Stack(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            icon.designSystemSvg(width: 74, height: 74), // Reduced from 74x74
-            SizedBox(height: AppSpacing.space1x),
-            Text(
-              title,
-              style: AppTypography.bodySmall.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2, // Allow text to wrap to 2 lines
-              overflow: TextOverflow.ellipsis,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                icon.designSystemSvg(width: 74, height: 74), // Reduced from 74x74
+                SizedBox(height: AppSpacing.space1x),
+                Text(
+                  title,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2, // Allow text to wrap to 2 lines
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
+            if (hasNotification)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: AppColors.error,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                ),
+              ),
           ],
         ),
-        if (hasNotification)
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: AppColors.error,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-            ),
-          ),
-      ],
+      ),
     );
   }
 

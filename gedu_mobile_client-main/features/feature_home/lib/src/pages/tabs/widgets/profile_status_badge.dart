@@ -45,11 +45,15 @@ class ProfileStatusBadge extends StatelessWidget {
           ),
           if (content != null) ...[
             const SizedBox(width: AppSpacing.space1x),
-            Text(
-              content!,
-              style: AppTypography.bodySmall.copyWith(
-                color: AppColors.warningBadgeText,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                content!,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.warningBadgeText,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
@@ -109,11 +113,15 @@ class ProfileStatusBadge extends StatelessWidget {
           ),
           if (content != null) ...[
             const SizedBox(width: AppSpacing.space1x),
-            Text(
-              content!,
-              style: AppTypography.bodySmall.copyWith(
-                color: AppColors.successBadgeText,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                content!,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.successBadgeText,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

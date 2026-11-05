@@ -381,14 +381,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         children: [
           Row(
             children: [
-              Text(
-                l10n.changePasswordRequirementsTitle,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  l10n.changePasswordRequirementsTitle,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-              const Spacer(),
               // Only show strength label when user is typing
               if (_newPasswordController.text.isNotEmpty)
                 Container(
@@ -435,10 +436,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             color: isMet ? AppColors.success : AppColors.textSecondary,
           ),
           const SizedBox(width: AppSpacing.space2x),
-          Text(
-            text,
-            style: AppTypography.bodySmall.copyWith(
-              color: isMet ? AppColors.success : AppColors.textSecondary,
+          Expanded(
+            child: Text(
+              text,
+              style: AppTypography.bodySmall.copyWith(
+                color: isMet ? AppColors.success : AppColors.textSecondary,
+              ),
             ),
           ),
         ],

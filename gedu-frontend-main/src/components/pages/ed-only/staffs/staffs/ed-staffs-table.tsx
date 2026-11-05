@@ -308,7 +308,13 @@ export default function EDStaffsTable() {
       render: (_, r) => {
         const fullName =
           ToFullNameByLocale(r.firstName, r.lastName) || r.name || "Cán bộ Sở";
-        const isMale = r.gender === "Nam" || r.personal?.sex === 1;
+        const isMale =
+          r.gender === "Nam" ||
+          r.personal?.sex === 1 ||
+          r.sex === 1 ||
+          r.gender === 1 ||
+          (!r.gender && !fullName.includes("Thị"));
+        const initial = (r.firstName || fullName || "C").trim().charAt(0).toUpperCase();
         return (
           <Flex gap={12} align="center">
             <Avatar
@@ -319,7 +325,7 @@ export default function EDStaffsTable() {
                 flexShrink: 0,
               }}
             >
-              {r.firstName ? r.firstName.slice(-1) : <UserOutlined />}
+              {initial}
             </Avatar>
             <div style={{ minWidth: 0 }}>
               <GText strong style={{ fontSize: 14, display: "block" }}>
@@ -505,7 +511,7 @@ export default function EDStaffsTable() {
                       fontWeight: 600,
                     }}
                   >
-                    {selectedStaff.firstName ? selectedStaff.firstName.slice(-1) : "CB"}
+                    {(selectedStaff.firstName || "CB").trim().charAt(0).toUpperCase()}
                   </Avatar>
                   <div>
                     <Flex align="center" gap={8}>

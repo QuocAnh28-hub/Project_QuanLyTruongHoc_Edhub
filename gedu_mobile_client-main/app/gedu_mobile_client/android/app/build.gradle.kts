@@ -39,9 +39,9 @@ android {
             versionName = "1.0.0-dev"
             versionCode = 1
             buildConfigField("String", "FLAVOR", "\"development\"")
-            buildConfigField("String", "APP_NAME", "\"Gedu Dev\"")
+            buildConfigField("String", "APP_NAME", "\"EduHub Dev\"")
             buildConfigField("String", "API_BASE_URL", "\"https://demo.lazeout.com\"")
-            manifestPlaceholders["appName"] = "Gedu Dev"
+            manifestPlaceholders["appName"] = "EduHub Dev"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
             manifestPlaceholders["applicationName"] = "io.flutter.app.FlutterApplication"
         }
@@ -52,9 +52,9 @@ android {
             versionName = "1.0.0-staging"
             versionCode = 1
             buildConfigField("String", "FLAVOR", "\"staging\"")
-            buildConfigField("String", "APP_NAME", "\"Gedu Staging\"")
+            buildConfigField("String", "APP_NAME", "\"EduHub Staging\"")
             buildConfigField("String", "API_BASE_URL", "\"https://staging.lazeout.com\"")
-            manifestPlaceholders["appName"] = "Gedu Staging"
+            manifestPlaceholders["appName"] = "EduHub Staging"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_staging"
             manifestPlaceholders["applicationName"] = "io.flutter.app.FlutterApplication"
         }
@@ -65,9 +65,9 @@ android {
             versionName = "1.0.0"
             versionCode = 1
             buildConfigField("String", "FLAVOR", "\"production\"")
-            buildConfigField("String", "APP_NAME", "\"Gedu\"")
+            buildConfigField("String", "APP_NAME", "\"EduHub\"")
             buildConfigField("String", "API_BASE_URL", "\"https://api.lazeout.com\"")
-            manifestPlaceholders["appName"] = "Gedu"
+            manifestPlaceholders["appName"] = "EduHub"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
             manifestPlaceholders["applicationName"] = "io.flutter.app.FlutterApplication"
         }

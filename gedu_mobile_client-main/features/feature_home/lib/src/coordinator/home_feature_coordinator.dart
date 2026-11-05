@@ -112,6 +112,93 @@ class HomeFeatureCoordinator extends FeatureModuleCoordinator
         );
       },
     ),
+
+    // Student Grades route
+    GoRoute(
+      path: HomeRoutes.studentGrades.path,
+      name: HomeRoutes.studentGrades.name,
+      builder: (context, state) => const StudentGradesPage(),
+    ),
+
+    // Timetable route
+    GoRoute(
+      path: HomeRoutes.timetable.path,
+      name: HomeRoutes.timetable.name,
+      builder: (context, state) => const TimetablePage(),
+    ),
+
+    // Leave Request route
+    GoRoute(
+      path: HomeRoutes.leaveRequest.path,
+      name: HomeRoutes.leaveRequest.name,
+      builder: (context, state) => const LeaveRequestPage(),
+    ),
+
+    // Attendance History route
+    GoRoute(
+      path: HomeRoutes.attendanceHistory.path,
+      name: HomeRoutes.attendanceHistory.name,
+      builder: (context, state) => const AttendanceHistoryPage(),
+    ),
+
+    // Chat Detail route
+    GoRoute(
+      path: HomeRoutes.chatDetail.path,
+      name: HomeRoutes.chatDetail.name,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return ChatDetailPage(
+          teacherName: extra?['teacherName'] as String?,
+          role: extra?['role'] as String?,
+        );
+      },
+    ),
+
+    // Teacher Class Attendance route
+    GoRoute(
+      path: HomeRoutes.teacherAttendance.path,
+      name: HomeRoutes.teacherAttendance.name,
+      builder: (context, state) => const TeacherAttendancePage(),
+    ),
+
+    // Teacher Leave Approval route
+    GoRoute(
+      path: HomeRoutes.teacherLeaveApproval.path,
+      name: HomeRoutes.teacherLeaveApproval.name,
+      builder: (context, state) => const TeacherLeaveApprovalPage(),
+    ),
+
+    // Teacher Gradebook route
+    GoRoute(
+      path: HomeRoutes.teacherGradebook.path,
+      name: HomeRoutes.teacherGradebook.name,
+      builder: (context, state) => const TeacherGradebookPage(),
+    ),
+
+    // Teacher Schedule route
+    GoRoute(
+      path: HomeRoutes.teacherSchedule.path,
+      name: HomeRoutes.teacherSchedule.name,
+      builder: (context, state) => const TeacherSchedulePage(),
+    ),
+
+    // Notifications route (full page view)
+    GoRoute(
+      path: HomeRoutes.notifications.path,
+      name: HomeRoutes.notifications.name,
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+            onPressed: () => context.pop(),
+          ),
+          title: const Text('Thông báo'),
+          backgroundColor: Colors.white,
+          elevation: 0.5,
+        ),
+        body: const NotificationTab(),
+      ),
+    ),
   ];
 
   // ==================== HOME NAVIGATION METHODS ====================

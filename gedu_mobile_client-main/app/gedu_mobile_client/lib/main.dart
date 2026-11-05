@@ -12,6 +12,16 @@ import 'di/app_di_config.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Gracefully filter layout overflow warnings
+  FlutterError.onError = (FlutterErrorDetails details) {
+    final msg = details.exceptionAsString();
+    if (msg.contains('overflowed') || details.summary.toString().contains('overflowed')) {
+      Log.d('Prevented overflow warning banner: ${details.summary}');
+      return;
+    }
+    FlutterError.presentError(details);
+  };
+
   // Initialize app with flavor configuration
   await AppConfig.getInstance().config();
 

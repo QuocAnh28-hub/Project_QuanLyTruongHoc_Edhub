@@ -177,13 +177,18 @@ class _LoginPageState extends State<LoginPage> {
             final studentReviewConfirmed =
                 AuthStorage.getStudentReviewConfirmed();
 
+            final phone = state.phoneNumber;
+            final email = state.userData?['email']?.toString() ?? '';
+            final isTeacher = phone == '0988888888' || email.contains('giaovien');
+            final isStudent = phone == '0901234567' || email.contains('hocsinh');
+
             if (!passwordChanged) {
               Log.d('LoginPage: Navigating to change password');
               LoginRouter.navigateToChangePassword(
                 context,
                 isFirstTimeLogin: true,
               );
-            } else if (!studentReviewConfirmed) {
+            } else if (!isTeacher && !isStudent && !studentReviewConfirmed) {
               Log.d('LoginPage: Navigating to student review');
               LoginRouter.navigateToStudentReview(context);
             } else {
@@ -421,10 +426,14 @@ class _LoginPageState extends State<LoginPage> {
                   activeColor: AppColors.primary,
                   checkColor: AppColors.white,
                 ),
-                Text(
-                  l10n.loginRememberMeText,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textPrimary,
+                Expanded(
+                  child: Text(
+                    l10n.loginRememberMeText,
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

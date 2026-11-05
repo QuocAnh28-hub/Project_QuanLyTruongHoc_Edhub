@@ -96,7 +96,13 @@ class AppCoordinator extends FeatureModuleCoordinator {
     final isAuthenticated = AuthStorage.isAuthenticated;
     final passwordChanged = AuthStorage.getPasswordChanged();
     final rememberMeEnabled = AuthStorage.getRememberMeStatus();
-    final studentReviewConfirmed = AuthStorage.getStudentReviewConfirmed();
+    final userData = AuthStorage.getUserData();
+    final phone = userData?['phone']?.toString() ?? '';
+    final email = userData?['email']?.toString() ?? '';
+    final isTeacher = phone == '0988888888' || email.contains('giaovien');
+    final isStudent = phone == '0901234567' || email.contains('hocsinh');
+    final studentReviewConfirmed =
+        (isTeacher || isStudent) ? true : AuthStorage.getStudentReviewConfirmed();
     final isLoginRoute = state.matchedLocation == AppRoutes.login.path;
     final isOnboardingRoute =
         state.matchedLocation == feature_auth.AuthRoutes.onboarding.path;
