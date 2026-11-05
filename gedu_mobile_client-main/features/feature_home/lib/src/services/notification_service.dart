@@ -467,3 +467,4 @@ class _InAppNotificationWidgetState extends State<_InAppNotificationWidget>
     );
   }
 }
+

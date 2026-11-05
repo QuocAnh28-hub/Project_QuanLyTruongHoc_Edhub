@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lib_design_system/lib_design_system.dart';
+import '../services/notification_service.dart';
 
 /// Màn hình Điểm danh & Quản lý Sĩ số Lớp học dành cho Giáo viên chủ nhiệm & Bộ môn
 class TeacherAttendancePage extends StatefulWidget {
@@ -288,6 +289,13 @@ class _TeacherAttendancePageState extends State<TeacherAttendancePage> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(ctx);
+              NotificationService.instance.notifyAttendance(
+                studentName: 'Trần Mỹ An',
+                className: '10A1',
+                status: 'Có mặt đúng giờ',
+                time: '07:25',
+                context: context,
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Đã đồng bộ dữ liệu điểm danh thành công về Sở GD&ĐT!'),
